@@ -15,7 +15,7 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
   
   <style>
-    /* Mobile-First Premium Tokens */
+    /* Premium Design Tokens */
     :root[data-theme="dark"] {
       --bg-main: #0b0f19;
       --bg-panel: #111827;
@@ -50,7 +50,7 @@
       --doc-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
     }
 
-    /* Dynamic Resume Variables */
+    /* Resume Custom Variables */
     :root {
       --res-font-family: 'Inter', sans-serif;
       --res-font-size: 12px;
@@ -130,7 +130,6 @@
       gap: 0.5rem;
     }
 
-    /* Touch Friendly Buttons */
     .btn {
       min-height: 42px;
       padding: 0.55rem 1rem;
@@ -241,7 +240,6 @@
       }
     }
 
-    /* Left Control Sidebar */
     .sidebar {
       background: var(--bg-panel);
       border-right: 1px solid var(--border-color);
@@ -251,7 +249,6 @@
       overflow: hidden;
     }
 
-    /* Navigation Tabs */
     .tabs-nav {
       display: flex;
       background: var(--bg-main);
@@ -298,7 +295,7 @@
       display: block;
     }
 
-    /* Form Styles */
+    /* Form & Unified AI Hub Styles */
     .card-box {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -321,6 +318,19 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
+    }
+
+    .step-badge {
+      width: 22px;
+      height: 22px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
     }
 
     .form-group {
@@ -360,36 +370,76 @@
       gap: 0.75rem;
     }
 
-    /* AI Hub Launchers */
-    .ai-launchers {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.5rem;
+    /* Consolidated AI Copy-Paste Workflow Center */
+    .ai-step-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.9rem;
       margin-bottom: 1rem;
     }
 
-    .launcher-btn {
-      padding: 0.6rem;
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
+    .ai-step-title {
+      font-size: 0.82rem;
+      font-weight: 700;
       color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .ai-preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .chip-btn {
+      padding: 0.3rem 0.6rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-muted);
       font-size: 0.75rem;
       font-weight: 600;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.3rem;
-      text-decoration: none;
     }
 
-    .launcher-btn:hover {
+    .chip-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .ai-launcher-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.4rem;
+    }
+
+    .launcher-pill {
+      min-height: 38px;
+      padding: 0.4rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+
+    .launcher-pill:hover {
       border-color: var(--primary);
       color: var(--primary);
     }
 
-    /* Floating Toast Notification for 1-Tap Auto Clipboard Ingest */
+    /* Floating Toast Notification */
     .clipboard-toast {
       position: fixed;
       bottom: 1.5rem;
@@ -447,7 +497,6 @@
       cursor: pointer;
     }
 
-    /* Swatches */
     .color-swatches {
       display: flex;
       gap: 0.6rem;
@@ -495,7 +544,7 @@
       width: 100%;
     }
 
-    /* Resume Document Wrapper (A4 standard) */
+    /* Resume Document Wrapper */
     .document-wrapper {
       width: 210mm;
       min-height: 297mm;
@@ -519,7 +568,6 @@
       }
     }
 
-    /* Document Template Elements */
     .res-header {
       border-bottom: 2px solid var(--res-accent);
       padding-bottom: 0.75rem;
@@ -620,7 +668,7 @@
       border: 1px solid #e2e8f0;
     }
 
-    /* Print Rules for PDF */
+    /* Print Rules */
     @media print {
       body {
         background: #fff !important;
@@ -653,7 +701,7 @@
 </head>
 <body>
 
-  <!-- App Header -->
+  <!-- Header -->
   <header>
     <div class="brand">
       <div class="brand-logo">OR</div>
@@ -676,7 +724,7 @@
     </div>
   </header>
 
-  <!-- Mobile Segmented View Switcher (For Phones) -->
+  <!-- Mobile View Switcher -->
   <div class="view-switcher-mobile">
     <button class="view-switch-btn active" id="btnSwitchControls" onclick="switchMobileView('controls')">
       <i data-lucide="edit-3"></i> Studio Controls
@@ -696,7 +744,7 @@
           <i data-lucide="file-text"></i> Content
         </button>
         <button class="tab-btn" onclick="switchTab('llmTab', this)">
-          <i data-lucide="bot"></i> AI Hub
+          <i data-lucide="bot"></i> AI Copy-Paste Hub
         </button>
         <button class="tab-btn" onclick="switchTab('styleTab', this)">
           <i data-lucide="sliders"></i> Fit & Styles
@@ -789,62 +837,73 @@
           </div>
         </div>
 
-        <!-- Tab 2: AI Hub -->
+        <!-- Tab 2: Consolidated AI Copy-Paste Workflow Center (All in ONE place) -->
         <div class="tab-pane" id="llmTab">
           
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="external-link"></i> Launch Free AI App</span>
-            </div>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.6rem;">
-              Tap to open your preferred AI app directly:
-            </p>
-            <div class="ai-launchers">
-              <a href="https://chatgpt.com/" target="_blank" class="launcher-btn">
-                <i data-lucide="message-square"></i> ChatGPT
-              </a>
-              <a href="https://claude.ai/new" target="_blank" class="launcher-btn">
-                <i data-lucide="sparkles"></i> Claude
-              </a>
-              <a href="https://gemini.google.com/" target="_blank" class="launcher-btn">
-                <i data-lucide="bot"></i> Gemini
-              </a>
-            </div>
-          </div>
-
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="zap"></i> 1-Tap Compact Prompt Generator</span>
-            </div>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.75rem;">
-              Uses an ultra-compact schema so ChatGPT/Claude outputs 100% accurate text without truncation:
-            </p>
-
-            <div class="form-group">
-              <label>Target Job Description (JD)</label>
-              <textarea class="form-control" id="inputJd" placeholder="Paste job requirements here..."></textarea>
+              <span class="card-box-title"><i data-lucide="sparkles"></i> AI Copy-Paste Workflow Center</span>
             </div>
 
-            <button class="btn btn-primary" style="width:100%;" onclick="copyCompactAgentPrompt()">
-              <i data-lucide="copy"></i> 🚀 Copy Prompt & Launch AI
-            </button>
-          </div>
+            <!-- Step 1: Goal & JD -->
+            <div class="ai-step-card">
+              <div class="ai-step-title">
+                <span class="step-badge">1</span>
+                <span>Select Task & Target JD</span>
+              </div>
+              <div class="ai-preset-chips">
+                <button class="chip-btn" onclick="setPresetTask('jd')">🎯 Target JD</button>
+                <button class="chip-btn" onclick="setPresetTask('star')">⚡ STAR Metrics</button>
+                <button class="chip-btn" onclick="setPresetTask('concise')">🧹 Trim Grammar</button>
+                <button class="chip-btn" onclick="setPresetTask('teen')">🎓 High School</button>
+              </div>
+              <div class="form-group" style="margin-bottom:0.5rem;">
+                <label>Job Description (Optional)</label>
+                <textarea class="form-control" id="inputJd" style="min-height:60px;" placeholder="Paste job posting here..."></textarea>
+              </div>
+            </div>
 
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="clipboard-check"></i> Ingest Response</span>
+            <!-- Step 2: Copy & Launch AI -->
+            <div class="ai-step-card">
+              <div class="ai-step-title">
+                <span class="step-badge">2</span>
+                <span>Copy Prompt & Launch AI</span>
+              </div>
+              <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.6rem;">
+                Tap your preferred AI app (copies prompt & opens AI app):
+              </p>
+              <div class="ai-launcher-row">
+                <button class="launcher-pill" onclick="copyAndLaunchAi('https://chatgpt.com/')">
+                  <i data-lucide="message-square"></i> ChatGPT
+                </button>
+                <button class="launcher-pill" onclick="copyAndLaunchAi('https://claude.ai/new')">
+                  <i data-lucide="sparkles"></i> Claude
+                </button>
+                <button class="launcher-pill" onclick="copyAndLaunchAi('https://gemini.google.com/')">
+                  <i data-lucide="bot"></i> Gemini
+                </button>
+              </div>
             </div>
-            <div class="form-group">
-              <textarea class="form-control" id="inputLlmResponse" style="min-height:90px;" placeholder="Paste AI response here..."></textarea>
+
+            <!-- Step 3: Ingest AI Response -->
+            <div class="ai-step-card" style="margin-bottom:0;">
+              <div class="ai-step-title">
+                <span class="step-badge">3</span>
+                <span>Ingest AI Response</span>
+              </div>
+              <div class="form-group" style="margin-bottom:0.6rem;">
+                <textarea class="form-control" id="inputLlmResponse" style="min-height:85px;" placeholder="Paste AI response here..."></textarea>
+              </div>
+              <div class="form-row">
+                <button class="btn btn-secondary" onclick="readClipboardAndIngest()">
+                  <i data-lucide="clipboard"></i> Paste Clipboard
+                </button>
+                <button class="btn btn-success" onclick="ingestLlmResponse()">
+                  <i data-lucide="zap"></i> Apply to Resume
+                </button>
+              </div>
             </div>
-            <div class="form-row">
-              <button class="btn btn-secondary" style="width:100%;" onclick="readClipboardAndIngest()">
-                <i data-lucide="clipboard"></i> Paste Clipboard
-              </button>
-              <button class="btn btn-success" style="width:100%;" onclick="ingestLlmResponse()">
-                <i data-lucide="zap"></i> Apply Resume
-              </button>
-            </div>
+
           </div>
 
         </div>
@@ -914,7 +973,7 @@
               <span class="card-box-title"><i data-lucide="layout"></i> Custom LLM HTML Template</span>
             </div>
             <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">
-              Paste custom HTML code generated by ChatGPT from a photo. Uses placeholders: {{fullName}}, {{title}}, {{summary}}, {{skills}}, {{experiences}}.
+              Paste custom HTML template generated by ChatGPT from a photo. Uses {{fullName}}, {{title}}, {{summary}}, {{skills}}, {{experiences}}.
             </p>
             <textarea class="form-control" id="customTemplateHtml" style="min-height:90px;" placeholder="Paste custom HTML template here..."></textarea>
             <div class="form-row" style="margin-top:0.5rem;">
@@ -1013,6 +1072,7 @@
       }
     ];
 
+    let currentPresetTask = "jd";
     let standardDocBackup = null;
     let deferredPrompt = null;
     let detectedClipboardText = "";
@@ -1210,12 +1270,21 @@
       }, 100);
     }
 
-    // Ultra-Compact AI Prompt Generator & Launch ChatGPT
-    function copyCompactAgentPrompt() {
+    // AI Workflow Center Handlers
+    function setPresetTask(task) {
+      currentPresetTask = task;
+    }
+
+    function copyAndLaunchAi(aiUrl) {
       const jd = document.getElementById('inputJd').value;
+      let instruction = "Re-write bullets to target the JD using strong action verbs & STAR metrics.";
+      
+      if (currentPresetTask === 'star') instruction = "Add measurable metrics, percentages, and STAR results to every bullet point.";
+      if (currentPresetTask === 'concise') instruction = "Trim words, fix grammar, and make sentences extremely punchy and concise.";
+      if (currentPresetTask === 'teen') instruction = "Format high school projects, volunteering, and coursework into entry-level achievements.";
 
       const compactPrompt = `[AI RESUME TASK]
-Re-write bullets to target the JD using strong action verbs & STAR metrics.
+${instruction}
 
 STRICT RULE: Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags using this COMPACT schema:
 {"n":"Name","t":"Title","s":"Summary","k":["Skill1","Skill2"],"x":[{"r":"Role","c":"Company","d":"Date","b":["Bullet1"]}]}
@@ -1233,11 +1302,11 @@ TARGET JD:
 ${jd || 'General Candidate'}`;
 
       navigator.clipboard.writeText(compactPrompt).then(() => {
-        window.open('https://chatgpt.com/', '_blank');
+        window.open(aiUrl, '_blank');
       });
     }
 
-    // Auto Clipboard Detection on Window Focus (Cutting-edge UX)
+    // Auto-Clipboard Detection on Window Focus
     async function checkClipboardOnFocus() {
       try {
         const text = await navigator.clipboard.readText();
