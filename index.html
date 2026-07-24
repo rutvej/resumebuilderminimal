@@ -155,6 +155,11 @@
       color: #fff;
     }
 
+    .btn-magic {
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      color: #fff;
+    }
+
     .btn-sm {
       min-height: 36px;
       padding: 0.35rem 0.75rem;
@@ -191,12 +196,10 @@
       overflow-y: auto;
     }
 
-    .onboarding-screen.hidden {
-      display: none;
-    }
+    .onboarding-screen.hidden { display: none; }
 
     .hero-content {
-      max-width: 800px;
+      max-width: 850px;
       width: 100%;
       text-align: center;
     }
@@ -333,9 +336,7 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    .demo-step-anim.active {
-      display: flex;
-    }
+    .demo-step-anim.active { display: flex; }
 
     .view-switcher-mobile {
       display: flex;
@@ -379,10 +380,7 @@
     }
 
     @media (max-width: 900px) {
-      .app-body {
-        grid-template-columns: 1fr;
-        height: auto;
-      }
+      .app-body { grid-template-columns: 1fr; height: auto; }
     }
 
     .sidebar {
@@ -458,10 +456,20 @@
       gap: 0.4rem;
     }
 
-    .form-group {
-      margin-bottom: 1rem;
+    .step-badge {
+      width: 22px;
+      height: 22px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
     }
 
+    .form-group { margin-bottom: 1rem; }
     .form-group label {
       display: block;
       font-size: 0.75rem;
@@ -483,10 +491,7 @@
       font-family: inherit;
     }
 
-    textarea.form-control {
-      min-height: 85px;
-      resize: vertical;
-    }
+    textarea.form-control { min-height: 85px; resize: vertical; }
 
     .form-row {
       display: grid;
@@ -494,39 +499,49 @@
       gap: 0.75rem;
     }
 
-    /* Template Picker Grid */
-    .template-presets-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+    .ai-preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.75rem;
     }
 
-    .template-card-option {
+    .chip-btn {
+      padding: 0.35rem 0.65rem;
       background: var(--bg-panel);
-      border: 2px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0.75rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-    }
-
-    .template-card-option:hover, .template-card-option.active {
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px var(--primary-glow);
-    }
-
-    .template-card-option h4 {
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-    }
-
-    .template-card-option p {
-      font-size: 0.72rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
       color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
     }
+
+    .chip-btn:hover { color: var(--primary); border-color: var(--primary); }
+
+    .ai-launcher-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.4rem;
+    }
+
+    .launcher-pill {
+      min-height: 40px;
+      padding: 0.4rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+    }
+
+    .launcher-pill:hover { border-color: var(--primary); color: var(--primary); }
 
     /* Sliders Group */
     .slider-group {
@@ -545,10 +560,7 @@
       margin-bottom: 0.5rem;
     }
 
-    .slider-value {
-      color: var(--primary);
-      font-weight: 700;
-    }
+    .slider-value { color: var(--primary); font-weight: 700; }
 
     input[type="range"] {
       width: 100%;
@@ -557,12 +569,7 @@
       cursor: pointer;
     }
 
-    .color-swatches {
-      display: flex;
-      gap: 0.6rem;
-      margin-top: 0.6rem;
-    }
-
+    .color-swatches { display: flex; gap: 0.6rem; margin-top: 0.6rem; }
     .swatch {
       width: 32px;
       height: 32px;
@@ -570,11 +577,7 @@
       cursor: pointer;
       border: 2px solid transparent;
     }
-
-    .swatch.selected {
-      border-color: var(--text-main);
-      box-shadow: 0 0 0 2px var(--primary-glow);
-    }
+    .swatch.selected { border-color: var(--text-main); box-shadow: 0 0 0 2px var(--primary-glow); }
 
     .preview-studio {
       background: var(--bg-main);
@@ -619,11 +622,7 @@
     }
 
     @media (max-width: 850px) {
-      .document-wrapper {
-        width: 100%;
-        min-height: auto;
-        padding: 1.25rem;
-      }
+      .document-wrapper { width: 100%; min-height: auto; padding: 1.25rem; }
     }
 
     .res-header {
@@ -656,10 +655,7 @@
       margin-top: 0.45rem;
     }
 
-    .res-section {
-      margin-bottom: var(--res-section-spacing);
-    }
-
+    .res-section { margin-bottom: var(--res-section-spacing); }
     .res-section-title {
       font-size: calc(var(--res-font-size) * 1.15);
       font-weight: 700;
@@ -703,7 +699,7 @@
 </head>
 <body>
 
-  <!-- Modern 2026 Welcome Hero Onboarding View -->
+  <!-- Onboarding Screen -->
   <div class="onboarding-screen" id="onboardingScreen">
     <div class="hero-content">
       
@@ -731,19 +727,19 @@
           <input type="file" id="fileImportInput" accept=".pdf,.docx,.txt" style="display:none;" onchange="handleResumeFileImport(event)">
         </div>
 
-        <!-- Path B: Create Fresh -->
-        <div class="path-card" onclick="startFreshResume()">
+        <!-- Path B: AI Copy-Paste Center -->
+        <div class="path-card" onclick="openAiHubFromHero()">
           <div>
-            <div class="path-icon"><i data-lucide="plus-circle"></i></div>
-            <h3>Create Fresh</h3>
-            <p>Start with an entry-level / high school starter template.</p>
+            <div class="path-icon"><i data-lucide="bot"></i></div>
+            <h3>🤖 AI Copy-Paste Hub</h3>
+            <p>Use ChatGPT/Claude prompts to write bullet points & tailor JDs.</p>
           </div>
-          <button class="btn btn-primary" style="width:100%;">
-            <i data-lucide="sparkles"></i> Start Fresh
+          <button class="btn btn-magic" style="width:100%;">
+            <i data-lucide="sparkles"></i> Launch AI Hub
           </button>
         </div>
 
-        <!-- Path C: Pick Visual Template First -->
+        <!-- Path C: Pick Visual Template -->
         <div class="path-card" onclick="openTemplatesFromHero()">
           <div>
             <div class="path-icon"><i data-lucide="layout"></i></div>
@@ -759,14 +755,14 @@
 
       <div style="display:flex; justify-content:center; gap:1rem;">
         <button class="btn btn-secondary btn-sm" onclick="openVideoTutorial()">
-          <i data-lucide="play-circle"></i> 🎥 Watch 15s Animated Video Tutorial (No File Needed!)
+          <i data-lucide="play-circle"></i> 🎥 Watch 15s Animated Video Tutorial
         </button>
       </div>
 
     </div>
   </div>
 
-  <!-- Pure Code Animated Video Demo Modal (No MP4 file needed!) -->
+  <!-- Video Tutorial Modal -->
   <div class="onboarding-screen hidden" id="videoTutorialModal">
     <div class="tutorial-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
@@ -811,7 +807,10 @@
     </div>
 
     <div class="header-actions">
-      <button class="btn btn-secondary btn-sm" onclick="switchTab('styleTab', document.querySelector('.tab-btn:last-child')); startFreshResume();">
+      <button class="btn btn-magic btn-sm" onclick="switchTab('llmTab', document.querySelectorAll('.tab-btn')[1]); startFreshResume();">
+        <i data-lucide="bot"></i> 🤖 AI Hub
+      </button>
+      <button class="btn btn-secondary btn-sm" onclick="switchTab('styleTab', document.querySelectorAll('.tab-btn')[2]); startFreshResume();">
         <i data-lucide="layout"></i> 🎨 Templates
       </button>
       <button class="btn btn-secondary btn-sm" onclick="showOnboarding()">
@@ -844,6 +843,9 @@
       <nav class="tabs-nav">
         <button class="tab-btn active" onclick="switchTab('contentTab', this)">
           <i data-lucide="file-text"></i> Content
+        </button>
+        <button class="tab-btn" onclick="switchTab('llmTab', this)">
+          <i data-lucide="bot"></i> 🤖 AI Hub
         </button>
         <button class="tab-btn" onclick="switchTab('styleTab', this)">
           <i data-lucide="sliders"></i> Fit & Styles
@@ -936,25 +938,73 @@
           </div>
         </div>
 
-        <!-- Tab 2: Fit & Styles (Includes Template Selector & Custom LLM Template Parser) -->
-        <div class="tab-pane" id="styleTab">
-
+        <!-- Tab 2: 🤖 AI Copy-Paste Workflow Hub -->
+        <div class="tab-pane" id="llmTab">
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="layout"></i> Template Preset Picker</span>
+              <span class="card-box-title"><i data-lucide="bot" style="color:var(--primary);"></i> 🤖 AI Copy-Paste Workflow Center</span>
             </div>
-            <div class="template-presets-grid">
-              <div class="template-card-option active" onclick="selectTemplatePreset('modern', this)">
-                <h4>Modern Minimal</h4>
-                <p>Clean single column</p>
+            
+            <!-- Step 1 -->
+            <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:10px; padding:0.9rem; margin-bottom:0.85rem;">
+              <div style="font-size:0.82rem; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
+                <span class="step-badge">1</span>
+                <span>Select Task Goal & Target JD</span>
               </div>
-              <div class="template-card-option" onclick="selectTemplatePreset('serif', this)">
-                <h4>Classic Serif</h4>
-                <p>Traditional academic</p>
+              <div class="ai-preset-chips">
+                <button class="chip-btn" onclick="setPresetTask('jd')">🎯 Target JD</button>
+                <button class="chip-btn" onclick="setPresetTask('star')">⚡ STAR Metrics</button>
+                <button class="chip-btn" onclick="setPresetTask('concise')">🧹 Trim Grammar</button>
+                <button class="chip-btn" onclick="setPresetTask('teen')">🎓 High School</button>
+              </div>
+              <div class="form-group" style="margin-bottom:0.5rem;">
+                <textarea class="form-control" id="inputJd" style="min-height:55px;" placeholder="Paste target job posting here..."></textarea>
               </div>
             </div>
+
+            <!-- Step 2 -->
+            <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:10px; padding:0.9rem; margin-bottom:0.85rem;">
+              <div style="font-size:0.82rem; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
+                <span class="step-badge">2</span>
+                <span>Copy Prompt & Launch AI App</span>
+              </div>
+              <div class="ai-launcher-row">
+                <button class="launcher-pill" onclick="copyAndLaunchAi('https://chatgpt.com/')">
+                  <i data-lucide="message-square"></i> ChatGPT
+                </button>
+                <button class="launcher-pill" onclick="copyAndLaunchAi('https://claude.ai/new')">
+                  <i data-lucide="sparkles"></i> Claude
+                </button>
+                <button class="launcher-pill" onclick="copyAndLaunchAi('https://gemini.google.com/')">
+                  <i data-lucide="bot"></i> Gemini
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:10px; padding:0.9rem;">
+              <div style="font-size:0.82rem; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
+                <span class="step-badge">3</span>
+                <span>Ingest AI Response</span>
+              </div>
+              <div class="form-group" style="margin-bottom:0.6rem;">
+                <textarea class="form-control" id="inputLlmResponse" style="min-height:85px;" placeholder="Paste AI response here..."></textarea>
+              </div>
+              <div class="form-row">
+                <button class="btn btn-secondary" onclick="readClipboardAndIngest()">
+                  <i data-lucide="clipboard"></i> Paste Clipboard
+                </button>
+                <button class="btn btn-success" onclick="ingestLlmResponse()">
+                  <i data-lucide="zap"></i> Apply Content
+                </button>
+              </div>
+            </div>
+
           </div>
-          
+        </div>
+
+        <!-- Tab 3: Fit & Styles -->
+        <div class="tab-pane" id="styleTab">
           <div class="slider-group">
             <div class="slider-header">
               <span>📏 Base Font Size</span>
@@ -1011,7 +1061,6 @@
               <option value="'JetBrains Mono', monospace">Technical Mono (JetBrains)</option>
             </select>
           </div>
-
         </div>
 
       </div>
@@ -1090,26 +1139,17 @@
       }
     ];
 
+    let currentPresetTask = "jd";
     let demoInterval = null;
+
+    function openAiHubFromHero() {
+      document.getElementById('onboardingScreen').classList.add('hidden');
+      switchTab('llmTab', document.querySelectorAll('.tab-btn')[1]);
+    }
 
     function openTemplatesFromHero() {
       document.getElementById('onboardingScreen').classList.add('hidden');
-      switchTab('styleTab', document.querySelectorAll('.tab-btn')[1]);
-    }
-
-    function selectTemplatePreset(preset, el) {
-      document.querySelectorAll('.template-card-option').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      
-      const selectFont = document.getElementById('selectFontFamily');
-      if (preset === 'serif') {
-        selectFont.value = "'Merriweather', serif";
-        selectColor('#0f172a', document.querySelectorAll('.swatch')[3]);
-      } else {
-        selectFont.value = "'Inter', sans-serif";
-        selectColor('#1e3a8a', document.querySelectorAll('.swatch')[0]);
-      }
-      updateStyles();
+      switchTab('styleTab', document.querySelectorAll('.tab-btn')[2]);
     }
 
     function showOnboarding() {
@@ -1143,7 +1183,6 @@
 
     function openVideoTutorial() {
       document.getElementById('videoTutorialModal').classList.remove('hidden');
-      
       let curStep = 1;
       demoInterval = setInterval(() => {
         curStep = (curStep % 3) + 1;
@@ -1175,6 +1214,90 @@
         preview.style.display = 'flex';
         btnPreview.classList.add('active');
         btnControls.classList.remove('active');
+      }
+    }
+
+    function setPresetTask(task) {
+      currentPresetTask = task;
+    }
+
+    function copyAndLaunchAi(aiUrl) {
+      const jd = document.getElementById('inputJd').value;
+      let instruction = "Re-write bullets to target the JD using strong action verbs & STAR metrics.";
+      if (currentPresetTask === 'star') instruction = "Add measurable metrics, percentages, and STAR results to every bullet point.";
+      if (currentPresetTask === 'concise') instruction = "Trim words, fix grammar, and make sentences extremely punchy and concise.";
+      if (currentPresetTask === 'teen') instruction = "Format high school projects, volunteering, and coursework into entry-level achievements.";
+
+      const compactPrompt = `[AI RESUME TASK]
+${instruction}
+
+STRICT RULE: Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags using this COMPACT schema:
+{"n":"Name","t":"Title","s":"Summary","k":["Skill1","Skill2"],"x":[{"r":"Role","c":"Company","d":"Date","b":["Bullet1"]}]}
+
+USER DATA:
+${JSON.stringify({
+  n: document.getElementById('inputName').value,
+  t: document.getElementById('inputTitle').value,
+  s: document.getElementById('inputSummary').value,
+  k: document.getElementById('inputSkills').value.split(',').map(s=>s.trim()),
+  x: experiences.map(e=>({r:e.role, c:e.company, d:e.date, b:e.bullets}))
+})}
+
+TARGET JD:
+${jd || 'General Candidate'}`;
+
+      navigator.clipboard.writeText(compactPrompt).then(() => {
+        window.open(aiUrl, '_blank');
+      });
+    }
+
+    async function readClipboardAndIngest() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('inputLlmResponse').value = text;
+          ingestLlmResponse();
+        }
+      } catch (err) {
+        alert('Please manually paste the ChatGPT response text into the box.');
+      }
+    }
+
+    function ingestLlmResponse() {
+      const text = document.getElementById('inputLlmResponse').value;
+      const jsonMatch = text.match(/<RESUME_JSON>([\s\S]*?)<\/RESUME_JSON>/) || text.match(/\{[\s\S]*\}/);
+
+      if (jsonMatch) {
+        try {
+          const parsed = JSON.parse(jsonMatch[0].replace(/<RESUME_JSON>|<\/RESUME_JSON>/g, ''));
+          
+          const fullName = parsed.n || parsed.fullName;
+          const title = parsed.t || parsed.title;
+          const summary = parsed.s || parsed.summary;
+          const skills = parsed.k || parsed.skills;
+          const exps = parsed.x || parsed.experiences;
+
+          if (fullName) document.getElementById('inputName').value = fullName;
+          if (title) document.getElementById('inputTitle').value = title;
+          if (summary) document.getElementById('inputSummary').value = summary;
+          if (skills) document.getElementById('inputSkills').value = Array.isArray(skills) ? skills.join(', ') : skills;
+          
+          if (exps && Array.isArray(exps)) {
+            experiences = exps.map(e => ({
+              role: e.r || e.role || "Role",
+              company: e.c || e.company || "Organization",
+              date: e.d || e.date || "Date",
+              bullets: e.b || e.bullets || []
+            }));
+          }
+
+          updateResumeData();
+          alert('✨ Resume Applied Successfully!');
+        } catch (e) {
+          alert('Could not parse JSON payload.');
+        }
+      } else {
+        alert('No JSON found in response.');
       }
     }
 
@@ -1349,13 +1472,6 @@
         }
       }, 100);
     }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const btn = document.getElementById('btnInstallPwa');
-      if (btn) btn.style.display = 'inline-flex';
-    });
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
