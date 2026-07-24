@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenResume Studio - 100% Free Offline PWA Resume Builder</title>
-  <meta name="description" content="Zero-cost, offline-first PWA resume builder and 1-page visual layout studio. 100% serverless, private, and installable on mobile and desktop.">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OpenResume Studio - Mobile-First PWA AI Resume Builder</title>
+  <meta name="description" content="100% Free, Mobile-First Offline PWA AI Resume Builder & 1-Page Layout Studio. Zero servers, installable on phones & computers.">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,21 +15,43 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
   
   <style>
-    :root {
-      --bg-dark: #090d16;
-      --panel-bg: #111827;
-      --card-bg: #1f2937;
-      --border-color: #374151;
+    /* Mobile-First Premium Tokens */
+    :root[data-theme="dark"] {
+      --bg-main: #0b0f19;
+      --bg-panel: #111827;
+      --bg-card: #1f2937;
+      --bg-card-hover: #374151;
+      --border-color: #1f2937;
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --accent-color: #3b82f6;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --accent: #3b82f6;
       --success: #10b981;
       --warning: #f59e0b;
-      --radius: 12px;
-      
-      /* Resume Dynamic Variables */
+      --doc-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    :root[data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-panel: #ffffff;
+      --bg-card: #f1f5f9;
+      --bg-card-hover: #e2e8f0;
+      --border-color: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-glow: rgba(79, 70, 229, 0.25);
+      --accent: #2563eb;
+      --success: #059669;
+      --warning: #d97706;
+      --doc-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Dynamic Resume Variables */
+    :root {
       --res-font-family: 'Inter', sans-serif;
       --res-font-size: 12px;
       --res-line-height: 1.35;
@@ -40,138 +64,167 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
+      background-color: var(--bg-main);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* App Header */
+    /* Mobile Header */
     header {
-      background: rgba(17, 24, 39, 0.85);
-      backdrop-filter: blur(12px);
+      background: var(--bg-panel);
       border-bottom: 1px solid var(--border-color);
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.6rem;
     }
 
     .brand-logo {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
       font-weight: 700;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+      font-size: 1rem;
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
     .brand-text h1 {
       font-family: 'Outfit', sans-serif;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 700;
-      background: linear-gradient(90deg, #fff, #93c5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
     }
 
     .brand-text p {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
-    .badge-offline {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 0.25rem 0.65rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .badge-offline::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background-color: #34d399;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
+    /* Touch Friendly Buttons */
     .btn {
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      min-height: 42px;
+      padding: 0.55rem 1rem;
+      border-radius: 10px;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
       border: none;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      gap: 0.45rem;
       transition: all 0.2s ease;
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: #fff;
-      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+      box-shadow: 0 4px 14px var(--primary-glow);
     }
 
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.5);
+    .btn-primary:active {
+      transform: scale(0.98);
     }
 
     .btn-secondary {
-      background: var(--card-bg);
+      background: var(--bg-card);
       color: var(--text-main);
       border: 1px solid var(--border-color);
     }
 
-    .btn-secondary:hover {
-      background: #2d3748;
-    }
-
     .btn-success {
-      background: #10b981;
+      background: var(--success);
       color: #fff;
     }
 
     .btn-sm {
+      min-height: 36px;
       padding: 0.35rem 0.75rem;
       font-size: 0.78rem;
     }
 
-    /* Main Container Layout */
+    .theme-toggle-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Mobile Segmented View Switcher (For Phones) */
+    .view-switcher-mobile {
+      display: flex;
+      background: var(--bg-panel);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.5rem;
+      gap: 0.4rem;
+    }
+
+    @media (min-width: 900px) {
+      .view-switcher-mobile {
+        display: none;
+      }
+    }
+
+    .view-switch-btn {
+      flex: 1;
+      min-height: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      cursor: pointer;
+    }
+
+    .view-switch-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 8px var(--primary-glow);
+    }
+
+    /* App Responsive Container Layout */
     .app-body {
       display: grid;
       grid-template-columns: 480px 1fr;
@@ -180,7 +233,7 @@
       overflow: hidden;
     }
 
-    @media (max-width: 1024px) {
+    @media (max-width: 900px) {
       .app-body {
         grid-template-columns: 1fr;
         height: auto;
@@ -190,7 +243,7 @@
 
     /* Left Control Sidebar */
     .sidebar {
-      background: var(--panel-bg);
+      background: var(--bg-panel);
       border-right: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
@@ -198,25 +251,25 @@
       overflow: hidden;
     }
 
-    /* Tab Navigation */
+    /* Navigation Tabs */
     .tabs-nav {
       display: flex;
-      background: rgba(0,0,0,0.2);
+      background: var(--bg-main);
       border-bottom: 1px solid var(--border-color);
       padding: 0.5rem 0.5rem 0 0.5rem;
-      gap: 0.25rem;
+      gap: 0.3rem;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 0.65rem 0.5rem;
+      min-height: 44px;
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 600;
       cursor: pointer;
-      border-radius: 8px 8px 0 0;
+      border-radius: 10px 10px 0 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -225,22 +278,16 @@
       border-bottom: 2px solid transparent;
     }
 
-    .tab-btn:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.03);
-    }
-
     .tab-btn.active {
-      color: #6366f1;
-      background: var(--panel-bg);
-      border-bottom: 2px solid #6366f1;
+      color: var(--primary);
+      background: var(--bg-panel);
+      border-bottom: 2px solid var(--primary);
     }
 
-    /* Tab Content Area */
     .tab-content-container {
       flex: 1;
       overflow-y: auto;
-      padding: 1.25rem;
+      padding: 1.2rem 1rem;
     }
 
     .tab-pane {
@@ -252,14 +299,38 @@
     }
 
     /* Form Styles */
+    .card-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.1rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .card-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.85rem;
+    }
+
+    .card-box-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
     .form-group {
       margin-bottom: 1rem;
     }
 
     .form-group label {
       display: block;
-      font-size: 0.78rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       color: var(--text-muted);
       margin-bottom: 0.35rem;
       text-transform: uppercase;
@@ -268,24 +339,18 @@
 
     .form-control {
       width: 100%;
-      padding: 0.6rem 0.8rem;
-      background: var(--card-bg);
+      min-height: 44px;
+      padding: 0.65rem 0.85rem;
+      background: var(--bg-panel);
       border: 1px solid var(--border-color);
       border-radius: 8px;
-      color: #fff;
-      font-size: 0.85rem;
+      color: var(--text-main);
+      font-size: 0.88rem;
       font-family: inherit;
-      transition: border-color 0.2s;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: #6366f1;
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
     textarea.form-control {
-      min-height: 80px;
+      min-height: 85px;
       resize: vertical;
     }
 
@@ -295,33 +360,69 @@
       gap: 0.75rem;
     }
 
-    .card-box {
-      background: rgba(31, 41, 55, 0.5);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 1rem;
+    /* AI Hub Launchers */
+    .ai-launchers {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
       margin-bottom: 1rem;
-      position: relative;
     }
 
-    .card-box-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .card-box-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #93c5fd;
-    }
-
-    /* Slider Group */
-    .slider-group {
-      background: var(--card-bg);
+    .launcher-btn {
+      padding: 0.6rem;
+      background: var(--bg-panel);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      text-decoration: none;
+    }
+
+    .launcher-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Floating Toast Notification for 1-Tap Auto Clipboard Ingest */
+    .clipboard-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+      border: 1px solid var(--primary);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border-radius: 14px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      z-index: 1000;
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 90%;
+    }
+
+    .clipboard-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .clipboard-toast-text {
+      font-size: 0.85rem;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* Sliders Group */
+    .slider-group {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
       padding: 1rem;
       margin-bottom: 1rem;
     }
@@ -335,63 +436,58 @@
     }
 
     .slider-value {
-      color: #6366f1;
+      color: var(--primary);
       font-weight: 700;
     }
 
     input[type="range"] {
       width: 100%;
-      accent-color: #6366f1;
+      height: 6px;
+      accent-color: var(--primary);
       cursor: pointer;
     }
 
     /* Swatches */
     .color-swatches {
       display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
     }
 
     .swatch {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid transparent;
-      transition: transform 0.2s;
-    }
-
-    .swatch:hover {
-      transform: scale(1.15);
     }
 
     .swatch.selected {
-      border-color: #fff;
-      box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+      border-color: var(--text-main);
+      box-shadow: 0 0 0 2px var(--primary-glow);
     }
 
-    /* Preview Studio Area */
+    /* Live Preview Studio */
     .preview-studio {
-      background: #1e293b;
+      background: var(--bg-main);
       display: flex;
       flex-direction: column;
       height: 100%;
       overflow-y: auto;
       align-items: center;
-      padding: 2rem 1rem;
+      padding: 1.5rem 1rem;
       position: relative;
     }
 
-    /* Page Fit Overflow Alert Banner */
     .overflow-banner {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      color: #fbbf24;
-      padding: 0.6rem 1.25rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 500;
-      margin-bottom: 1rem;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: var(--warning);
+      padding: 0.7rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
       display: none;
       align-items: center;
       gap: 0.5rem;
@@ -405,14 +501,14 @@
       min-height: 297mm;
       background: #ffffff;
       color: #1e293b;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      border-radius: 2px;
+      box-shadow: var(--doc-shadow);
+      border-radius: 4px;
       padding: var(--res-margin);
       font-family: var(--res-font-family);
       font-size: var(--res-font-size);
       line-height: var(--res-line-height);
       position: relative;
-      transition: all 0.15s ease-out;
+      transition: all 0.2s ease;
     }
 
     @media (max-width: 850px) {
@@ -423,7 +519,7 @@
       }
     }
 
-    /* Resume Template Styles */
+    /* Document Template Elements */
     .res-header {
       border-bottom: 2px solid var(--res-accent);
       padding-bottom: 0.75rem;
@@ -431,7 +527,7 @@
     }
 
     .res-name {
-      font-size: calc(var(--res-font-size) * 1.85);
+      font-size: calc(var(--res-font-size) * 1.9);
       font-weight: 700;
       color: var(--res-accent);
       line-height: 1.1;
@@ -443,7 +539,7 @@
       font-size: calc(var(--res-font-size) * 1.15);
       color: #475569;
       font-weight: 500;
-      margin-top: 0.2rem;
+      margin-top: 0.25rem;
     }
 
     .res-contact-bar {
@@ -452,7 +548,7 @@
       gap: 0.8rem;
       font-size: calc(var(--res-font-size) * 0.9);
       color: #64748b;
-      margin-top: 0.4rem;
+      margin-top: 0.45rem;
     }
 
     .res-section {
@@ -517,20 +613,20 @@
     .res-skill-tag {
       background: #f1f5f9;
       color: #334155;
-      padding: 0.15rem 0.5rem;
+      padding: 0.18rem 0.55rem;
       border-radius: 4px;
       font-size: calc(var(--res-font-size) * 0.88);
       font-weight: 500;
       border: 1px solid #e2e8f0;
     }
 
-    /* Print Controls for PDF */
+    /* Print Rules for PDF */
     @media print {
       body {
         background: #fff !important;
         color: #000 !important;
       }
-      header, .sidebar, .overflow-banner {
+      header, .sidebar, .overflow-banner, .view-switcher-mobile, .clipboard-toast {
         display: none !important;
       }
       .app-body {
@@ -540,6 +636,7 @@
       .preview-studio {
         background: transparent !important;
         padding: 0 !important;
+        display: block !important;
       }
       .document-wrapper {
         box-shadow: none !important;
@@ -556,56 +653,63 @@
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- App Header -->
   <header>
     <div class="brand">
       <div class="brand-logo">OR</div>
       <div class="brand-text">
-        <h1>OpenResume Studio</h1>
-        <p>100% Free Offline PWA Resume Builder</p>
+        <h1>OpenResume</h1>
+        <p>Offline PWA AI Builder</p>
       </div>
     </div>
 
     <div class="header-actions">
-      <div class="badge-offline" id="pwaStatus">Offline Ready</div>
+      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Theme">
+        <i data-lucide="moon" id="themeIcon"></i>
+      </button>
       <button class="btn btn-secondary btn-sm" id="btnInstallPwa" style="display:none;" onclick="triggerPwaInstall()">
-        <i data-lucide="download"></i> Install App
+        <i data-lucide="download"></i> Install
       </button>
-      <button class="btn btn-secondary btn-sm" onclick="resetToSample()">
-        <i data-lucide="rotate-ccw"></i> Reset
-      </button>
-      <button class="btn btn-primary" onclick="window.print()">
-        <i data-lucide="printer"></i> Export PDF
+      <button class="btn btn-primary btn-sm" onclick="window.print()">
+        <i data-lucide="printer"></i> PDF
       </button>
     </div>
   </header>
 
-  <!-- App Body Layout -->
+  <!-- Mobile Segmented View Switcher (For Phones) -->
+  <div class="view-switcher-mobile">
+    <button class="view-switch-btn active" id="btnSwitchControls" onclick="switchMobileView('controls')">
+      <i data-lucide="edit-3"></i> Studio Controls
+    </button>
+    <button class="view-switch-btn" id="btnSwitchPreview" onclick="switchMobileView('preview')">
+      <i data-lucide="eye"></i> Live Preview
+    </button>
+  </div>
+
+  <!-- App Main Body -->
   <div class="app-body">
     
-    <!-- Left Control Sidebar -->
-    <aside class="sidebar">
-      <!-- Tabs Nav -->
+    <!-- Left Sidebar -->
+    <aside class="sidebar" id="sidebarContainer">
       <nav class="tabs-nav">
         <button class="tab-btn active" onclick="switchTab('contentTab', this)">
           <i data-lucide="file-text"></i> Content
         </button>
         <button class="tab-btn" onclick="switchTab('llmTab', this)">
-          <i data-lucide="bot"></i> LLM Assistant
+          <i data-lucide="bot"></i> AI Hub
         </button>
         <button class="tab-btn" onclick="switchTab('styleTab', this)">
           <i data-lucide="sliders"></i> Fit & Styles
         </button>
       </nav>
 
-      <!-- Tab Content Area -->
       <div class="tab-content-container">
         
         <!-- Tab 1: Content Editor -->
         <div class="tab-pane active" id="contentTab">
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">Personal Contact Info</span>
+              <span class="card-box-title"><i data-lucide="user"></i> Personal Contact Info</span>
             </div>
             <div class="form-group">
               <label>Full Name</label>
@@ -639,7 +743,7 @@
 
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">Professional Summary</span>
+              <span class="card-box-title"><i data-lucide="align-left"></i> Summary</span>
             </div>
             <div class="form-group">
               <textarea class="form-control" id="inputSummary" oninput="updateResumeData()">Motivated high school graduate with a passion for web development and software engineering. Demonstrated ability in building responsive web applications, leading robotics club projects, and volunteering in community tech workshops.</textarea>
@@ -648,7 +752,7 @@
 
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">Work & Project Experience</span>
+              <span class="card-box-title"><i data-lucide="briefcase"></i> Work & Experience</span>
               <button class="btn btn-secondary btn-sm" onclick="addExperience()"><i data-lucide="plus"></i> Add Item</button>
             </div>
             <div id="experienceContainer"></div>
@@ -656,7 +760,7 @@
 
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">Education</span>
+              <span class="card-box-title"><i data-lucide="graduation-cap"></i> Education</span>
             </div>
             <div class="form-group">
               <label>School / Institution</label>
@@ -676,7 +780,7 @@
 
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">Skills & Technologies</span>
+              <span class="card-box-title"><i data-lucide="code"></i> Skills</span>
             </div>
             <div class="form-group">
               <label>Comma-Separated Skills</label>
@@ -685,33 +789,53 @@
           </div>
         </div>
 
-        <!-- Tab 2: LLM Assistant -->
+        <!-- Tab 2: AI Hub -->
         <div class="tab-pane" id="llmTab">
+          
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">1-Tap ChatGPT / Claude Agentic Prompt</span>
+              <span class="card-box-title"><i data-lucide="external-link"></i> Launch Free AI App</span>
             </div>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
-              Targeting a specific job? Paste the Job Description below and click <b>Copy Agentic Prompt</b>. Then paste it into free ChatGPT/Claude!
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.6rem;">
+              Tap to open your preferred AI app directly:
             </p>
+            <div class="ai-launchers">
+              <a href="https://chatgpt.com/" target="_blank" class="launcher-btn">
+                <i data-lucide="message-square"></i> ChatGPT
+              </a>
+              <a href="https://claude.ai/new" target="_blank" class="launcher-btn">
+                <i data-lucide="sparkles"></i> Claude
+              </a>
+              <a href="https://gemini.google.com/" target="_blank" class="launcher-btn">
+                <i data-lucide="bot"></i> Gemini
+              </a>
+            </div>
+          </div>
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span class="card-box-title"><i data-lucide="zap"></i> 1-Tap Compact Prompt Generator</span>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.75rem;">
+              Uses an ultra-compact schema so ChatGPT/Claude outputs 100% accurate text without truncation:
+            </p>
+
             <div class="form-group">
               <label>Target Job Description (JD)</label>
-              <textarea class="form-control" id="inputJd" placeholder="Paste target job posting or requirements here..."></textarea>
+              <textarea class="form-control" id="inputJd" placeholder="Paste job requirements here..."></textarea>
             </div>
-            <button class="btn btn-primary" style="width:100%; margin-bottom:0.75rem;" onclick="copyAgentPrompt()">
-              <i data-lucide="copy"></i> 🚀 Copy Prompt for ChatGPT / Claude
+
+            <button class="btn btn-primary" style="width:100%;" onclick="copyCompactAgentPrompt()">
+              <i data-lucide="copy"></i> 🚀 Copy Prompt & Launch AI
             </button>
           </div>
 
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">1-Tap Paste Response Ingest</span>
+              <span class="card-box-title"><i data-lucide="clipboard-check"></i> Ingest Response</span>
             </div>
-            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">
-              Paste the AI response from ChatGPT/Claude below to auto-update your resume instantly:
-            </p>
             <div class="form-group">
-              <textarea class="form-control" id="inputLlmResponse" style="min-height:120px;" placeholder="Paste ChatGPT/Claude response here..."></textarea>
+              <textarea class="form-control" id="inputLlmResponse" style="min-height:90px;" placeholder="Paste AI response here..."></textarea>
             </div>
             <div class="form-row">
               <button class="btn btn-secondary" style="width:100%;" onclick="readClipboardAndIngest()">
@@ -722,9 +846,10 @@
               </button>
             </div>
           </div>
+
         </div>
 
-        <!-- Tab 3: Fit & Styles (What LLMs CANNOT do) -->
+        <!-- Tab 3: Fit & Styles -->
         <div class="tab-pane" id="styleTab">
           
           <div class="slider-group">
@@ -765,8 +890,8 @@
             </div>
             <div class="color-swatches">
               <div class="swatch selected" style="background:#1e3a8a;" onclick="selectColor('#1e3a8a', this)"></div>
-              <div class="swatch" style="background:#065f46;" onclick="selectColor('#065f46', this)"></div>
-              <div class="swatch" style="background:#3730a3;" onclick="selectColor('#3730a3', this)"></div>
+              <div class="swatch" style="background:#059669;" onclick="selectColor('#059669', this)"></div>
+              <div class="swatch" style="background:#4f46e5;" onclick="selectColor('#4f46e5', this)"></div>
               <div class="swatch" style="background:#0f172a;" onclick="selectColor('#0f172a', this)"></div>
               <div class="swatch" style="background:#991b1b;" onclick="selectColor('#991b1b', this)"></div>
             </div>
@@ -786,12 +911,12 @@
 
           <div class="card-box">
             <div class="card-box-header">
-              <span class="card-box-title">Custom LLM Template Import</span>
+              <span class="card-box-title"><i data-lucide="layout"></i> Custom LLM HTML Template</span>
             </div>
             <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">
-              Paste custom HTML code generated by ChatGPT/Claude from a photo. Use placeholders like {{fullName}}, {{summary}}, {{experience}}, {{skills}}.
+              Paste custom HTML code generated by ChatGPT from a photo. Uses placeholders: {{fullName}}, {{title}}, {{summary}}, {{skills}}, {{experiences}}.
             </p>
-            <textarea class="form-control" id="customTemplateHtml" style="min-height:100px;" placeholder="Paste custom HTML template here..."></textarea>
+            <textarea class="form-control" id="customTemplateHtml" style="min-height:90px;" placeholder="Paste custom HTML template here..."></textarea>
             <div class="form-row" style="margin-top:0.5rem;">
               <button class="btn btn-secondary btn-sm" onclick="applyCustomTemplate()">Apply Custom HTML</button>
               <button class="btn btn-secondary btn-sm" onclick="resetCustomTemplate()">Restore Standard</button>
@@ -804,7 +929,7 @@
     </aside>
 
     <!-- Right Live Preview Studio Canvas -->
-    <main class="preview-studio">
+    <main class="preview-studio" id="previewStudioContainer">
       
       <!-- Fit Overflow Warning Alert -->
       <div class="overflow-banner" id="overflowAlert">
@@ -858,8 +983,15 @@
 
   </div>
 
+  <!-- Floating Toast Notification for 1-Tap Auto Clipboard Ingest -->
+  <div class="clipboard-toast" id="clipboardToast">
+    <i data-lucide="sparkles" style="color:#a78bfa;"></i>
+    <span class="clipboard-toast-text">AI Resume Found in Clipboard!</span>
+    <button class="btn btn-success btn-sm" onclick="ingestDetectedClipboard()">⚡ Tap to Apply</button>
+  </div>
+
   <script>
-    // Initial State & Experience Items
+    // State
     let experiences = [
       {
         role: "Web Development Lead",
@@ -883,11 +1015,46 @@
 
     let standardDocBackup = null;
     let deferredPrompt = null;
+    let detectedClipboardText = "";
 
-    // Initialize Lucide Icons
+    // Mobile View Switcher
+    function switchMobileView(viewMode) {
+      const sidebar = document.getElementById('sidebarContainer');
+      const preview = document.getElementById('previewStudioContainer');
+      const btnControls = document.getElementById('btnSwitchControls');
+      const btnPreview = document.getElementById('btnSwitchPreview');
+
+      if (viewMode === 'controls') {
+        sidebar.style.display = 'flex';
+        preview.style.display = 'none';
+        btnControls.classList.add('active');
+        btnPreview.classList.remove('active');
+      } else {
+        sidebar.style.display = 'none';
+        preview.style.display = 'flex';
+        btnPreview.classList.add('active');
+        btnControls.classList.remove('active');
+      }
+    }
+
+    // Theme Toggle Functionality
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('openresume_theme', newTheme);
+      
+      const icon = document.getElementById('themeIcon');
+      if (icon) {
+        icon.setAttribute('data-lucide', newTheme === 'dark' ? 'moon' : 'sun');
+        lucide.createIcons();
+      }
+    }
+
+    const savedTheme = localStorage.getItem('openresume_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
     lucide.createIcons();
 
-    // Tab Switching
     function switchTab(tabId, el) {
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -895,18 +1062,15 @@
       el.classList.add('active');
     }
 
-    // Render Experience Inputs & Document Output
     function renderExperiences() {
       const container = document.getElementById('experienceContainer');
       const docContainer = document.getElementById('docExperience');
-      
       if (!container || !docContainer) return;
 
       container.innerHTML = '';
       docContainer.innerHTML = '';
 
       experiences.forEach((item, index) => {
-        // Render Input Card
         const card = document.createElement('div');
         card.className = 'card-box';
         card.style.padding = '0.75rem';
@@ -934,7 +1098,6 @@
         `;
         container.appendChild(card);
 
-        // Render Document View
         const docItem = document.createElement('div');
         docItem.className = 'res-item';
         docItem.innerHTML = `
@@ -969,7 +1132,6 @@
       renderExperiences();
     }
 
-    // Update Resume Main Fields
     function updateResumeData() {
       const nameEl = document.getElementById('docName');
       if (nameEl) nameEl.innerText = document.getElementById('inputName').value || 'Your Name';
@@ -1008,7 +1170,6 @@
       renderExperiences();
     }
 
-    // Slider Controls for Fit-to-1-Page
     function updateStyles() {
       const fs = document.getElementById('sliderFontSize').value;
       const lh = document.getElementById('sliderLineHeight').value;
@@ -1036,7 +1197,6 @@
       document.documentElement.style.setProperty('--res-accent', hex);
     }
 
-    // Check Page Fit Overflow
     function checkPageOverflow() {
       setTimeout(() => {
         const doc = document.getElementById('resumeDoc');
@@ -1050,35 +1210,56 @@
       }, 100);
     }
 
-    // 1-Tap Copy Agentic Prompt for ChatGPT
-    function copyAgentPrompt() {
+    // Ultra-Compact AI Prompt Generator & Launch ChatGPT
+    function copyCompactAgentPrompt() {
       const jd = document.getElementById('inputJd').value;
-      const promptText = `[SYSTEM AGENT SPECIFICATION]
-You are acting as an expert Resume Writer & ATS Optimizer.
-Task: Re-write the user's resume data to target the provided Job Description.
 
-CRITICAL RULES:
-1. Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags.
-2. Format output strictly as JSON with keys: "fullName", "title", "summary", "skills" (array of strings), "experiences" (array of objects with "role", "company", "date", "bullets").
+      const compactPrompt = `[AI RESUME TASK]
+Re-write bullets to target the JD using strong action verbs & STAR metrics.
 
-USER CURRENT DATA:
+STRICT RULE: Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags using this COMPACT schema:
+{"n":"Name","t":"Title","s":"Summary","k":["Skill1","Skill2"],"x":[{"r":"Role","c":"Company","d":"Date","b":["Bullet1"]}]}
+
+USER DATA:
 ${JSON.stringify({
-  name: document.getElementById('inputName').value,
-  title: document.getElementById('inputTitle').value,
-  summary: document.getElementById('inputSummary').value,
-  skills: document.getElementById('inputSkills').value,
-  experiences: experiences
+  n: document.getElementById('inputName').value,
+  t: document.getElementById('inputTitle').value,
+  s: document.getElementById('inputSummary').value,
+  k: document.getElementById('inputSkills').value.split(',').map(s=>s.trim()),
+  x: experiences.map(e=>({r:e.role, c:e.company, d:e.date, b:e.bullets}))
 })}
 
-TARGET JOB DESCRIPTION:
-${jd || 'General Entry-Level / Technology Candidate'}`;
+TARGET JD:
+${jd || 'General Candidate'}`;
 
-      navigator.clipboard.writeText(promptText).then(() => {
-        alert('🚀 Agentic Prompt Copied to Clipboard!\n\nPaste it into ChatGPT or Claude, copy the response back, and paste it in the Ingest tab!');
+      navigator.clipboard.writeText(compactPrompt).then(() => {
+        window.open('https://chatgpt.com/', '_blank');
       });
     }
 
-    // 1-Tap Read Clipboard and Ingest
+    // Auto Clipboard Detection on Window Focus (Cutting-edge UX)
+    async function checkClipboardOnFocus() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && (text.includes('<RESUME_JSON>') || text.includes('"n"') || text.includes('"fullName"'))) {
+          detectedClipboardText = text;
+          const toast = document.getElementById('clipboardToast');
+          if (toast) toast.classList.add('show');
+        }
+      } catch (err) {}
+    }
+
+    function ingestDetectedClipboard() {
+      if (detectedClipboardText) {
+        document.getElementById('inputLlmResponse').value = detectedClipboardText;
+        ingestLlmResponse();
+        const toast = document.getElementById('clipboardToast');
+        if (toast) toast.classList.remove('show');
+      }
+    }
+
+    window.addEventListener('focus', checkClipboardOnFocus);
+
     async function readClipboardAndIngest() {
       try {
         const text = await navigator.clipboard.readText();
@@ -1087,11 +1268,10 @@ ${jd || 'General Entry-Level / Technology Candidate'}`;
           ingestLlmResponse();
         }
       } catch (err) {
-        alert('Please manually paste the ChatGPT text response into the box below.');
+        alert('Please manually paste the ChatGPT response text into the box below.');
       }
     }
 
-    // 1-Tap Ingest Response
     function ingestLlmResponse() {
       const text = document.getElementById('inputLlmResponse').value;
       const jsonMatch = text.match(/<RESUME_JSON>([\s\S]*?)<\/RESUME_JSON>/) || text.match(/\{[\s\S]*\}/);
@@ -1099,24 +1279,37 @@ ${jd || 'General Entry-Level / Technology Candidate'}`;
       if (jsonMatch) {
         try {
           const parsed = JSON.parse(jsonMatch[0].replace(/<RESUME_JSON>|<\/RESUME_JSON>/g, ''));
-          if (parsed.fullName) document.getElementById('inputName').value = parsed.fullName;
-          if (parsed.title) document.getElementById('inputTitle').value = parsed.title;
-          if (parsed.summary) document.getElementById('inputSummary').value = parsed.summary;
-          if (parsed.skills) document.getElementById('inputSkills').value = Array.isArray(parsed.skills) ? parsed.skills.join(', ') : parsed.skills;
-          if (parsed.experiences && Array.isArray(parsed.experiences)) {
-            experiences = parsed.experiences;
+          
+          const fullName = parsed.n || parsed.fullName;
+          const title = parsed.t || parsed.title;
+          const summary = parsed.s || parsed.summary;
+          const skills = parsed.k || parsed.skills;
+          const exps = parsed.x || parsed.experiences;
+
+          if (fullName) document.getElementById('inputName').value = fullName;
+          if (title) document.getElementById('inputTitle').value = title;
+          if (summary) document.getElementById('inputSummary').value = summary;
+          if (skills) document.getElementById('inputSkills').value = Array.isArray(skills) ? skills.join(', ') : skills;
+          
+          if (exps && Array.isArray(exps)) {
+            experiences = exps.map(e => ({
+              role: e.r || e.role || "Role",
+              company: e.c || e.company || "Organization",
+              date: e.d || e.date || "Date",
+              bullets: e.b || e.bullets || []
+            }));
           }
+
           updateResumeData();
           alert('✨ Resume Applied Successfully!');
         } catch (e) {
-          alert('Could not parse JSON payload from response. Please ensure ChatGPT formatted the response cleanly.');
+          alert('Could not parse JSON. Please ensure response contains valid JSON.');
         }
       } else {
-        alert('No JSON found. Please ensure ChatGPT response includes the <RESUME_JSON> block.');
+        alert('No JSON found. Please ensure response includes the <RESUME_JSON> block.');
       }
     }
 
-    // Custom LLM Template Parser Engine
     function applyCustomTemplate() {
       const htmlTemplate = document.getElementById('customTemplateHtml').value;
       if (!htmlTemplate.trim()) {
@@ -1139,7 +1332,6 @@ ${jd || 'General Entry-Level / Technology Candidate'}`;
         .replace(/\{\{summary\}\}/g, document.getElementById('inputSummary').value)
         .replace(/\{\{skills\}\}/g, document.getElementById('inputSkills').value);
 
-      // Render Experience Block
       const expHtml = experiences.map(e => `
         <div class="res-item">
           <div class="res-item-header"><b>${e.role}</b> - <span>${e.company}</span> (${e.date})</div>
@@ -1160,7 +1352,6 @@ ${jd || 'General Entry-Level / Technology Candidate'}`;
       }
     }
 
-    // PWA Install Prompt Handler
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
@@ -1178,12 +1369,6 @@ ${jd || 'General Entry-Level / Technology Candidate'}`;
       }
     }
 
-    // Reset to Sample
-    function resetToSample() {
-      location.reload();
-    }
-
-    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then((reg) => {
@@ -1194,10 +1379,15 @@ ${jd || 'General Entry-Level / Technology Candidate'}`;
       });
     }
 
-    // Initial Load
     window.addEventListener('DOMContentLoaded', () => {
       renderExperiences();
       updateResumeData();
+      
+      const themeIcon = document.getElementById('themeIcon');
+      if (themeIcon) {
+        themeIcon.setAttribute('data-lucide', savedTheme === 'dark' ? 'moon' : 'sun');
+        lucide.createIcons();
+      }
     });
   </script>
 </body>
