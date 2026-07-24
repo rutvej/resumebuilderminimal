@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>OpenResume Studio - Mobile-First PWA AI Resume Builder</title>
-  <meta name="description" content="100% Free, Mobile-First Offline PWA AI Resume Builder & 1-Page Layout Studio. Zero servers, installable on phones & computers.">
+  <title>OpenResume Studio - Easy AI PWA Resume Builder</title>
+  <meta name="description" content="100% Free, Easy Mobile PWA AI Resume Builder & 1-Page Layout Studio. Zero servers, installable on phones & computers.">
   <meta name="theme-color" content="#0b0f19">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +15,6 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
   
   <style>
-    /* Premium Tokens */
     :root[data-theme="dark"] {
       --bg-main: #0b0f19;
       --bg-panel: #111827;
@@ -74,7 +73,6 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     header {
@@ -87,7 +85,6 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
 
     .brand {
@@ -106,15 +103,12 @@
       justify-content: center;
       color: #fff;
       font-weight: 700;
-      font-size: 1rem;
-      box-shadow: 0 4px 12px var(--primary-glow);
     }
 
     .brand-text h1 {
       font-family: 'Outfit', sans-serif;
       font-size: 1.1rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
     }
 
     .brand-text p {
@@ -149,10 +143,6 @@
       box-shadow: 0 4px 14px var(--primary-glow);
     }
 
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-
     .btn-secondary {
       background: var(--bg-card);
       color: var(--text-main);
@@ -162,6 +152,18 @@
     .btn-success {
       background: var(--success);
       color: #fff;
+    }
+
+    .btn-magic {
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35); }
+      100% { box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
     }
 
     .btn-sm {
@@ -192,9 +194,7 @@
     }
 
     @media (min-width: 900px) {
-      .view-switcher-mobile {
-        display: none;
-      }
+      .view-switcher-mobile { display: none; }
     }
 
     .view-switch-btn {
@@ -217,7 +217,6 @@
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
-      box-shadow: 0 2px 8px var(--primary-glow);
     }
 
     .app-body {
@@ -232,7 +231,6 @@
       .app-body {
         grid-template-columns: 1fr;
         height: auto;
-        overflow: visible;
       }
     }
 
@@ -267,7 +265,6 @@
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
-      transition: all 0.2s;
       border-bottom: 2px solid transparent;
     }
 
@@ -283,13 +280,8 @@
       padding: 1.2rem 1rem;
     }
 
-    .tab-pane {
-      display: none;
-    }
-
-    .tab-pane.active {
-      display: block;
-    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
 
     .card-box {
       background: var(--bg-card);
@@ -315,19 +307,6 @@
       gap: 0.4rem;
     }
 
-    .step-badge {
-      width: 22px;
-      height: 22px;
-      background: var(--primary);
-      color: #fff;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
     .form-group {
       margin-bottom: 1rem;
     }
@@ -339,7 +318,6 @@
       color: var(--text-muted);
       margin-bottom: 0.35rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
     .form-control {
@@ -365,157 +343,108 @@
       gap: 0.75rem;
     }
 
-    /* Accordion Collapsible Cards for AI Hub */
-    .accordion-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      overflow: hidden;
-      transition: all 0.25s ease;
+    /* Friendly Wizard Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
     }
 
-    .accordion-header {
-      padding: 1rem;
-      background: var(--bg-card);
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      max-width: 500px;
+      width: 100%;
+      padding: 1.5rem;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      cursor: pointer;
-      user-select: none;
+      margin-bottom: 1.25rem;
     }
 
-    .accordion-header:hover {
-      background: var(--bg-card-hover);
-    }
-
-    .accordion-title {
-      font-size: 0.9rem;
+    .modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
       font-weight: 700;
-      color: var(--text-main);
+      color: #fff;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .accordion-icon {
-      transition: transform 0.3s ease;
+    .modal-close {
+      background: transparent;
+      border: none;
       color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.2rem;
     }
 
-    .accordion-card.open .accordion-icon {
-      transform: rotate(180deg);
-      color: var(--primary);
+    .wizard-step {
+      display: none;
     }
 
-    .accordion-content {
-      max-height: 0;
-      overflow: hidden;
-      padding: 0 1rem;
-      transition: max-height 0.35s ease, padding 0.35s ease;
+    .wizard-step.active {
+      display: block;
     }
 
-    .accordion-card.open .accordion-content {
-      max-height: 1000px;
-      padding: 0.5rem 1rem 1rem 1rem;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .ai-step-card {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0.9rem;
-      margin-bottom: 0.85rem;
-    }
-
-    .ai-step-title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.6rem;
-    }
-
-    .ai-preset-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
+    .wizard-option-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
       margin-bottom: 0.75rem;
-    }
-
-    .chip-btn {
-      padding: 0.3rem 0.6rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      font-weight: 600;
       cursor: pointer;
-    }
-
-    .chip-btn:hover {
-      color: var(--primary);
-      border-color: var(--primary);
-    }
-
-    .ai-launcher-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.4rem;
-    }
-
-    .launcher-pill {
-      min-height: 38px;
-      padding: 0.4rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--text-main);
-      font-size: 0.76rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-    }
-
-    .launcher-pill:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    /* Floating Toast */
-    .clipboard-toast {
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%) translateY(120%);
-      background: linear-gradient(135deg, #1e1b4b, #312e81);
-      border: 1px solid var(--primary);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      border-radius: 14px;
-      padding: 0.85rem 1.25rem;
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      z-index: 1000;
-      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      max-width: 90%;
+      transition: all 0.2s;
     }
 
-    .clipboard-toast.show {
-      transform: translateX(-50%) translateY(0);
+    .wizard-option-card:hover, .wizard-option-card.selected {
+      border-color: var(--primary);
+      background: var(--bg-card-hover);
     }
 
-    .clipboard-toast-text {
-      font-size: 0.85rem;
-      color: #fff;
-      font-weight: 500;
+    .wizard-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wizard-text h4 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .wizard-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
     }
 
     /* Sliders Group */
@@ -594,7 +523,7 @@
       width: 100%;
     }
 
-    /* Resume Document Wrapper */
+    /* Document Wrapper */
     .document-wrapper {
       width: 210mm;
       min-height: 297mm;
@@ -630,7 +559,6 @@
       color: var(--res-accent);
       line-height: 1.1;
       text-transform: uppercase;
-      letter-spacing: 0.02em;
     }
 
     .res-title {
@@ -678,19 +606,9 @@
       font-weight: 600;
     }
 
-    .res-item-role {
-      color: #0f172a;
-    }
-
-    .res-item-company {
-      color: var(--res-accent);
-    }
-
-    .res-item-date {
-      color: #64748b;
-      font-weight: 400;
-      font-size: calc(var(--res-font-size) * 0.9);
-    }
+    .res-item-role { color: #0f172a; }
+    .res-item-company { color: var(--res-accent); }
+    .res-item-date { color: #64748b; font-weight: 400; font-size: calc(var(--res-font-size) * 0.9); }
 
     .res-bullets {
       padding-left: 1.2rem;
@@ -698,9 +616,7 @@
       color: #334155;
     }
 
-    .res-bullets li {
-      margin-bottom: 0.2rem;
-    }
+    .res-bullets li { margin-bottom: 0.2rem; }
 
     .res-skills-list {
       display: flex;
@@ -718,34 +634,13 @@
       border: 1px solid #e2e8f0;
     }
 
-    /* Print Rules */
     @media print {
-      body {
-        background: #fff !important;
-        color: #000 !important;
-      }
-      header, .sidebar, .overflow-banner, .view-switcher-mobile, .clipboard-toast {
-        display: none !important;
-      }
-      .app-body {
-        display: block !important;
-        height: auto !important;
-      }
-      .preview-studio {
-        background: transparent !important;
-        padding: 0 !important;
-        display: block !important;
-      }
-      .document-wrapper {
-        box-shadow: none !important;
-        width: 100% !important;
-        min-height: auto !important;
-        padding: var(--res-margin) !important;
-      }
-      @page {
-        size: A4 portrait;
-        margin: 0;
-      }
+      body { background: #fff !important; color: #000 !important; }
+      header, .sidebar, .overflow-banner, .view-switcher-mobile, .modal-overlay { display: none !important; }
+      .app-body { display: block !important; height: auto !important; }
+      .preview-studio { background: transparent !important; padding: 0 !important; display: block !important; }
+      .document-wrapper { box-shadow: none !important; width: 100% !important; min-height: auto !important; padding: var(--res-margin) !important; }
+      @page { size: A4 portrait; margin: 0; }
     }
   </style>
 </head>
@@ -762,11 +657,11 @@
     </div>
 
     <div class="header-actions">
+      <button class="btn btn-magic btn-sm" onclick="openWizard()">
+        <i data-lucide="sparkles"></i> 30s AI Wizard
+      </button>
       <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Theme">
         <i data-lucide="moon" id="themeIcon"></i>
-      </button>
-      <button class="btn btn-secondary btn-sm" id="btnInstallPwa" style="display:none;" onclick="triggerPwaInstall()">
-        <i data-lucide="download"></i> Install
       </button>
       <button class="btn btn-primary btn-sm" onclick="window.print()">
         <i data-lucide="printer"></i> PDF
@@ -793,9 +688,6 @@
         <button class="tab-btn active" onclick="switchTab('contentTab', this)">
           <i data-lucide="file-text"></i> Content
         </button>
-        <button class="tab-btn" onclick="switchTab('llmTab', this)">
-          <i data-lucide="bot"></i> AI Copy-Paste Hub
-        </button>
         <button class="tab-btn" onclick="switchTab('styleTab', this)">
           <i data-lucide="sliders"></i> Fit & Styles
         </button>
@@ -805,6 +697,12 @@
         
         <!-- Tab 1: Content Editor -->
         <div class="tab-pane active" id="contentTab">
+          <div style="margin-bottom:1rem;">
+            <button class="btn btn-magic" style="width:100%;" onclick="openWizard()">
+              <i data-lucide="sparkles"></i> Launch 30s Guided AI Wizard
+            </button>
+          </div>
+
           <div class="card-box">
             <div class="card-box-header">
               <span class="card-box-title"><i data-lucide="user"></i> Personal Contact Info</span>
@@ -887,121 +785,8 @@
           </div>
         </div>
 
-        <!-- Tab 2: ALL AI Copy-Paste Tools (Consolidated Collapsible Accordions) -->
-        <div class="tab-pane" id="llmTab">
-          
-          <!-- Accordion 1: Resume Content AI Copy-Paste -->
-          <div class="accordion-card open" id="accordionContent">
-            <div class="accordion-header" onclick="toggleAccordion('accordionContent')">
-              <div class="accordion-title">
-                <i data-lucide="sparkles" style="color:var(--primary);"></i>
-                <span>1. Resume Content AI Copy-Paste</span>
-              </div>
-              <i data-lucide="chevron-down" class="accordion-icon"></i>
-            </div>
-            <div class="accordion-content">
-              <div class="ai-step-card">
-                <div class="ai-step-title">
-                  <span class="step-badge">1</span>
-                  <span>Select Goal & Target JD</span>
-                </div>
-                <div class="ai-preset-chips">
-                  <button class="chip-btn" onclick="setPresetTask('jd')">🎯 Target JD</button>
-                  <button class="chip-btn" onclick="setPresetTask('star')">⚡ STAR Metrics</button>
-                  <button class="chip-btn" onclick="setPresetTask('concise')">🧹 Trim Grammar</button>
-                  <button class="chip-btn" onclick="setPresetTask('teen')">🎓 High School</button>
-                </div>
-                <div class="form-group" style="margin-bottom:0.5rem;">
-                  <textarea class="form-control" id="inputJd" style="min-height:55px;" placeholder="Paste target job posting here..."></textarea>
-                </div>
-              </div>
-
-              <div class="ai-step-card">
-                <div class="ai-step-title">
-                  <span class="step-badge">2</span>
-                  <span>Copy Prompt & Launch AI</span>
-                </div>
-                <div class="ai-launcher-row">
-                  <button class="launcher-pill" onclick="copyAndLaunchAi('https://chatgpt.com/')">
-                    <i data-lucide="message-square"></i> ChatGPT
-                  </button>
-                  <button class="launcher-pill" onclick="copyAndLaunchAi('https://claude.ai/new')">
-                    <i data-lucide="sparkles"></i> Claude
-                  </button>
-                  <button class="launcher-pill" onclick="copyAndLaunchAi('https://gemini.google.com/')">
-                    <i data-lucide="bot"></i> Gemini
-                  </button>
-                </div>
-              </div>
-
-              <div class="ai-step-card" style="margin-bottom:0;">
-                <div class="ai-step-title">
-                  <span class="step-badge">3</span>
-                  <span>Ingest AI Response</span>
-                </div>
-                <div class="form-group" style="margin-bottom:0.6rem;">
-                  <textarea class="form-control" id="inputLlmResponse" style="min-height:80px;" placeholder="Paste AI response here..."></textarea>
-                </div>
-                <div class="form-row">
-                  <button class="btn btn-secondary" onclick="readClipboardAndIngest()">
-                    <i data-lucide="clipboard"></i> Paste Clipboard
-                  </button>
-                  <button class="btn btn-success" onclick="ingestLlmResponse()">
-                    <i data-lucide="zap"></i> Apply Content
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Accordion 2: Custom HTML Template AI Copy-Paste -->
-          <div class="accordion-card" id="accordionTemplate">
-            <div class="accordion-header" onclick="toggleAccordion('accordionTemplate')">
-              <div class="accordion-title">
-                <i data-lucide="layout" style="color:var(--primary);"></i>
-                <span>2. Custom HTML Template AI Copy-Paste</span>
-              </div>
-              <i data-lucide="chevron-down" class="accordion-icon"></i>
-            </div>
-            <div class="accordion-content">
-              <div class="ai-step-card">
-                <div class="ai-step-title">
-                  <span class="step-badge">1</span>
-                  <span>Image-to-HTML Prompt</span>
-                </div>
-                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.6rem;">
-                  Upload any resume photo to ChatGPT/Claude and ask for an HTML file.
-                </p>
-                <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="copyImageToHtmlPrompt()">
-                  <i data-lucide="copy"></i> Copy Image-to-HTML Prompt
-                </button>
-              </div>
-
-              <div class="ai-step-card" style="margin-bottom:0;">
-                <div class="ai-step-title">
-                  <span class="step-badge">2</span>
-                  <span>Paste & Apply Template Code</span>
-                </div>
-                <div class="form-group" style="margin-bottom:0.6rem;">
-                  <textarea class="form-control" id="customTemplateHtml" style="min-height:85px;" placeholder="Paste ChatGPT generated HTML code here..."></textarea>
-                </div>
-                <div class="form-row">
-                  <button class="btn btn-primary" onclick="applyCustomTemplate()">
-                    <i data-lucide="check-circle"></i> Apply HTML
-                  </button>
-                  <button class="btn btn-secondary" onclick="resetCustomTemplate()">
-                    <i data-lucide="rotate-ccw"></i> Restore Standard
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Tab 3: Fit & Styles -->
+        <!-- Tab 2: Fit & Styles -->
         <div class="tab-pane" id="styleTab">
-          
           <div class="slider-group">
             <div class="slider-header">
               <span>📏 Base Font Size</span>
@@ -1058,7 +843,6 @@
               <option value="'JetBrains Mono', monospace">Technical Mono (JetBrains)</option>
             </select>
           </div>
-
         </div>
 
       </div>
@@ -1066,14 +850,11 @@
 
     <!-- Right Live Preview Studio Canvas -->
     <main class="preview-studio" id="previewStudioContainer">
-      
-      <!-- Fit Overflow Warning Alert -->
       <div class="overflow-banner" id="overflowAlert">
         <i data-lucide="alert-triangle"></i>
-        <span><b>1-Page Overflow Warning:</b> Your content slightly exceeds 1 page! Use the <b>Font Size</b> or <b>Line Spacing</b> sliders on the left to shrink spacing slightly.</span>
+        <span><b>1-Page Overflow Warning:</b> Content slightly exceeds 1 page! Reduce <b>Font Size</b> or <b>Line Spacing</b> sliders to fit perfectly.</span>
       </div>
 
-      <!-- Live Resume A4 Document -->
       <div class="document-wrapper" id="resumeDoc">
         <header class="res-header">
           <div class="res-name" id="docName">Alex Rivera</div>
@@ -1113,17 +894,106 @@
           <div class="res-section-title">Skills & Technologies</div>
           <div class="res-skills-list" id="docSkills"></div>
         </section>
-
       </div>
     </main>
 
   </div>
 
-  <!-- Floating Toast Notification -->
-  <div class="clipboard-toast" id="clipboardToast">
-    <i data-lucide="sparkles" style="color:#a78bfa;"></i>
-    <span class="clipboard-toast-text">AI Resume Found in Clipboard!</span>
-    <button class="btn btn-success btn-sm" onclick="ingestDetectedClipboard()">⚡ Tap to Apply</button>
+  <!-- Friendly 30s Guided AI Wizard Modal -->
+  <div class="modal-overlay" id="wizardModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="sparkles" style="color:#ec4899;"></i>
+          <span>30-Second Guided AI Wizard</span>
+        </div>
+        <button class="modal-close" onclick="closeWizard()">&times;</button>
+      </div>
+
+      <!-- Step 1: Goal -->
+      <div class="wizard-step active" id="wStep1">
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+          Step 1 of 3: What is your primary goal today?
+        </p>
+
+        <div class="wizard-option-card selected" onclick="selectWizardGoal('jd', this)">
+          <div class="wizard-icon"><i data-lucide="target"></i></div>
+          <div class="wizard-text">
+            <h4>Tailor for a Specific Job</h4>
+            <p>Matches your bullet points to a target Job Description.</p>
+          </div>
+        </div>
+
+        <div class="wizard-option-card" onclick="selectWizardGoal('star', this)">
+          <div class="wizard-icon"><i data-lucide="zap"></i></div>
+          <div class="wizard-text">
+            <h4>Add Impressive Metrics (STAR)</h4>
+            <p>Adds percentages and numeric results to your achievements.</p>
+          </div>
+        </div>
+
+        <div class="wizard-option-card" onclick="selectWizardGoal('teen', this)">
+          <div class="wizard-icon"><i data-lucide="user-check"></i></div>
+          <div class="wizard-text">
+            <h4>High School / First Job Starter</h4>
+            <p>Turns school projects and volunteering into a top resume.</p>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label>Target Job Description (Optional)</label>
+          <textarea class="form-control" id="wInputJd" style="min-height:55px;" placeholder="Paste job posting here if tailoring..."></textarea>
+        </div>
+
+        <button class="btn btn-magic" style="width:100%; margin-top:0.5rem;" onclick="goWizardStep(2)">
+          Next: Launch AI in 1 Tap <i data-lucide="arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Step 2: Launch AI -->
+      <div class="wizard-step" id="wStep2">
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+          Step 2 of 3: Tap <b>Copy & Launch ChatGPT</b> below.
+        </p>
+
+        <div style="background:var(--bg-card); border-radius:10px; padding:1rem; text-align:center; margin-bottom:1.25rem;">
+          <i data-lucide="copy-check" style="width:36px; height:36px; color:var(--primary); margin-bottom:0.5rem;"></i>
+          <h4 style="font-size:0.95rem; margin-bottom:0.3rem;">Prompt Copied Automatically!</h4>
+          <p style="font-size:0.8rem; color:var(--text-muted);">
+            When ChatGPT opens, long-press the text box, select <b>Paste</b>, and tap <b>Send</b>. Then copy ChatGPT's answer!
+          </p>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%; min-height:48px; margin-bottom:0.75rem;" onclick="copyAndLaunchChatGPT()">
+          <i data-lucide="external-link"></i> 🚀 1-Tap Launch ChatGPT
+        </button>
+
+        <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="goWizardStep(3)">
+          Already copied AI response? Continue to Step 3 <i data-lucide="arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- Step 3: Apply -->
+      <div class="wizard-step" id="wStep3">
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+          Step 3 of 3: Paste ChatGPT's response or tap <b>Paste Clipboard</b>!
+        </p>
+
+        <div class="form-group">
+          <textarea class="form-control" id="wLlmResponse" style="min-height:90px;" placeholder="Paste ChatGPT response here..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <button class="btn btn-secondary" onclick="readWizardClipboard()">
+            <i data-lucide="clipboard"></i> Paste Clipboard
+          </button>
+          <button class="btn btn-success" onclick="applyWizardResponse()">
+            <i data-lucide="check-circle"></i> ✨ Apply to Resume
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <script>
@@ -1149,18 +1019,8 @@
       }
     ];
 
-    let currentPresetTask = "jd";
-    let standardDocBackup = null;
+    let wizardGoal = "jd";
     let deferredPrompt = null;
-    let detectedClipboardText = "";
-
-    // Accordion Toggle Handler
-    function toggleAccordion(cardId) {
-      const card = document.getElementById(cardId);
-      if (card) {
-        card.classList.toggle('open');
-      }
-    }
 
     // Mobile View Switcher
     function switchMobileView(viewMode) {
@@ -1179,6 +1039,108 @@
         preview.style.display = 'flex';
         btnPreview.classList.add('active');
         btnControls.classList.remove('active');
+      }
+    }
+
+    // Wizard Functions
+    function openWizard() {
+      document.getElementById('wizardModal').classList.add('show');
+      goWizardStep(1);
+    }
+
+    function closeWizard() {
+      document.getElementById('wizardModal').classList.remove('show');
+    }
+
+    function selectWizardGoal(goal, el) {
+      wizardGoal = goal;
+      document.querySelectorAll('.wizard-option-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function goWizardStep(stepNum) {
+      document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+      document.getElementById('wStep' + stepNum).classList.add('active');
+    }
+
+    function copyAndLaunchChatGPT() {
+      const jd = document.getElementById('wInputJd').value;
+      let instruction = "Re-write bullets to target the JD using strong action verbs & STAR metrics.";
+      if (wizardGoal === 'star') instruction = "Add measurable metrics, percentages, and STAR results to every bullet point.";
+      if (wizardGoal === 'teen') instruction = "Format high school projects, volunteering, and coursework into entry-level achievements.";
+
+      const compactPrompt = `[AI RESUME TASK]
+${instruction}
+
+STRICT RULE: Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags using this COMPACT schema:
+{"n":"Name","t":"Title","s":"Summary","k":["Skill1","Skill2"],"x":[{"r":"Role","c":"Company","d":"Date","b":["Bullet1"]}]}
+
+USER DATA:
+${JSON.stringify({
+  n: document.getElementById('inputName').value,
+  t: document.getElementById('inputTitle').value,
+  s: document.getElementById('inputSummary').value,
+  k: document.getElementById('inputSkills').value.split(',').map(s=>s.trim()),
+  x: experiences.map(e=>({r:e.role, c:e.company, d:e.date, b:e.bullets}))
+})}
+
+TARGET JD:
+${jd || 'General Candidate'}`;
+
+      navigator.clipboard.writeText(compactPrompt).then(() => {
+        window.open('https://chatgpt.com/', '_blank');
+        goWizardStep(3);
+      });
+    }
+
+    async function readWizardClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('wLlmResponse').value = text;
+          applyWizardResponse();
+        }
+      } catch (err) {
+        alert('Please manually paste the ChatGPT response text into the box.');
+      }
+    }
+
+    function applyWizardResponse() {
+      const text = document.getElementById('wLlmResponse').value;
+      const jsonMatch = text.match(/<RESUME_JSON>([\s\S]*?)<\/RESUME_JSON>/) || text.match(/\{[\s\S]*\}/);
+
+      if (jsonMatch) {
+        try {
+          const parsed = JSON.parse(jsonMatch[0].replace(/<RESUME_JSON>|<\/RESUME_JSON>/g, ''));
+          
+          const fullName = parsed.n || parsed.fullName;
+          const title = parsed.t || parsed.title;
+          const summary = parsed.s || parsed.summary;
+          const skills = parsed.k || parsed.skills;
+          const exps = parsed.x || parsed.experiences;
+
+          if (fullName) document.getElementById('inputName').value = fullName;
+          if (title) document.getElementById('inputTitle').value = title;
+          if (summary) document.getElementById('inputSummary').value = summary;
+          if (skills) document.getElementById('inputSkills').value = Array.isArray(skills) ? skills.join(', ') : skills;
+          
+          if (exps && Array.isArray(exps)) {
+            experiences = exps.map(e => ({
+              role: e.r || e.role || "Role",
+              company: e.c || e.company || "Organization",
+              date: e.d || e.date || "Date",
+              bullets: e.b || e.bullets || []
+            }));
+          }
+
+          updateResumeData();
+          closeWizard();
+          alert('✨ Resume Applied Successfully!');
+        } catch (e) {
+          alert('Could not parse JSON payload.');
+        }
+      } else {
+        alert('No JSON found in response.');
       }
     }
 
@@ -1353,162 +1315,6 @@
           alert.style.display = 'none';
         }
       }, 100);
-    }
-
-    function setPresetTask(task) {
-      currentPresetTask = task;
-    }
-
-    function copyAndLaunchAi(aiUrl) {
-      const jd = document.getElementById('inputJd').value;
-      let instruction = "Re-write bullets to target the JD using strong action verbs & STAR metrics.";
-      
-      if (currentPresetTask === 'star') instruction = "Add measurable metrics, percentages, and STAR results to every bullet point.";
-      if (currentPresetTask === 'concise') instruction = "Trim words, fix grammar, and make sentences extremely punchy and concise.";
-      if (currentPresetTask === 'teen') instruction = "Format high school projects, volunteering, and coursework into entry-level achievements.";
-
-      const compactPrompt = `[AI RESUME TASK]
-${instruction}
-
-STRICT RULE: Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags using this COMPACT schema:
-{"n":"Name","t":"Title","s":"Summary","k":["Skill1","Skill2"],"x":[{"r":"Role","c":"Company","d":"Date","b":["Bullet1"]}]}
-
-USER DATA:
-${JSON.stringify({
-  n: document.getElementById('inputName').value,
-  t: document.getElementById('inputTitle').value,
-  s: document.getElementById('inputSummary').value,
-  k: document.getElementById('inputSkills').value.split(',').map(s=>s.trim()),
-  x: experiences.map(e=>({r:e.role, c:e.company, d:e.date, b:e.bullets}))
-})}
-
-TARGET JD:
-${jd || 'General Candidate'}`;
-
-      navigator.clipboard.writeText(compactPrompt).then(() => {
-        window.open(aiUrl, '_blank');
-      });
-    }
-
-    function copyImageToHtmlPrompt() {
-      const prompt = `Convert the uploaded resume photo/screenshot into a single HTML file with clean inline CSS styling. Use placeholders: {{fullName}}, {{title}}, {{email}}, {{phone}}, {{location}}, {{website}}, {{summary}}, {{skills}}, {{experiences}}.`;
-      navigator.clipboard.writeText(prompt).then(() => {
-        alert('🚀 Image-to-HTML Prompt Copied to Clipboard!\n\nUpload your resume photo to ChatGPT or Claude and paste this prompt!');
-      });
-    }
-
-    async function checkClipboardOnFocus() {
-      try {
-        const text = await navigator.clipboard.readText();
-        if (text && (text.includes('<RESUME_JSON>') || text.includes('"n"') || text.includes('"fullName"'))) {
-          detectedClipboardText = text;
-          const toast = document.getElementById('clipboardToast');
-          if (toast) toast.classList.add('show');
-        }
-      } catch (err) {}
-    }
-
-    function ingestDetectedClipboard() {
-      if (detectedClipboardText) {
-        document.getElementById('inputLlmResponse').value = detectedClipboardText;
-        ingestLlmResponse();
-        const toast = document.getElementById('clipboardToast');
-        if (toast) toast.classList.remove('show');
-      }
-    }
-
-    window.addEventListener('focus', checkClipboardOnFocus);
-
-    async function readClipboardAndIngest() {
-      try {
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          document.getElementById('inputLlmResponse').value = text;
-          ingestLlmResponse();
-        }
-      } catch (err) {
-        alert('Please manually paste the ChatGPT response text into the box below.');
-      }
-    }
-
-    function ingestLlmResponse() {
-      const text = document.getElementById('inputLlmResponse').value;
-      const jsonMatch = text.match(/<RESUME_JSON>([\s\S]*?)<\/RESUME_JSON>/) || text.match(/\{[\s\S]*\}/);
-
-      if (jsonMatch) {
-        try {
-          const parsed = JSON.parse(jsonMatch[0].replace(/<RESUME_JSON>|<\/RESUME_JSON>/g, ''));
-          
-          const fullName = parsed.n || parsed.fullName;
-          const title = parsed.t || parsed.title;
-          const summary = parsed.s || parsed.summary;
-          const skills = parsed.k || parsed.skills;
-          const exps = parsed.x || parsed.experiences;
-
-          if (fullName) document.getElementById('inputName').value = fullName;
-          if (title) document.getElementById('inputTitle').value = title;
-          if (summary) document.getElementById('inputSummary').value = summary;
-          if (skills) document.getElementById('inputSkills').value = Array.isArray(skills) ? skills.join(', ') : skills;
-          
-          if (exps && Array.isArray(exps)) {
-            experiences = exps.map(e => ({
-              role: e.r || e.role || "Role",
-              company: e.c || e.company || "Organization",
-              date: e.d || e.date || "Date",
-              bullets: e.b || e.bullets || []
-            }));
-          }
-
-          updateResumeData();
-          alert('✨ Resume Content Applied Successfully!');
-        } catch (e) {
-          alert('Could not parse JSON. Please ensure response contains valid JSON.');
-        }
-      } else {
-        alert('No JSON found. Please ensure response includes the <RESUME_JSON> block.');
-      }
-    }
-
-    function applyCustomTemplate() {
-      const htmlTemplate = document.getElementById('customTemplateHtml').value;
-      if (!htmlTemplate.trim()) {
-        alert('Please paste custom HTML template code first.');
-        return;
-      }
-
-      const doc = document.getElementById('resumeDoc');
-      if (!standardDocBackup) {
-        standardDocBackup = doc.innerHTML;
-      }
-
-      let rendered = htmlTemplate
-        .replace(/\{\{fullName\}\}/g, document.getElementById('inputName').value)
-        .replace(/\{\{title\}\}/g, document.getElementById('inputTitle').value)
-        .replace(/\{\{email\}\}/g, document.getElementById('inputEmail').value)
-        .replace(/\{\{phone\}\}/g, document.getElementById('inputPhone').value)
-        .replace(/\{\{location\}\}/g, document.getElementById('inputLocation').value)
-        .replace(/\{\{website\}\}/g, document.getElementById('inputWebsite').value)
-        .replace(/\{\{summary\}\}/g, document.getElementById('inputSummary').value)
-        .replace(/\{\{skills\}\}/g, document.getElementById('inputSkills').value);
-
-      const expHtml = experiences.map(e => `
-        <div class="res-item">
-          <div class="res-item-header"><b>${e.role}</b> - <span>${e.company}</span> (${e.date})</div>
-          <ul>${e.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
-        </div>
-      `).join('');
-
-      rendered = rendered.replace(/\{\{experiences\}\}/g, expHtml);
-      doc.innerHTML = rendered;
-      alert('✨ Custom HTML Template Applied!');
-    }
-
-    function resetCustomTemplate() {
-      if (standardDocBackup) {
-        document.getElementById('resumeDoc').innerHTML = standardDocBackup;
-        updateResumeData();
-        alert('Standard Template Restored.');
-      }
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
