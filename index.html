@@ -13,9 +13,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
-
-  <!-- PDF / Docx Text Parser Helper -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   
   <style>
     :root[data-theme="dark"] {
@@ -158,11 +155,6 @@
       color: #fff;
     }
 
-    .btn-magic {
-      background: linear-gradient(135deg, #8b5cf6, #ec4899);
-      color: #fff;
-    }
-
     .btn-sm {
       min-height: 36px;
       padding: 0.35rem 0.75rem;
@@ -182,7 +174,7 @@
       cursor: pointer;
     }
 
-    /* Modern 2026 Welcome Hero Onboarding View */
+    /* Onboarding Hero */
     .onboarding-screen {
       position: fixed;
       top: 0;
@@ -248,12 +240,12 @@
 
     .path-cards-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
       margin-bottom: 2rem;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 750px) {
       .path-cards-grid { grid-template-columns: 1fr; }
     }
 
@@ -261,7 +253,7 @@
       background: var(--bg-panel);
       border: 2px solid var(--border-color);
       border-radius: 16px;
-      padding: 1.75rem 1.5rem;
+      padding: 1.5rem 1.25rem;
       text-align: left;
       cursor: pointer;
       transition: all 0.25s ease;
@@ -277,31 +269,31 @@
     }
 
     .path-icon {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
       background: rgba(99, 102, 241, 0.15);
       color: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
     }
 
     .path-card h3 {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
     }
 
     .path-card p {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       line-height: 1.4;
       margin-bottom: 1.25rem;
     }
 
-    /* Video Tutorial Modal */
+    /* Video Demo Animation Frame (Pure Code Animation) */
     .tutorial-box {
       background: var(--bg-panel);
       border: 1px solid var(--border-color);
@@ -315,7 +307,7 @@
     .video-demo-frame {
       width: 100%;
       height: 240px;
-      background: #000;
+      background: linear-gradient(135deg, #090d16, #111827);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -331,8 +323,14 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       padding: 1rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .demo-step-anim.active {
@@ -494,6 +492,40 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.75rem;
+    }
+
+    /* Template Picker Grid */
+    .template-presets-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .template-card-option {
+      background: var(--bg-panel);
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .template-card-option:hover, .template-card-option.active {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px var(--primary-glow);
+    }
+
+    .template-card-option h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .template-card-option p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
     }
 
     /* Sliders Group */
@@ -690,11 +722,11 @@
         <div class="path-card" onclick="triggerImportResume()">
           <div>
             <div class="path-icon"><i data-lucide="file-up"></i></div>
-            <h3>Import / Edit Existing Resume</h3>
-            <p>Upload your old PDF, Docx, or text file to convert and format it instantly.</p>
+            <h3>Import / Edit Resume</h3>
+            <p>Upload your old PDF, Docx, or TXT file to convert & reformat.</p>
           </div>
           <button class="btn btn-secondary" style="width:100%;">
-            <i data-lucide="upload"></i> Upload Existing File
+            <i data-lucide="upload"></i> Upload File
           </button>
           <input type="file" id="fileImportInput" accept=".pdf,.docx,.txt" style="display:none;" onchange="handleResumeFileImport(event)">
         </div>
@@ -703,11 +735,23 @@
         <div class="path-card" onclick="startFreshResume()">
           <div>
             <div class="path-icon"><i data-lucide="plus-circle"></i></div>
-            <h3>Create Fresh from Scratch</h3>
-            <p>Start with a high school or entry-level starter template tailored for first-timers.</p>
+            <h3>Create Fresh</h3>
+            <p>Start with an entry-level / high school starter template.</p>
           </div>
           <button class="btn btn-primary" style="width:100%;">
             <i data-lucide="sparkles"></i> Start Fresh
+          </button>
+        </div>
+
+        <!-- Path C: Pick Visual Template First -->
+        <div class="path-card" onclick="openTemplatesFromHero()">
+          <div>
+            <div class="path-icon"><i data-lucide="layout"></i></div>
+            <h3>Pick Template First</h3>
+            <p>Choose from Modern Minimalist, Classic Serif, or Custom HTML.</p>
+          </div>
+          <button class="btn btn-secondary" style="width:100%;">
+            <i data-lucide="palette"></i> Select Template
           </button>
         </div>
 
@@ -715,42 +759,39 @@
 
       <div style="display:flex; justify-content:center; gap:1rem;">
         <button class="btn btn-secondary btn-sm" onclick="openVideoTutorial()">
-          <i data-lucide="play-circle"></i> 🎥 Watch 15s Animated Video Tutorial
+          <i data-lucide="play-circle"></i> 🎥 Watch 15s Animated Video Tutorial (No File Needed!)
         </button>
       </div>
 
     </div>
   </div>
 
-  <!-- Animated Video Tutorial Modal -->
+  <!-- Pure Code Animated Video Demo Modal (No MP4 file needed!) -->
   <div class="onboarding-screen hidden" id="videoTutorialModal">
     <div class="tutorial-box">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-family:'Outfit', sans-serif; font-size:1.2rem;">🎥 15-Second How-To Video Guide</h3>
+        <h3 style="font-family:'Outfit', sans-serif; font-size:1.2rem;">🎥 15-Second Animated Video Guide</h3>
         <button class="btn btn-secondary btn-sm" onclick="closeVideoTutorial()">&times;</button>
       </div>
 
-      <!-- Animated Steps Demo Container -->
       <div class="video-demo-frame">
-        
         <div class="demo-step-anim active" id="demoStep1">
-          <i data-lucide="file-text" style="width:48px; height:48px; color:#6366f1;"></i>
-          <h4 style="color:#fff;">1. Enter Details or Import File</h4>
-          <p style="font-size:0.8rem; color:#9ca3af;">Enter your contact info or upload your existing resume file.</p>
+          <i data-lucide="file-text" style="width:52px; height:52px; color:#6366f1;"></i>
+          <h4 style="color:#fff; margin-top:0.4rem;">Step 1: Enter Info or Upload Resume File</h4>
+          <p style="font-size:0.8rem; color:#9ca3af;">Type your background or upload an existing PDF/Docx file.</p>
         </div>
 
         <div class="demo-step-anim" id="demoStep2">
-          <i data-lucide="bot" style="width:48px; height:48px; color:#ec4899;"></i>
-          <h4 style="color:#fff;">2. 1-Tap Copy Prompt to ChatGPT</h4>
-          <p style="font-size:0.8rem; color:#9ca3af;">ChatGPT generates STAR bullet points & returns clean text.</p>
+          <i data-lucide="bot" style="width:52px; height:52px; color:#ec4899;"></i>
+          <h4 style="color:#fff; margin-top:0.4rem;">Step 2: 1-Tap Copy Prompt to ChatGPT</h4>
+          <p style="font-size:0.8rem; color:#9ca3af;">ChatGPT rewrites bullet points with impressive STAR metrics.</p>
         </div>
 
         <div class="demo-step-anim" id="demoStep3">
-          <i data-lucide="sliders" style="width:48px; height:48px; color:#10b981;"></i>
-          <h4 style="color:#fff;">3. Adjust Sliders & Export 1-Page PDF</h4>
-          <p style="font-size:0.8rem; color:#9ca3af;">Use font size sliders to fit onto 1 page perfectly!</p>
+          <i data-lucide="sliders" style="width:52px; height:52px; color:#10b981;"></i>
+          <h4 style="color:#fff; margin-top:0.4rem;">Step 3: Adjust Font Sliders to Fit 1 Page</h4>
+          <p style="font-size:0.8rem; color:#9ca3af;">Slide font size down 1px to fit onto 1 page perfectly & download PDF!</p>
         </div>
-
       </div>
 
       <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="closeVideoTutorial()">
@@ -770,6 +811,9 @@
     </div>
 
     <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" onclick="switchTab('styleTab', document.querySelector('.tab-btn:last-child')); startFreshResume();">
+        <i data-lucide="layout"></i> 🎨 Templates
+      </button>
       <button class="btn btn-secondary btn-sm" onclick="showOnboarding()">
         <i data-lucide="home"></i> Home
       </button>
@@ -810,7 +854,6 @@
         
         <!-- Tab 1: Content Editor -->
         <div class="tab-pane active" id="contentTab">
-          
           <div class="card-box">
             <div class="card-box-header">
               <span class="card-box-title"><i data-lucide="user"></i> Personal Contact Info</span>
@@ -893,8 +936,25 @@
           </div>
         </div>
 
-        <!-- Tab 2: Fit & Styles -->
+        <!-- Tab 2: Fit & Styles (Includes Template Selector & Custom LLM Template Parser) -->
         <div class="tab-pane" id="styleTab">
+
+          <div class="card-box">
+            <div class="card-box-header">
+              <span class="card-box-title"><i data-lucide="layout"></i> Template Preset Picker</span>
+            </div>
+            <div class="template-presets-grid">
+              <div class="template-card-option active" onclick="selectTemplatePreset('modern', this)">
+                <h4>Modern Minimal</h4>
+                <p>Clean single column</p>
+              </div>
+              <div class="template-card-option" onclick="selectTemplatePreset('serif', this)">
+                <h4>Classic Serif</h4>
+                <p>Traditional academic</p>
+              </div>
+            </div>
+          </div>
+          
           <div class="slider-group">
             <div class="slider-header">
               <span>📏 Base Font Size</span>
@@ -951,6 +1011,7 @@
               <option value="'JetBrains Mono', monospace">Technical Mono (JetBrains)</option>
             </select>
           </div>
+
         </div>
 
       </div>
@@ -1008,7 +1069,6 @@
   </div>
 
   <script>
-    // State
     let experiences = [
       {
         role: "Web Development Lead",
@@ -1032,7 +1092,26 @@
 
     let demoInterval = null;
 
-    // Onboarding Path Handlers
+    function openTemplatesFromHero() {
+      document.getElementById('onboardingScreen').classList.add('hidden');
+      switchTab('styleTab', document.querySelectorAll('.tab-btn')[1]);
+    }
+
+    function selectTemplatePreset(preset, el) {
+      document.querySelectorAll('.template-card-option').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      
+      const selectFont = document.getElementById('selectFontFamily');
+      if (preset === 'serif') {
+        selectFont.value = "'Merriweather', serif";
+        selectColor('#0f172a', document.querySelectorAll('.swatch')[3]);
+      } else {
+        selectFont.value = "'Inter', sans-serif";
+        selectColor('#1e3a8a', document.querySelectorAll('.swatch')[0]);
+      }
+      updateStyles();
+    }
+
     function showOnboarding() {
       document.getElementById('onboardingScreen').classList.remove('hidden');
     }
@@ -1065,12 +1144,12 @@
     function openVideoTutorial() {
       document.getElementById('videoTutorialModal').classList.remove('hidden');
       
-      // Animated 15s step loop
       let curStep = 1;
       demoInterval = setInterval(() => {
         curStep = (curStep % 3) + 1;
         document.querySelectorAll('.demo-step-anim').forEach(s => s.classList.remove('active'));
-        document.getElementById('demoStep' + curStep).classList.add('active');
+        const stepEl = document.getElementById('demoStep' + curStep);
+        if (stepEl) stepEl.classList.add('active');
       }, 3000);
     }
 
@@ -1120,7 +1199,7 @@
       document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
-      el.classList.add('active');
+      if (el) el.classList.add('active');
     }
 
     function renderExperiences() {
@@ -1254,7 +1333,7 @@
 
     function selectColor(hex, el) {
       document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
-      el.classList.add('selected');
+      if (el) el.classList.add('selected');
       document.documentElement.style.setProperty('--res-accent', hex);
     }
 
@@ -1270,6 +1349,13 @@
         }
       }, 100);
     }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const btn = document.getElementById('btnInstallPwa');
+      if (btn) btn.style.display = 'inline-flex';
+    });
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
