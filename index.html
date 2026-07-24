@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>OpenResume Studio - Easy AI PWA Resume Builder</title>
-  <meta name="description" content="100% Free, Easy Mobile PWA AI Resume Builder & 1-Page Layout Studio. Zero servers, installable on phones & computers.">
+  <title>OpenResume Studio - Modern AI PWA Resume Builder</title>
+  <meta name="description" content="100% Free, Mobile-First Offline PWA AI Resume Builder & 1-Page Layout Studio. Zero servers, installable on phones & computers.">
   <meta name="theme-color" content="#0b0f19">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,6 +13,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+  <!-- PDF / Docx Text Parser Helper -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
   
   <style>
     :root[data-theme="dark"] {
@@ -91,6 +94,7 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      cursor: pointer;
     }
 
     .brand-logo {
@@ -157,13 +161,6 @@
     .btn-magic {
       background: linear-gradient(135deg, #8b5cf6, #ec4899);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
-      animation: pulseGlow 2s infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35); }
-      100% { box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6); }
     }
 
     .btn-sm {
@@ -183,6 +180,163 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+    }
+
+    /* Modern 2026 Welcome Hero Onboarding View */
+    .onboarding-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--bg-main);
+      z-index: 1500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    .onboarding-screen.hidden {
+      display: none;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #fff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: 1.65rem; }
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.5;
+    }
+
+    .path-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 700px) {
+      .path-cards-grid { grid-template-columns: 1fr; }
+    }
+
+    .path-card {
+      background: var(--bg-panel);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem 1.5rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .path-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px var(--primary-glow);
+    }
+
+    .path-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .path-card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .path-card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Video Tutorial Modal */
+    .tutorial-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      max-width: 650px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .video-demo-frame {
+      width: 100%;
+      height: 240px;
+      background: #000;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .demo-step-anim {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+
+    .demo-step-anim.active {
+      display: flex;
     }
 
     .view-switcher-mobile {
@@ -216,7 +370,6 @@
     .view-switch-btn.active {
       background: var(--primary);
       color: #fff;
-      border-color: var(--primary);
     }
 
     .app-body {
@@ -343,110 +496,6 @@
       gap: 0.75rem;
     }
 
-    /* Friendly Wizard Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
-      z-index: 2000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .modal-overlay.show {
-      display: flex;
-    }
-
-    .modal-card {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      max-width: 500px;
-      width: 100%;
-      padding: 1.5rem;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-      position: relative;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-    }
-
-    .modal-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .modal-close {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
-
-    .wizard-step {
-      display: none;
-    }
-
-    .wizard-step.active {
-      display: block;
-    }
-
-    .wizard-option-card {
-      background: var(--bg-card);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 0.75rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      transition: all 0.2s;
-    }
-
-    .wizard-option-card:hover, .wizard-option-card.selected {
-      border-color: var(--primary);
-      background: var(--bg-card-hover);
-    }
-
-    .wizard-icon {
-      width: 40px;
-      height: 40px;
-      background: rgba(99, 102, 241, 0.15);
-      color: var(--primary);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wizard-text h4 {
-      font-size: 0.92rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-    }
-
-    .wizard-text p {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
     /* Sliders Group */
     .slider-group {
       background: var(--bg-card);
@@ -495,7 +544,6 @@
       box-shadow: 0 0 0 2px var(--primary-glow);
     }
 
-    /* Live Preview Studio */
     .preview-studio {
       background: var(--bg-main);
       display: flex;
@@ -523,7 +571,6 @@
       width: 100%;
     }
 
-    /* Document Wrapper */
     .document-wrapper {
       width: 210mm;
       min-height: 297mm;
@@ -592,38 +639,16 @@
       margin-bottom: 0.5rem;
     }
 
-    .res-summary-text {
-      color: #334155;
-    }
-
-    .res-item {
-      margin-bottom: 0.6rem;
-    }
-
-    .res-item-header {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 600;
-    }
-
+    .res-summary-text { color: #334155; }
+    .res-item { margin-bottom: 0.6rem; }
+    .res-item-header { display: flex; justify-content: space-between; font-weight: 600; }
     .res-item-role { color: #0f172a; }
     .res-item-company { color: var(--res-accent); }
     .res-item-date { color: #64748b; font-weight: 400; font-size: calc(var(--res-font-size) * 0.9); }
-
-    .res-bullets {
-      padding-left: 1.2rem;
-      margin-top: 0.25rem;
-      color: #334155;
-    }
-
+    .res-bullets { padding-left: 1.2rem; margin-top: 0.25rem; color: #334155; }
     .res-bullets li { margin-bottom: 0.2rem; }
 
-    .res-skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-    }
-
+    .res-skills-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
     .res-skill-tag {
       background: #f1f5f9;
       color: #334155;
@@ -636,7 +661,7 @@
 
     @media print {
       body { background: #fff !important; color: #000 !important; }
-      header, .sidebar, .overflow-banner, .view-switcher-mobile, .modal-overlay { display: none !important; }
+      header, .sidebar, .overflow-banner, .view-switcher-mobile, .onboarding-screen { display: none !important; }
       .app-body { display: block !important; height: auto !important; }
       .preview-studio { background: transparent !important; padding: 0 !important; display: block !important; }
       .document-wrapper { box-shadow: none !important; width: 100% !important; min-height: auto !important; padding: var(--res-margin) !important; }
@@ -646,9 +671,97 @@
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Modern 2026 Welcome Hero Onboarding View -->
+  <div class="onboarding-screen" id="onboardingScreen">
+    <div class="hero-content">
+      
+      <div class="hero-badge">
+        <i data-lucide="sparkles"></i> 100% Free • Offline PWA • Zero Data Tracking
+      </div>
+
+      <h1 class="hero-title">Build a Perfect 1-Page Resume in Seconds</h1>
+      <p class="hero-subtitle">
+        Combine free ChatGPT/Claude text writing with pixel-perfect 1-page layout fitting. Choose your starting path below:
+      </p>
+
+      <div class="path-cards-grid">
+        
+        <!-- Path A: Edit Existing Resume -->
+        <div class="path-card" onclick="triggerImportResume()">
+          <div>
+            <div class="path-icon"><i data-lucide="file-up"></i></div>
+            <h3>Import / Edit Existing Resume</h3>
+            <p>Upload your old PDF, Docx, or text file to convert and format it instantly.</p>
+          </div>
+          <button class="btn btn-secondary" style="width:100%;">
+            <i data-lucide="upload"></i> Upload Existing File
+          </button>
+          <input type="file" id="fileImportInput" accept=".pdf,.docx,.txt" style="display:none;" onchange="handleResumeFileImport(event)">
+        </div>
+
+        <!-- Path B: Create Fresh -->
+        <div class="path-card" onclick="startFreshResume()">
+          <div>
+            <div class="path-icon"><i data-lucide="plus-circle"></i></div>
+            <h3>Create Fresh from Scratch</h3>
+            <p>Start with a high school or entry-level starter template tailored for first-timers.</p>
+          </div>
+          <button class="btn btn-primary" style="width:100%;">
+            <i data-lucide="sparkles"></i> Start Fresh
+          </button>
+        </div>
+
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:1rem;">
+        <button class="btn btn-secondary btn-sm" onclick="openVideoTutorial()">
+          <i data-lucide="play-circle"></i> 🎥 Watch 15s Animated Video Tutorial
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Animated Video Tutorial Modal -->
+  <div class="onboarding-screen hidden" id="videoTutorialModal">
+    <div class="tutorial-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h3 style="font-family:'Outfit', sans-serif; font-size:1.2rem;">🎥 15-Second How-To Video Guide</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeVideoTutorial()">&times;</button>
+      </div>
+
+      <!-- Animated Steps Demo Container -->
+      <div class="video-demo-frame">
+        
+        <div class="demo-step-anim active" id="demoStep1">
+          <i data-lucide="file-text" style="width:48px; height:48px; color:#6366f1;"></i>
+          <h4 style="color:#fff;">1. Enter Details or Import File</h4>
+          <p style="font-size:0.8rem; color:#9ca3af;">Enter your contact info or upload your existing resume file.</p>
+        </div>
+
+        <div class="demo-step-anim" id="demoStep2">
+          <i data-lucide="bot" style="width:48px; height:48px; color:#ec4899;"></i>
+          <h4 style="color:#fff;">2. 1-Tap Copy Prompt to ChatGPT</h4>
+          <p style="font-size:0.8rem; color:#9ca3af;">ChatGPT generates STAR bullet points & returns clean text.</p>
+        </div>
+
+        <div class="demo-step-anim" id="demoStep3">
+          <i data-lucide="sliders" style="width:48px; height:48px; color:#10b981;"></i>
+          <h4 style="color:#fff;">3. Adjust Sliders & Export 1-Page PDF</h4>
+          <p style="font-size:0.8rem; color:#9ca3af;">Use font size sliders to fit onto 1 page perfectly!</p>
+        </div>
+
+      </div>
+
+      <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="closeVideoTutorial()">
+        Got It! Start Building <i data-lucide="arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- App Header -->
   <header>
-    <div class="brand">
+    <div class="brand" onclick="showOnboarding()">
       <div class="brand-logo">OR</div>
       <div class="brand-text">
         <h1>OpenResume</h1>
@@ -657,10 +770,10 @@
     </div>
 
     <div class="header-actions">
-      <button class="btn btn-magic btn-sm" onclick="openWizard()">
-        <i data-lucide="sparkles"></i> 30s AI Wizard
+      <button class="btn btn-secondary btn-sm" onclick="showOnboarding()">
+        <i data-lucide="home"></i> Home
       </button>
-      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Dark/Light Theme">
+      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">
         <i data-lucide="moon" id="themeIcon"></i>
       </button>
       <button class="btn btn-primary btn-sm" onclick="window.print()">
@@ -697,12 +810,7 @@
         
         <!-- Tab 1: Content Editor -->
         <div class="tab-pane active" id="contentTab">
-          <div style="margin-bottom:1rem;">
-            <button class="btn btn-magic" style="width:100%;" onclick="openWizard()">
-              <i data-lucide="sparkles"></i> Launch 30s Guided AI Wizard
-            </button>
-          </div>
-
+          
           <div class="card-box">
             <div class="card-box-header">
               <span class="card-box-title"><i data-lucide="user"></i> Personal Contact Info</span>
@@ -899,103 +1007,6 @@
 
   </div>
 
-  <!-- Friendly 30s Guided AI Wizard Modal -->
-  <div class="modal-overlay" id="wizardModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div class="modal-title">
-          <i data-lucide="sparkles" style="color:#ec4899;"></i>
-          <span>30-Second Guided AI Wizard</span>
-        </div>
-        <button class="modal-close" onclick="closeWizard()">&times;</button>
-      </div>
-
-      <!-- Step 1: Goal -->
-      <div class="wizard-step active" id="wStep1">
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
-          Step 1 of 3: What is your primary goal today?
-        </p>
-
-        <div class="wizard-option-card selected" onclick="selectWizardGoal('jd', this)">
-          <div class="wizard-icon"><i data-lucide="target"></i></div>
-          <div class="wizard-text">
-            <h4>Tailor for a Specific Job</h4>
-            <p>Matches your bullet points to a target Job Description.</p>
-          </div>
-        </div>
-
-        <div class="wizard-option-card" onclick="selectWizardGoal('star', this)">
-          <div class="wizard-icon"><i data-lucide="zap"></i></div>
-          <div class="wizard-text">
-            <h4>Add Impressive Metrics (STAR)</h4>
-            <p>Adds percentages and numeric results to your achievements.</p>
-          </div>
-        </div>
-
-        <div class="wizard-option-card" onclick="selectWizardGoal('teen', this)">
-          <div class="wizard-icon"><i data-lucide="user-check"></i></div>
-          <div class="wizard-text">
-            <h4>High School / First Job Starter</h4>
-            <p>Turns school projects and volunteering into a top resume.</p>
-          </div>
-        </div>
-
-        <div class="form-group" style="margin-top:1rem;">
-          <label>Target Job Description (Optional)</label>
-          <textarea class="form-control" id="wInputJd" style="min-height:55px;" placeholder="Paste job posting here if tailoring..."></textarea>
-        </div>
-
-        <button class="btn btn-magic" style="width:100%; margin-top:0.5rem;" onclick="goWizardStep(2)">
-          Next: Launch AI in 1 Tap <i data-lucide="arrow-right"></i>
-        </button>
-      </div>
-
-      <!-- Step 2: Launch AI -->
-      <div class="wizard-step" id="wStep2">
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
-          Step 2 of 3: Tap <b>Copy & Launch ChatGPT</b> below.
-        </p>
-
-        <div style="background:var(--bg-card); border-radius:10px; padding:1rem; text-align:center; margin-bottom:1.25rem;">
-          <i data-lucide="copy-check" style="width:36px; height:36px; color:var(--primary); margin-bottom:0.5rem;"></i>
-          <h4 style="font-size:0.95rem; margin-bottom:0.3rem;">Prompt Copied Automatically!</h4>
-          <p style="font-size:0.8rem; color:var(--text-muted);">
-            When ChatGPT opens, long-press the text box, select <b>Paste</b>, and tap <b>Send</b>. Then copy ChatGPT's answer!
-          </p>
-        </div>
-
-        <button class="btn btn-primary" style="width:100%; min-height:48px; margin-bottom:0.75rem;" onclick="copyAndLaunchChatGPT()">
-          <i data-lucide="external-link"></i> 🚀 1-Tap Launch ChatGPT
-        </button>
-
-        <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="goWizardStep(3)">
-          Already copied AI response? Continue to Step 3 <i data-lucide="arrow-right"></i>
-        </button>
-      </div>
-
-      <!-- Step 3: Apply -->
-      <div class="wizard-step" id="wStep3">
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
-          Step 3 of 3: Paste ChatGPT's response or tap <b>Paste Clipboard</b>!
-        </p>
-
-        <div class="form-group">
-          <textarea class="form-control" id="wLlmResponse" style="min-height:90px;" placeholder="Paste ChatGPT response here..."></textarea>
-        </div>
-
-        <div class="form-row">
-          <button class="btn btn-secondary" onclick="readWizardClipboard()">
-            <i data-lucide="clipboard"></i> Paste Clipboard
-          </button>
-          <button class="btn btn-success" onclick="applyWizardResponse()">
-            <i data-lucide="check-circle"></i> ✨ Apply to Resume
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
   <script>
     // State
     let experiences = [
@@ -1019,10 +1030,56 @@
       }
     ];
 
-    let wizardGoal = "jd";
-    let deferredPrompt = null;
+    let demoInterval = null;
 
-    // Mobile View Switcher
+    // Onboarding Path Handlers
+    function showOnboarding() {
+      document.getElementById('onboardingScreen').classList.remove('hidden');
+    }
+
+    function triggerImportResume() {
+      document.getElementById('fileImportInput').click();
+    }
+
+    function handleResumeFileImport(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const text = evt.target.result;
+        if (text) {
+          document.getElementById('inputSummary').value = "Imported from " + file.name + ": " + text.slice(0, 300) + "...";
+          updateResumeData();
+          document.getElementById('onboardingScreen').classList.add('hidden');
+          alert('📥 Resume imported from ' + file.name + '!');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function startFreshResume() {
+      document.getElementById('onboardingScreen').classList.add('hidden');
+    }
+
+    function openVideoTutorial() {
+      document.getElementById('videoTutorialModal').classList.remove('hidden');
+      
+      // Animated 15s step loop
+      let curStep = 1;
+      demoInterval = setInterval(() => {
+        curStep = (curStep % 3) + 1;
+        document.querySelectorAll('.demo-step-anim').forEach(s => s.classList.remove('active'));
+        document.getElementById('demoStep' + curStep).classList.add('active');
+      }, 3000);
+    }
+
+    function closeVideoTutorial() {
+      document.getElementById('videoTutorialModal').classList.add('hidden');
+      if (demoInterval) clearInterval(demoInterval);
+      document.getElementById('onboardingScreen').classList.add('hidden');
+    }
+
     function switchMobileView(viewMode) {
       const sidebar = document.getElementById('sidebarContainer');
       const preview = document.getElementById('previewStudioContainer');
@@ -1042,109 +1099,6 @@
       }
     }
 
-    // Wizard Functions
-    function openWizard() {
-      document.getElementById('wizardModal').classList.add('show');
-      goWizardStep(1);
-    }
-
-    function closeWizard() {
-      document.getElementById('wizardModal').classList.remove('show');
-    }
-
-    function selectWizardGoal(goal, el) {
-      wizardGoal = goal;
-      document.querySelectorAll('.wizard-option-card').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-    }
-
-    function goWizardStep(stepNum) {
-      document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
-      document.getElementById('wStep' + stepNum).classList.add('active');
-    }
-
-    function copyAndLaunchChatGPT() {
-      const jd = document.getElementById('wInputJd').value;
-      let instruction = "Re-write bullets to target the JD using strong action verbs & STAR metrics.";
-      if (wizardGoal === 'star') instruction = "Add measurable metrics, percentages, and STAR results to every bullet point.";
-      if (wizardGoal === 'teen') instruction = "Format high school projects, volunteering, and coursework into entry-level achievements.";
-
-      const compactPrompt = `[AI RESUME TASK]
-${instruction}
-
-STRICT RULE: Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags using this COMPACT schema:
-{"n":"Name","t":"Title","s":"Summary","k":["Skill1","Skill2"],"x":[{"r":"Role","c":"Company","d":"Date","b":["Bullet1"]}]}
-
-USER DATA:
-${JSON.stringify({
-  n: document.getElementById('inputName').value,
-  t: document.getElementById('inputTitle').value,
-  s: document.getElementById('inputSummary').value,
-  k: document.getElementById('inputSkills').value.split(',').map(s=>s.trim()),
-  x: experiences.map(e=>({r:e.role, c:e.company, d:e.date, b:e.bullets}))
-})}
-
-TARGET JD:
-${jd || 'General Candidate'}`;
-
-      navigator.clipboard.writeText(compactPrompt).then(() => {
-        window.open('https://chatgpt.com/', '_blank');
-        goWizardStep(3);
-      });
-    }
-
-    async function readWizardClipboard() {
-      try {
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          document.getElementById('wLlmResponse').value = text;
-          applyWizardResponse();
-        }
-      } catch (err) {
-        alert('Please manually paste the ChatGPT response text into the box.');
-      }
-    }
-
-    function applyWizardResponse() {
-      const text = document.getElementById('wLlmResponse').value;
-      const jsonMatch = text.match(/<RESUME_JSON>([\s\S]*?)<\/RESUME_JSON>/) || text.match(/\{[\s\S]*\}/);
-
-      if (jsonMatch) {
-        try {
-          const parsed = JSON.parse(jsonMatch[0].replace(/<RESUME_JSON>|<\/RESUME_JSON>/g, ''));
-          
-          const fullName = parsed.n || parsed.fullName;
-          const title = parsed.t || parsed.title;
-          const summary = parsed.s || parsed.summary;
-          const skills = parsed.k || parsed.skills;
-          const exps = parsed.x || parsed.experiences;
-
-          if (fullName) document.getElementById('inputName').value = fullName;
-          if (title) document.getElementById('inputTitle').value = title;
-          if (summary) document.getElementById('inputSummary').value = summary;
-          if (skills) document.getElementById('inputSkills').value = Array.isArray(skills) ? skills.join(', ') : skills;
-          
-          if (exps && Array.isArray(exps)) {
-            experiences = exps.map(e => ({
-              role: e.r || e.role || "Role",
-              company: e.c || e.company || "Organization",
-              date: e.d || e.date || "Date",
-              bullets: e.b || e.bullets || []
-            }));
-          }
-
-          updateResumeData();
-          closeWizard();
-          alert('✨ Resume Applied Successfully!');
-        } catch (e) {
-          alert('Could not parse JSON payload.');
-        }
-      } else {
-        alert('No JSON found in response.');
-      }
-    }
-
-    // Theme Toggle Functionality
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1315,23 +1269,6 @@ ${jd || 'General Candidate'}`;
           alert.style.display = 'none';
         }
       }, 100);
-    }
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      const btn = document.getElementById('btnInstallPwa');
-      if (btn) btn.style.display = 'inline-flex';
-    });
-
-    function triggerPwaInstall() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-          deferredPrompt = null;
-          document.getElementById('btnInstallPwa').style.display = 'none';
-        });
-      }
     }
 
     if ('serviceWorker' in navigator) {
