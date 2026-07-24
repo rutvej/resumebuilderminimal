@@ -15,7 +15,7 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
   
   <style>
-    /* Premium Design Tokens */
+    /* Premium Tokens */
     :root[data-theme="dark"] {
       --bg-main: #0b0f19;
       --bg-panel: #111827;
@@ -50,7 +50,6 @@
       --doc-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
     }
 
-    /* Resume Custom Variables */
     :root {
       --res-font-family: 'Inter', sans-serif;
       --res-font-size: 12px;
@@ -78,7 +77,6 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Mobile Header */
     header {
       background: var(--bg-panel);
       border-bottom: 1px solid var(--border-color);
@@ -185,7 +183,6 @@
       cursor: pointer;
     }
 
-    /* Mobile Segmented View Switcher (For Phones) */
     .view-switcher-mobile {
       display: flex;
       background: var(--bg-panel);
@@ -223,7 +220,6 @@
       box-shadow: 0 2px 8px var(--primary-glow);
     }
 
-    /* App Responsive Container Layout */
     .app-body {
       display: grid;
       grid-template-columns: 480px 1fr;
@@ -295,7 +291,6 @@
       display: block;
     }
 
-    /* Form & Unified AI Hub Styles */
     .card-box {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -370,13 +365,68 @@
       gap: 0.75rem;
     }
 
-    /* Consolidated AI Copy-Paste Workflow Center */
+    /* Accordion Collapsible Cards for AI Hub */
+    .accordion-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .accordion-header {
+      padding: 1rem;
+      background: var(--bg-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .accordion-header:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .accordion-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .accordion-icon {
+      transition: transform 0.3s ease;
+      color: var(--text-muted);
+    }
+
+    .accordion-card.open .accordion-icon {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 1rem;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+
+    .accordion-card.open .accordion-content {
+      max-height: 1000px;
+      padding: 0.5rem 1rem 1rem 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
     .ai-step-card {
       background: var(--bg-panel);
       border: 1px solid var(--border-color);
       border-radius: 10px;
       padding: 0.9rem;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
     }
 
     .ai-step-title {
@@ -439,7 +489,7 @@
       color: var(--primary);
     }
 
-    /* Floating Toast Notification */
+    /* Floating Toast */
     .clipboard-toast {
       position: fixed;
       bottom: 1.5rem;
@@ -837,73 +887,114 @@
           </div>
         </div>
 
-        <!-- Tab 2: Consolidated AI Copy-Paste Workflow Center (All in ONE place) -->
+        <!-- Tab 2: ALL AI Copy-Paste Tools (Consolidated Collapsible Accordions) -->
         <div class="tab-pane" id="llmTab">
           
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="sparkles"></i> AI Copy-Paste Workflow Center</span>
+          <!-- Accordion 1: Resume Content AI Copy-Paste -->
+          <div class="accordion-card open" id="accordionContent">
+            <div class="accordion-header" onclick="toggleAccordion('accordionContent')">
+              <div class="accordion-title">
+                <i data-lucide="sparkles" style="color:var(--primary);"></i>
+                <span>1. Resume Content AI Copy-Paste</span>
+              </div>
+              <i data-lucide="chevron-down" class="accordion-icon"></i>
             </div>
+            <div class="accordion-content">
+              <div class="ai-step-card">
+                <div class="ai-step-title">
+                  <span class="step-badge">1</span>
+                  <span>Select Goal & Target JD</span>
+                </div>
+                <div class="ai-preset-chips">
+                  <button class="chip-btn" onclick="setPresetTask('jd')">🎯 Target JD</button>
+                  <button class="chip-btn" onclick="setPresetTask('star')">⚡ STAR Metrics</button>
+                  <button class="chip-btn" onclick="setPresetTask('concise')">🧹 Trim Grammar</button>
+                  <button class="chip-btn" onclick="setPresetTask('teen')">🎓 High School</button>
+                </div>
+                <div class="form-group" style="margin-bottom:0.5rem;">
+                  <textarea class="form-control" id="inputJd" style="min-height:55px;" placeholder="Paste target job posting here..."></textarea>
+                </div>
+              </div>
 
-            <!-- Step 1: Goal & JD -->
-            <div class="ai-step-card">
-              <div class="ai-step-title">
-                <span class="step-badge">1</span>
-                <span>Select Task & Target JD</span>
+              <div class="ai-step-card">
+                <div class="ai-step-title">
+                  <span class="step-badge">2</span>
+                  <span>Copy Prompt & Launch AI</span>
+                </div>
+                <div class="ai-launcher-row">
+                  <button class="launcher-pill" onclick="copyAndLaunchAi('https://chatgpt.com/')">
+                    <i data-lucide="message-square"></i> ChatGPT
+                  </button>
+                  <button class="launcher-pill" onclick="copyAndLaunchAi('https://claude.ai/new')">
+                    <i data-lucide="sparkles"></i> Claude
+                  </button>
+                  <button class="launcher-pill" onclick="copyAndLaunchAi('https://gemini.google.com/')">
+                    <i data-lucide="bot"></i> Gemini
+                  </button>
+                </div>
               </div>
-              <div class="ai-preset-chips">
-                <button class="chip-btn" onclick="setPresetTask('jd')">🎯 Target JD</button>
-                <button class="chip-btn" onclick="setPresetTask('star')">⚡ STAR Metrics</button>
-                <button class="chip-btn" onclick="setPresetTask('concise')">🧹 Trim Grammar</button>
-                <button class="chip-btn" onclick="setPresetTask('teen')">🎓 High School</button>
-              </div>
-              <div class="form-group" style="margin-bottom:0.5rem;">
-                <label>Job Description (Optional)</label>
-                <textarea class="form-control" id="inputJd" style="min-height:60px;" placeholder="Paste job posting here..."></textarea>
+
+              <div class="ai-step-card" style="margin-bottom:0;">
+                <div class="ai-step-title">
+                  <span class="step-badge">3</span>
+                  <span>Ingest AI Response</span>
+                </div>
+                <div class="form-group" style="margin-bottom:0.6rem;">
+                  <textarea class="form-control" id="inputLlmResponse" style="min-height:80px;" placeholder="Paste AI response here..."></textarea>
+                </div>
+                <div class="form-row">
+                  <button class="btn btn-secondary" onclick="readClipboardAndIngest()">
+                    <i data-lucide="clipboard"></i> Paste Clipboard
+                  </button>
+                  <button class="btn btn-success" onclick="ingestLlmResponse()">
+                    <i data-lucide="zap"></i> Apply Content
+                  </button>
+                </div>
               </div>
             </div>
+          </div>
 
-            <!-- Step 2: Copy & Launch AI -->
-            <div class="ai-step-card">
-              <div class="ai-step-title">
-                <span class="step-badge">2</span>
-                <span>Copy Prompt & Launch AI</span>
+          <!-- Accordion 2: Custom HTML Template AI Copy-Paste -->
+          <div class="accordion-card" id="accordionTemplate">
+            <div class="accordion-header" onclick="toggleAccordion('accordionTemplate')">
+              <div class="accordion-title">
+                <i data-lucide="layout" style="color:var(--primary);"></i>
+                <span>2. Custom HTML Template AI Copy-Paste</span>
               </div>
-              <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.6rem;">
-                Tap your preferred AI app (copies prompt & opens AI app):
-              </p>
-              <div class="ai-launcher-row">
-                <button class="launcher-pill" onclick="copyAndLaunchAi('https://chatgpt.com/')">
-                  <i data-lucide="message-square"></i> ChatGPT
+              <i data-lucide="chevron-down" class="accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+              <div class="ai-step-card">
+                <div class="ai-step-title">
+                  <span class="step-badge">1</span>
+                  <span>Image-to-HTML Prompt</span>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.6rem;">
+                  Upload any resume photo to ChatGPT/Claude and ask for an HTML file.
+                </p>
+                <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="copyImageToHtmlPrompt()">
+                  <i data-lucide="copy"></i> Copy Image-to-HTML Prompt
                 </button>
-                <button class="launcher-pill" onclick="copyAndLaunchAi('https://claude.ai/new')">
-                  <i data-lucide="sparkles"></i> Claude
-                </button>
-                <button class="launcher-pill" onclick="copyAndLaunchAi('https://gemini.google.com/')">
-                  <i data-lucide="bot"></i> Gemini
-                </button>
+              </div>
+
+              <div class="ai-step-card" style="margin-bottom:0;">
+                <div class="ai-step-title">
+                  <span class="step-badge">2</span>
+                  <span>Paste & Apply Template Code</span>
+                </div>
+                <div class="form-group" style="margin-bottom:0.6rem;">
+                  <textarea class="form-control" id="customTemplateHtml" style="min-height:85px;" placeholder="Paste ChatGPT generated HTML code here..."></textarea>
+                </div>
+                <div class="form-row">
+                  <button class="btn btn-primary" onclick="applyCustomTemplate()">
+                    <i data-lucide="check-circle"></i> Apply HTML
+                  </button>
+                  <button class="btn btn-secondary" onclick="resetCustomTemplate()">
+                    <i data-lucide="rotate-ccw"></i> Restore Standard
+                  </button>
+                </div>
               </div>
             </div>
-
-            <!-- Step 3: Ingest AI Response -->
-            <div class="ai-step-card" style="margin-bottom:0;">
-              <div class="ai-step-title">
-                <span class="step-badge">3</span>
-                <span>Ingest AI Response</span>
-              </div>
-              <div class="form-group" style="margin-bottom:0.6rem;">
-                <textarea class="form-control" id="inputLlmResponse" style="min-height:85px;" placeholder="Paste AI response here..."></textarea>
-              </div>
-              <div class="form-row">
-                <button class="btn btn-secondary" onclick="readClipboardAndIngest()">
-                  <i data-lucide="clipboard"></i> Paste Clipboard
-                </button>
-                <button class="btn btn-success" onclick="ingestLlmResponse()">
-                  <i data-lucide="zap"></i> Apply to Resume
-                </button>
-              </div>
-            </div>
-
           </div>
 
         </div>
@@ -968,20 +1059,6 @@
             </select>
           </div>
 
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="layout"></i> Custom LLM HTML Template</span>
-            </div>
-            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">
-              Paste custom HTML template generated by ChatGPT from a photo. Uses {{fullName}}, {{title}}, {{summary}}, {{skills}}, {{experiences}}.
-            </p>
-            <textarea class="form-control" id="customTemplateHtml" style="min-height:90px;" placeholder="Paste custom HTML template here..."></textarea>
-            <div class="form-row" style="margin-top:0.5rem;">
-              <button class="btn btn-secondary btn-sm" onclick="applyCustomTemplate()">Apply Custom HTML</button>
-              <button class="btn btn-secondary btn-sm" onclick="resetCustomTemplate()">Restore Standard</button>
-            </div>
-          </div>
-
         </div>
 
       </div>
@@ -1042,7 +1119,7 @@
 
   </div>
 
-  <!-- Floating Toast Notification for 1-Tap Auto Clipboard Ingest -->
+  <!-- Floating Toast Notification -->
   <div class="clipboard-toast" id="clipboardToast">
     <i data-lucide="sparkles" style="color:#a78bfa;"></i>
     <span class="clipboard-toast-text">AI Resume Found in Clipboard!</span>
@@ -1076,6 +1153,14 @@
     let standardDocBackup = null;
     let deferredPrompt = null;
     let detectedClipboardText = "";
+
+    // Accordion Toggle Handler
+    function toggleAccordion(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) {
+        card.classList.toggle('open');
+      }
+    }
 
     // Mobile View Switcher
     function switchMobileView(viewMode) {
@@ -1270,7 +1355,6 @@
       }, 100);
     }
 
-    // AI Workflow Center Handlers
     function setPresetTask(task) {
       currentPresetTask = task;
     }
@@ -1306,7 +1390,13 @@ ${jd || 'General Candidate'}`;
       });
     }
 
-    // Auto-Clipboard Detection on Window Focus
+    function copyImageToHtmlPrompt() {
+      const prompt = `Convert the uploaded resume photo/screenshot into a single HTML file with clean inline CSS styling. Use placeholders: {{fullName}}, {{title}}, {{email}}, {{phone}}, {{location}}, {{website}}, {{summary}}, {{skills}}, {{experiences}}.`;
+      navigator.clipboard.writeText(prompt).then(() => {
+        alert('🚀 Image-to-HTML Prompt Copied to Clipboard!\n\nUpload your resume photo to ChatGPT or Claude and paste this prompt!');
+      });
+    }
+
     async function checkClipboardOnFocus() {
       try {
         const text = await navigator.clipboard.readText();
@@ -1370,7 +1460,7 @@ ${jd || 'General Candidate'}`;
           }
 
           updateResumeData();
-          alert('✨ Resume Applied Successfully!');
+          alert('✨ Resume Content Applied Successfully!');
         } catch (e) {
           alert('Could not parse JSON. Please ensure response contains valid JSON.');
         }
