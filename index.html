@@ -16,16 +16,18 @@
   
   <style>
     :root[data-theme="dark"] {
-      --bg-main: #0b0f19;
-      --bg-panel: #111827;
-      --bg-card: #1f2937;
-      --bg-card-hover: #374151;
-      --border-color: #1f2937;
+      --bg-main: #09090b;
+      --bg-panel: rgba(24, 24, 27, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      --bg-card: rgba(39, 39, 42, 0.5);
+      --bg-card-hover: rgba(63, 63, 70, 0.8);
+      --border-color: rgba(63, 63, 70, 0.5);
       --text-main: #f9fafb;
       --text-muted: #9ca3af;
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --primary-glow: rgba(99, 102, 241, 0.4);
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --primary-glow: rgba(139, 92, 246, 0.5);
       --accent: #3b82f6;
       --success: #10b981;
       --warning: #f59e0b;
@@ -755,7 +757,7 @@
 
       <div style="display:flex; justify-content:center; gap:1rem;">
         <button class="btn btn-secondary btn-sm" onclick="openVideoTutorial()">
-          <i data-lucide="play-circle"></i> 🎥 Watch 15s Animated Video Tutorial
+          <i data-lucide="play-circle"></i> 🎥 View Quick Start Guide
         </button>
       </div>
 
@@ -770,24 +772,15 @@
         <button class="btn btn-secondary btn-sm" onclick="closeVideoTutorial()">&times;</button>
       </div>
 
-      <div class="video-demo-frame">
-        <div class="demo-step-anim active" id="demoStep1">
-          <i data-lucide="file-text" style="width:52px; height:52px; color:#6366f1;"></i>
-          <h4 style="color:#fff; margin-top:0.4rem;">Step 1: Enter Info or Upload Resume File</h4>
-          <p style="font-size:0.8rem; color:#9ca3af;">Type your background or upload an existing PDF/Docx file.</p>
-        </div>
-
-        <div class="demo-step-anim" id="demoStep2">
-          <i data-lucide="bot" style="width:52px; height:52px; color:#ec4899;"></i>
-          <h4 style="color:#fff; margin-top:0.4rem;">Step 2: 1-Tap Copy Prompt to ChatGPT</h4>
-          <p style="font-size:0.8rem; color:#9ca3af;">ChatGPT rewrites bullet points with impressive STAR metrics.</p>
-        </div>
-
-        <div class="demo-step-anim" id="demoStep3">
-          <i data-lucide="sliders" style="width:52px; height:52px; color:#10b981;"></i>
-          <h4 style="color:#fff; margin-top:0.4rem;">Step 3: Adjust Font Sliders to Fit 1 Page</h4>
-          <p style="font-size:0.8rem; color:#9ca3af;">Slide font size down 1px to fit onto 1 page perfectly & download PDF!</p>
-        </div>
+      <div class="video-demo-frame" style="background: rgba(17, 24, 39, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; display:flex; flex-direction:column; align-items:center; padding: 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+        <h4 style="color:#fff; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">Interactive Tutorial</h4>
+        <p style="font-size: 0.85rem; color: #9ca3af; max-width: 80%;">
+          1. Copy your job description and paste it in the AI Hub tab.<br><br>
+          2. Generate a prompt to paste into ChatGPT.<br><br>
+          3. Paste ChatGPT's response back here to automatically populate your resume.<br><br>
+          4. Tweak the sliders under "Fit & Styles" to make it exactly 1 page.
+        </p>
       </div>
 
       <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="closeVideoTutorial()">
@@ -1163,12 +1156,15 @@
     function handleResumeFileImport(e) {
       const file = e.target.files[0];
       if (!file) return;
-
+      if(file.name.endsWith('.pdf') || file.name.endsWith('.docx')) {
+          alert('PDF/DOCX extraction is currently disabled to prevent data corruption. Please copy and paste your resume text instead!');
+          return;
+      }
       const reader = new FileReader();
       reader.onload = function(evt) {
         const text = evt.target.result;
         if (text) {
-          document.getElementById('inputSummary').value = "Imported from " + file.name + ": " + text.slice(0, 300) + "...";
+          document.getElementById('inputSummary').value = "Imported from " + file.name + "\n\n" + text.slice(0, 500) + "...";
           updateResumeData();
           document.getElementById('onboardingScreen').classList.add('hidden');
           alert('📥 Resume imported from ' + file.name + '!');
@@ -1183,13 +1179,6 @@
 
     function openVideoTutorial() {
       document.getElementById('videoTutorialModal').classList.remove('hidden');
-      let curStep = 1;
-      demoInterval = setInterval(() => {
-        curStep = (curStep % 3) + 1;
-        document.querySelectorAll('.demo-step-anim').forEach(s => s.classList.remove('active'));
-        const stepEl = document.getElementById('demoStep' + curStep);
-        if (stepEl) stepEl.classList.add('active');
-      }, 3000);
     }
 
     function closeVideoTutorial() {
@@ -1325,14 +1314,20 @@ ${jd || 'General Candidate'}`;
       if (el) el.classList.add('active');
     }
 
-    function renderExperiences() {
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag));
+    }
+
+    function renderExperienceForm() {
       const container = document.getElementById('experienceContainer');
-      const docContainer = document.getElementById('docExperience');
-      if (!container || !docContainer) return;
-
+      if (!container) return;
       container.innerHTML = '';
-      docContainer.innerHTML = '';
-
       experiences.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = 'card-box';
@@ -1344,39 +1339,45 @@ ${jd || 'General Candidate'}`;
           </div>
           <div class="form-group">
             <label>Role / Title</label>
-            <input type="text" class="form-control" value="${item.role}" oninput="experiences[${index}].role = this.value; updateResumeData()">
+            <input type="text" class="form-control" value="${escapeHTML(item.role)}" oninput="experiences[${index}].role = this.value; updateResumeData()">
           </div>
           <div class="form-group">
             <label>Company / Organization</label>
-            <input type="text" class="form-control" value="${item.company}" oninput="experiences[${index}].company = this.value; updateResumeData()">
+            <input type="text" class="form-control" value="${escapeHTML(item.company)}" oninput="experiences[${index}].company = this.value; updateResumeData()">
           </div>
           <div class="form-group">
             <label>Dates</label>
-            <input type="text" class="form-control" value="${item.date}" oninput="experiences[${index}].date = this.value; updateResumeData()">
+            <input type="text" class="form-control" value="${escapeHTML(item.date)}" oninput="experiences[${index}].date = this.value; updateResumeData()">
           </div>
           <div class="form-group">
             <label>Bullet Points (One per line)</label>
-            <textarea class="form-control" oninput="experiences[${index}].bullets = this.value.split('\\n').filter(b=>b.trim()); updateResumeData()">${item.bullets.join('\n')}</textarea>
+            <textarea class="form-control" oninput="experiences[${index}].bullets = this.value.split('\\n').filter(b=>b.trim()); updateResumeData()">${escapeHTML(item.bullets.join('\n'))}</textarea>
           </div>
         `;
         container.appendChild(card);
+      });
+      lucide.createIcons();
+    }
 
+    function renderExperiencePreview() {
+      const docContainer = document.getElementById('docExperience');
+      if (!docContainer) return;
+      docContainer.innerHTML = '';
+      experiences.forEach((item) => {
         const docItem = document.createElement('div');
         docItem.className = 'res-item';
         docItem.innerHTML = `
           <div class="res-item-header">
-            <span class="res-item-role">${item.role}</span>
-            <span class="res-item-date">${item.date}</span>
+            <span class="res-item-role">${escapeHTML(item.role)}</span>
+            <span class="res-item-date">${escapeHTML(item.date)}</span>
           </div>
-          <div class="res-item-company">${item.company}</div>
+          <div class="res-item-company">${escapeHTML(item.company)}</div>
           <ul class="res-bullets">
-            ${item.bullets.map(b => `<li>${b}</li>`).join('')}
+            ${item.bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}
           </ul>
         `;
         docContainer.appendChild(docItem);
       });
-
-      lucide.createIcons();
       checkPageOverflow();
     }
 
@@ -1387,12 +1388,14 @@ ${jd || 'General Candidate'}`;
         date: "2024",
         bullets: ["Achieved project milestones using collaborative team tools."]
       });
-      renderExperiences();
+      renderExperienceForm();
+      renderExperiencePreview();
     }
 
     function deleteExperience(idx) {
       experiences.splice(idx, 1);
-      renderExperiences();
+      renderExperienceForm();
+      renderExperiencePreview();
     }
 
     function updateResumeData() {
@@ -1427,10 +1430,10 @@ ${jd || 'General Candidate'}`;
       const skills = document.getElementById('inputSkills').value.split(',').map(s => s.trim()).filter(Boolean);
       const skillsEl = document.getElementById('docSkills');
       if (skillsEl) {
-        skillsEl.innerHTML = skills.map(s => `<span class="res-skill-tag">${s}</span>`).join('');
+        skillsEl.innerHTML = skills.map(s => `<span class="res-skill-tag">${escapeHTML(s)}</span>`).join('');
       }
 
-      renderExperiences();
+      renderExperiencePreview();
     }
 
     function updateStyles() {
@@ -1484,7 +1487,8 @@ ${jd || 'General Candidate'}`;
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      renderExperiences();
+      renderExperienceForm();
+      renderExperiencePreview();
       updateResumeData();
       
       const themeIcon = document.getElementById('themeIcon');
