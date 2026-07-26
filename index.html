@@ -401,7 +401,7 @@ input[type="range"] {
 .tmp-sidebar-left { width:35%; background:var(--accent-bg); border-radius:2px; }
 
 /* ==============================
-   PREVIEW STUDIO
+   PREVIEW STUDIO & A4 MOBILE SCALING
    ============================== */
 .editor-preview {
   background:var(--bg-base); display:flex; flex-direction:column;
@@ -412,11 +412,12 @@ input[type="range"] {
   .editor-preview { display:none; padding:1rem 0.5rem; }
   .editor-preview.mobile-visible { display:flex; position:fixed; inset:0; z-index:200; padding-top:3.5rem; }
 }
+
 .overflow-banner {
   background:var(--warning-bg); border:1px solid rgba(251,191,36,0.3);
   color:var(--warning); padding:0.6rem 1rem; border-radius:10px;
   font-size:0.8rem; font-weight:600; margin-bottom:1rem;
-  display:none; align-items:center; gap:0.5rem; max-width:210mm; width:100%;
+  display:none; align-items:center; gap:0.5rem; max-width:210mm; width:100%; flex-wrap:wrap;
 }
 .overflow-banner.visible { display:flex; }
 
@@ -424,21 +425,20 @@ input[type="range"] {
 .document-wrapper {
   width:210mm; min-height:297mm; background:#ffffff; color:#1e293b;
   box-shadow:var(--shadow-lg); border-radius:4px;
-  position:relative; transition:all 0.15s ease;
+  position:relative; transition:transform 0.15s ease, margin-bottom 0.15s ease;
 }
-@media(max-width:850px) {
-  .document-wrapper { width:100%; min-height:auto; }
-}
+
+/* Print CSS Rules - ONLY print the resume document! */
 @media print {
-  body { background:#fff !important; }
-  .app-header,.editor-sidebar,.overflow-banner,.bottom-nav,.toast-container,.modal-overlay,
-  .clipboard-banner,.mobile-preview-close { display:none !important; }
-  .screen { display:block !important; min-height:auto !important; }
-  #dashboardScreen { display:none !important; }
-  #editorScreen { display:block !important; }
-  .editor-body { display:block !important; height:auto !important; }
-  .editor-preview { display:block !important; background:transparent !important; padding:0 !important; position:static !important; }
-  .document-wrapper { box-shadow:none !important; width:100% !important; min-height:auto !important; }
+  body { background:#fff !important; color:#000 !important; margin:0 !important; padding:0 !important; }
+  header, .app-header, .editor-header, .editor-sidebar, .overflow-banner, .bottom-nav, 
+  .toast-container, .modal-overlay, .clipboard-banner, .mobile-preview-close, 
+  .dashboard, #dashboardScreen { display:none !important; }
+  .screen { display:block !important; min-height:auto !important; margin:0 !important; padding:0 !important; }
+  #editorScreen { display:block !important; margin:0 !important; padding:0 !important; }
+  .editor-body { display:block !important; height:auto !important; margin:0 !important; padding:0 !important; }
+  .editor-preview { display:block !important; background:transparent !important; padding:0 !important; margin:0 !important; position:static !important; overflow:visible !important; transform:none !important; }
+  .document-wrapper { box-shadow:none !important; width:100% !important; min-height:auto !important; transform:none !important; margin:0 !important; border-radius:0 !important; }
   @page { size:A4 portrait; margin:0; }
 }
 
@@ -710,7 +710,13 @@ input[type="range"] {
     <main class="editor-preview" id="editorPreview">
       <div class="overflow-banner" id="overflowBanner">
         <i data-lucide="alert-triangle"></i>
-        <span><b>Overflow:</b> Content exceeds 1 page. Reduce font sizes or spacing.</span>
+        <span style="flex:1"><b>1-Page Overflow:</b> Exceeds limit by ~<span id="overflowPxText">0</span>px.</span>
+        <button class="btn btn-secondary btn-xs" onclick="copyOverflowFixPrompt()">
+          <i data-lucide="clipboard-copy"></i> Copy AI Fix Prompt
+        </button>
+        <button class="btn btn-secondary btn-xs" onclick="autoFitStyleSliders()" title="Scale down fonts and spacing to fit">
+          <i data-lucide="sparkles"></i> Auto-Fit
+        </button>
       </div>
       <div class="document-wrapper" id="documentWrapper">
         <!-- Resume rendered here -->
@@ -1500,6 +1506,7 @@ function renderAIPanel() {
         <div class="chip ${APP.selectedPromptType === 'create-content' ? 'active' : ''}" onclick="selectPromptType('create-content')">📝 Write Content (New)</div>
         ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'edit-all' ? 'active' : ''}" onclick="selectPromptType('edit-all')">✏️ Edit All Content</div>` : ''}
         ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'edit-section' ? 'active' : ''}" onclick="selectPromptType('edit-section')">🎯 Edit One Section</div>` : ''}
+        ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'fix-overflow' ? 'active' : ''}" onclick="selectPromptType('fix-overflow')">📐 Fix 1-Page Overflow</div>` : ''}
         <div class="chip ${APP.selectedPromptType === 'design-template' ? 'active' : ''}" onclick="selectPromptType('design-template')">🎨 Design Template</div>
       </div>
       ${APP.selectedPromptType === 'edit-section' && hasContent ? `
@@ -1509,7 +1516,7 @@ function renderAIPanel() {
             ${APP.currentResume.sections.map((s, i) => `<option value="${i}">${escHTML(s.title)}</option>`).join('')}
           </select>
         </div>` : ''}
-      ${APP.selectedPromptType === 'create-content' || APP.selectedPromptType === 'edit-all' ? `
+      ${APP.selectedPromptType === 'create-content' || APP.selectedPromptType === 'edit-all' || APP.selectedPromptType === 'fix-overflow' ? `
         <div class="form-group">
           <label>Target Job Description (optional)</label>
           <textarea class="form-control" id="jobDescription" placeholder="Paste the job posting here to tailor your resume..."></textarea>
@@ -1685,6 +1692,52 @@ Please improve this section. Make the content more compelling, concise, and impa
 </RESUME_SECTION>`;
   }
 
+  if (type === 'fix-overflow') {
+    const doc = document.getElementById('documentWrapper');
+    const height = doc ? doc.scrollHeight : 1200;
+    const overflowPx = Math.max(0, height - 1130);
+    const data = {
+      contact: r.contact,
+      sections: r.sections,
+      styleOverrides: r.styleOverrides
+    };
+
+    return `My resume currently exceeds 1 page and spills over onto page 2! Please help me make it fit onto EXACTLY 1 PAGE.
+
+## Overflow Metric
+- Current rendered height: ${height}px
+- Single page limit: 1130px
+- Overflow amount: ~${overflowPx}px (${Math.round((overflowPx/1130)*100)}% extra height)
+
+## Current Resume Data & Style Settings
+<CURRENT_RESUME_AND_STYLES>
+${JSON.stringify(data, null, 2)}
+</CURRENT_RESUME_AND_STYLES>
+
+${jd ? `## Target Job Description\n${jd}\n` : ''}
+## Instructions
+Rewrite the content to be slightly more punchy and concise, or provide optimized numeric values for styleOverrides (baseFontSize, lineHeight, sectionSpacing, margins, nameSize, bodySize, etc.) so the entire resume fits cleanly on 1 page without losing any key achievements or metrics.
+
+When finished, output your response in <RESUME_DATA> tags with updated content AND/OR updated styleOverrides:
+
+<RESUME_DATA>
+{
+  "contact": { ... },
+  "sections": [ ... ],
+  "styleOverrides": {
+    "baseFontSize": 11.5,
+    "lineHeight": 1.25,
+    "sectionSpacing": 0.8,
+    "margins": 0.4,
+    "nameSize": 20,
+    "bodySize": 11,
+    "dateSize": 10,
+    "tagSize": 10
+  }
+}
+</RESUME_DATA>`;
+  }
+
   if (type === 'design-template') {
     return `I'm using OpenResume Studio and want a custom HTML/CSS resume template.
 
@@ -1736,6 +1789,28 @@ function copyGeneratedPrompt() {
   });
 }
 
+function copyOverflowFixPrompt() {
+  selectPromptType('fix-overflow');
+  switchEditorTab('ai', document.querySelectorAll('.sidebar-tab')[1]);
+  generateAndShowPrompt();
+  copyGeneratedPrompt();
+  showToast('Copied 1-Page AI Fix Prompt!', 'success');
+}
+
+function autoFitStyleSliders() {
+  if (!APP.currentResume) return;
+  const s = APP.currentResume.styleOverrides || {};
+  s.baseFontSize = Math.max(9.5, (s.baseFontSize || 12) - 0.5);
+  s.lineHeight = Math.max(1.15, (s.lineHeight || 1.35) - 0.05);
+  s.sectionSpacing = Math.max(0.4, (s.sectionSpacing || 1.0) - 0.15);
+  s.margins = Math.max(0.3, (s.margins || 0.5) - 0.05);
+  APP.currentResume.styleOverrides = s;
+  renderStylePanel();
+  updatePreview();
+  scheduleSave();
+  showToast('Scaled down fonts & spacing to fit!', 'success');
+}
+
 function launchLLM(url) {
   copyGeneratedPrompt();
   setTimeout(() => window.open(url, '_blank'), 400);
@@ -1767,8 +1842,12 @@ function applyAIResponse() {
         parsed.sections.forEach(s => { if (!s.id) s.id = uuid(); });
         APP.currentResume.sections = parsed.sections;
       }
+      if (parsed.styleOverrides) {
+        APP.currentResume.styleOverrides = { ...APP.currentResume.styleOverrides, ...parsed.styleOverrides };
+        renderStylePanel();
+      }
       renderEditPanel(); updatePreview(); scheduleSave();
-      showToast('Resume content applied!', 'success');
+      showToast('Resume content & style applied!', 'success');
       return;
     } catch (e) { /* fall through */ }
   }
@@ -1802,11 +1881,15 @@ function applyAIResponse() {
   // Try raw JSON
   try {
     const parsed = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '');
-    if (parsed.contact || parsed.sections) {
+    if (parsed.contact || parsed.sections || parsed.styleOverrides) {
       if (parsed.contact) APP.currentResume.contact = { ...APP.currentResume.contact, ...parsed.contact };
       if (parsed.sections) {
         parsed.sections.forEach(s => { if (!s.id) s.id = uuid(); });
         APP.currentResume.sections = parsed.sections;
+      }
+      if (parsed.styleOverrides) {
+        APP.currentResume.styleOverrides = { ...APP.currentResume.styleOverrides, ...parsed.styleOverrides };
+        renderStylePanel();
       }
       renderEditPanel(); updatePreview(); scheduleSave();
       showToast('Resume content applied!', 'success');
@@ -1949,7 +2032,7 @@ function updateStyle(key, value) {
 }
 
 /* =============================================================================
-   PREVIEW
+   PREVIEW & MOBILE A4 SCALING
    ============================================================================= */
 function updatePreview() {
   if (!APP.currentResume) return;
@@ -1983,16 +2066,48 @@ function updatePreview() {
     wrapper.style.cssText = '';
   }
   checkOverflow();
+  updateMobileScale();
 }
 
 function checkOverflow() {
   setTimeout(() => {
     const doc = document.getElementById('documentWrapper');
     const banner = document.getElementById('overflowBanner');
+    const pxText = document.getElementById('overflowPxText');
     if (!doc || !banner) return;
-    // A4 at 96dpi ~= 1123px, but with margins it's less. Use 1130 as threshold.
-    banner.classList.toggle('visible', doc.scrollHeight > 1130);
+    const overflow = doc.scrollHeight - 1130;
+    if (overflow > 0) {
+      banner.classList.add('visible');
+      if (pxText) pxText.textContent = Math.round(overflow);
+    } else {
+      banner.classList.remove('visible');
+    }
   }, 50);
+}
+
+function updateMobileScale() {
+  const preview = document.getElementById('editorPreview');
+  const doc = document.getElementById('documentWrapper');
+  if (!preview || !doc) return;
+
+  if (window.innerWidth <= 900) {
+    const availableWidth = preview.clientWidth - 32;
+    const docWidthPx = 794; // 210mm at 96dpi
+    if (availableWidth > 0 && availableWidth < docWidthPx) {
+      const scale = Math.min(1, Math.max(0.35, availableWidth / docWidthPx));
+      doc.style.transform = `scale(${scale})`;
+      doc.style.transformOrigin = 'top center';
+      const docHeightPx = doc.scrollHeight || 1123;
+      const scaledHeight = docHeightPx * scale;
+      doc.style.marginBottom = `-${docHeightPx - scaledHeight}px`;
+    } else {
+      doc.style.transform = 'none';
+      doc.style.marginBottom = '0px';
+    }
+  } else {
+    doc.style.transform = 'none';
+    doc.style.marginBottom = '0px';
+  }
 }
 
 /* Mobile preview */
@@ -2006,6 +2121,7 @@ function showMobilePreview() {
   closeBtn.classList.add('visible');
   if (window.innerWidth <= 900) sidebar.style.display = 'none';
   updatePreview();
+  setTimeout(updateMobileScale, 50);
 }
 
 function closeMobilePreview() {
@@ -2014,6 +2130,9 @@ function closeMobilePreview() {
   preview.classList.remove('mobile-visible');
   closeBtn.classList.remove('visible');
 }
+
+/* Resize listener for scaling */
+window.addEventListener('resize', updateMobileScale);
 
 /* =============================================================================
    AUTO-SAVE
