@@ -1,20 +1,2 @@
-<style>
-    .ats-sheet { font-family: 'Inter', sans-serif; color: #0f172a; line-height: 1.45; }
-    .ats-header { border-bottom: 2px solid #0f172a; padding-bottom: 0.6rem; margin-bottom: 1rem; }
-    .ats-name { font-size: 24px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.04em; }
-    .ats-title { font-size: 14px; font-weight: 600; color: #334155; margin-top: 0.2rem; }
-    .ats-contact { font-size: 11px; color: #475569; margin-top: 0.4rem; display: flex; gap: 0.6rem; flex-wrap: wrap; }
-    .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #cbd5e1; padding-bottom: 0.2rem; margin-bottom: 0.5rem; color: #0f172a; margin-top: 0.8rem; }
-  </style>
-  <div class=ats-sheet>
-    <header class=ats-header>
-      <div class=ats-name>{{name}}</div>
-      <div class=ats-title>{{title}}</div>
-      <div class=ats-contact>
-        <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
-      </div>
-    </header>
-    <main>
-      {{sections}}
-    </main>
-  </div>
+<style>.tpl-container{font-family:'Merriweather',serif;color:#1e293b;padding:1.2rem;line-height:1.5;}.tpl-header{text-align:center;border-bottom:2px double #0f172a;padding-bottom:0.8rem;margin-bottom:1rem;}.tpl-name{font-size:26px;font-weight:700;color:#0f172a;letter-spacing:0.06em;text-transform:uppercase;}.tpl-title{font-size:13px;color:#475569;font-style:italic;margin-top:0.25rem;}.tpl-contact{font-size:11px;color:#475569;margin-top:0.4rem;display:flex;justify-content:center;gap:0.6rem;flex-wrap:wrap;}.tpl-contact span:not(:last-child)::after{content:" |";color:#94a3b8;margin-left:0.6rem;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;text-align:center;border-top:1px solid #cbd5e1;border-bottom:1px solid #cbd5e1;padding:0.25rem 0;margin-bottom:0.6rem;color:#0f172a;}</style>
+<div class="tpl-container"><header class="tpl-header"><div class="tpl-name">{{name}}</div><div class="tpl-title">{{title}}</div><div class="tpl-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main class="tpl-main">{{sections}}</main></div>

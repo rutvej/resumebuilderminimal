@@ -1,23 +1,2 @@
-<style>
-      .tpl-container { font-family: 'Merriweather', serif; color: #1e293b; padding: 1.2rem; text-align: center; }
-      .tpl-header { border-bottom: 2px solid #4f46e5; padding-bottom: 0.8rem; margin-bottom: 1rem; }
-      .tpl-name { font-size: 24px; font-weight: 800; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.06em; }
-      .tpl-title { font-size: 14px; color: #475569; font-weight: 500; margin-top: 0.2rem; }
-      .tpl-contact { font-size: 11px; color: #64748b; margin-top: 0.4rem; display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
-      .tpl-main { text-align: left; }
-      .tpl-main .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; padding: 0.2rem 0; margin-bottom: 0.6rem; color: #4f46e5; }
-    </style>
-
-      <div class=tpl-container>
-        <header class=tpl-header>
-          <div class=tpl-name>{{name}}</div>
-          <div class=tpl-title>{{title}}</div>
-          <div class=tpl-contact>
-            <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
-          </div>
-        </header>
-        <main class=tpl-main>
-          {{sections}}
-        </main>
-      </div>
-    
+<style>.tpl-container{font-family:'Inter',sans-serif;color:#0f172a;padding:1.2rem;display:flex;gap:1.2rem;min-height:100%;}.tpl-left-col{width:32%;border-right:2px solid #e2e8f0;padding-right:1rem;}.tpl-right-col{width:68%;}.tpl-name{font-size:22px;font-weight:900;color:#2563eb;line-height:1.1;}.tpl-title{font-size:12px;font-weight:600;color:#64748b;margin-top:0.3rem;}.tpl-contact{font-size:11px;color:#475569;margin-top:1rem;display:flex;flex-direction:column;gap:0.4rem;}.res-section-title{font-size:12px;font-weight:700;text-transform:uppercase;color:#2563eb;border-bottom:1.5px solid #2563eb;padding-bottom:0.2rem;margin-bottom:0.5rem;}</style>
+<div class="tpl-container"><aside class="tpl-left-col"><div class="tpl-name">{{name}}</div><div class="tpl-title">{{title}}</div><div class="tpl-contact"><div>📧 {{email}}</div><div>📱 {{phone}}</div><div>📍 {{location}}</div><div>🌐 {{website}}</div></div></aside><main class="tpl-right-col">{{sections}}</main></div>

@@ -1,22 +1,2 @@
-<style>
-      .tpl-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.2rem; }
-      .tpl-header { border-left: 4px solid #1e3a8a; padding-left: 0.8rem; margin-bottom: 1rem; }
-      .tpl-name { font-size: 24px; font-weight: 800; color: #1e3a8a; text-transform: uppercase; line-height: 1.1; }
-      .tpl-title { font-size: 14px; color: #475569; font-weight: 500; margin-top: 0.2rem; }
-      .tpl-contact { font-size: 11px; color: #64748b; margin-top: 0.4rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
-      .tpl-main .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.2rem; margin-bottom: 0.6rem; color: #1e3a8a; }
-    </style>
-
-      <div class=tpl-container>
-        <header class=tpl-header>
-          <div class=tpl-name>{{name}}</div>
-          <div class=tpl-title>{{title}}</div>
-          <div class=tpl-contact>
-            <span>{{email}}</span> <span>{{phone}}</span> <span>{{location}}</span> <span>{{website}}</span>
-          </div>
-        </header>
-        <main class=tpl-main>
-          {{sections}}
-        </main>
-      </div>
-    
+<style>.tpl-container{font-family:'Inter',sans-serif;color:#0f172a;padding:0;}.tpl-header{background:#1e3a8a;color:#fff;padding:1.5rem 1.2rem;display:flex;align-items:center;gap:1.2rem;}.tpl-avatar{width:56px;height:56px;border-radius:50%;background:#ffffff;color:#1e3a8a;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid rgba(255,255,255,0.4);}.tpl-name{font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;}.tpl-title{font-size:13px;color:#93c5fd;font-weight:600;margin-top:0.15rem;}.tpl-contact{font-size:11px;color:#cbd5e1;margin-top:0.35rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.tpl-body{padding:1.2rem;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#1e3a8a;border-bottom:2px solid #1e3a8a;padding-bottom:0.2rem;margin-bottom:0.6rem;}</style>
+<div class="tpl-container"><header class="tpl-header"><div class="tpl-avatar">EX</div><div><div class="tpl-name">{{name}}</div><div class="tpl-title">{{title}}</div><div class="tpl-contact"><span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span></div></div></header><main class="tpl-body">{{sections}}</main></div>
