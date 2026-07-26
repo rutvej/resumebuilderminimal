@@ -428,7 +428,7 @@ input[type="range"] {
 /* Editable canvas items hover outline */
 [contenteditable="true"] { outline:none; transition:box-shadow 0.15s; border-radius:2px; }
 [contenteditable="true"]:hover { box-shadow:0 0 0 1px rgba(124,92,252,0.4); }
-[contenteditable="true"]:focus { box-shadow:0 0 0 2px var(--accent); background:rgba(124,92,252,0.04); }
+[contenteditable="true"]:focus, .selected-canvas-el { box-shadow:0 0 0 2px var(--accent) !important; background:rgba(124,92,252,0.08) !important; }
 
 /* Floating Notion Mini-Toolbar */
 .canvas-toolbar {
@@ -653,12 +653,14 @@ input[type="range"] {
      NOTION-LIKE CANVAS FLOATING TOOLBAR
      ============================ -->
 <div class="canvas-toolbar" id="canvasFloatingToolbar">
-  <button onclick="formatCanvasSelection('bold')" title="Bold (Ctrl+B)"><b>B</b></button>
-  <button onclick="formatCanvasSelection('italic')" title="Italic (Ctrl+I)"><i>I</i></button>
+  <span id="canvasSelectCount" style="font-weight:700;color:var(--accent-light);font-size:0.72rem;margin-right:0.2rem;"></span>
+  <button onclick="formatCanvasSelection('bold')" title="Bold"><b>B</b></button>
+  <button onclick="formatCanvasSelection('italic')" title="Italic"><i>I</i></button>
   <button onclick="changeActiveElementFontSize(1)" title="Increase font size">A+</button>
   <button onclick="changeActiveElementFontSize(-1)" title="Decrease font size">A-</button>
   <input type="color" id="canvasColorPicker" onchange="changeActiveElementColor(this.value)" title="Change Text Color">
-  <button onclick="deleteActiveCanvasElement()" title="Delete element" style="color:#f87171;">✕</button>
+  <button id="multiSelectToggleBtn" onclick="toggleMultiSelectMode()" title="Toggle Multi-Select Mode">☑️ Multi</button>
+  <button onclick="deleteActiveCanvasElement()" title="Delete element(s)" style="color:#f87171;">✕</button>
 </div>
 
 <!-- ============================
@@ -885,7 +887,9 @@ const APP = {
   autoSaveTimer: null,
   selectedNewTemplate: 'modern-minimal',
   newSectionType: 'items',
-  activeCanvasEl: null
+  activeCanvasEl: null,
+  selectedCanvasElements: new Set(),
+  isMultiSelectMode: false
 };
 
 /* =============================================================================
@@ -1093,10 +1097,22 @@ async function loadSavedCustomTemplates() {
   list.forEach(tpl => registerCustomTemplateObject(tpl));
 }
 
+function scopeCustomCss(css) {
+  if (!css) return '';
+  // Scope CSS selectors so uploaded HTML styles never spill into app UI
+  return css
+    .replace(/\b(body|html|:root)\b/g, '.doc-custom')
+    .replace(/(^|\})\s*([a-zA-Z0-9_\-\.\:\#\*]+)/g, function(m, p1, p2) {
+      if (p2.startsWith('@') || p2.startsWith('.doc-custom') || p2.startsWith('from') || p2.startsWith('to') || p2.startsWith('http')) return m;
+      return `${p1} .doc-custom ${p2}`;
+    });
+}
+
 function renderCustomTemplate(r, html, css) {
   const s = r.styleOverrides || {};
   let rendered = html || '';
   const c = r.contact || {};
+
   rendered = rendered.replace(/\{\{name\}\}/g, escHTML(c.name || ''));
   rendered = rendered.replace(/\{\{title\}\}/g, escHTML(c.title || ''));
   rendered = rendered.replace(/\{\{email\}\}/g, escHTML(c.email || ''));
@@ -1104,16 +1120,38 @@ function renderCustomTemplate(r, html, css) {
   rendered = rendered.replace(/\{\{location\}\}/g, escHTML(c.location || ''));
   rendered = rendered.replace(/\{\{website\}\}/g, escHTML(c.website || ''));
 
-  const sectionSpacing = `margin-bottom:${s.sectionSpacing || 1}rem;`;
-  const sectionsHtml = (r.sections || []).map(sec => `
-    <div class="res-section" style="${sectionSpacing}">
+  // Track sections rendered dynamically by custom placeholders (e.g. {{summary}}, {{experience}}, {{section:skills}})
+  const usedSectionIds = new Set();
+  (r.sections || []).forEach(sec => {
+    const slug = sec.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const placeholders = [`{{${sec.id}}}`, `{{${slug}}}`, `{{section:${sec.id}}}`, `{{section:${slug}}}`];
+    
+    placeholders.forEach(ph => {
+      if (rendered.includes(ph)) {
+        usedSectionIds.add(sec.id);
+        const secHtml = `
+          <div class="res-section" style="margin-bottom:${s.sectionSpacing||1}rem;">
+            <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid #ddd;padding-bottom:0.2rem;margin-bottom:0.4rem;color:var(--doc-accent,#1e3a8a);">${escHTML(sec.title)}</div>
+            ${renderSectionContent(sec, s)}
+          </div>`;
+        rendered = rendered.replaceAll(ph, secHtml);
+      }
+    });
+  });
+
+  // Render remaining sections at {{sections}}
+  const remainingSections = (r.sections || []).filter(sec => !usedSectionIds.has(sec.id));
+  const remainingHtml = remainingSections.map(sec => `
+    <div class="res-section" style="margin-bottom:${s.sectionSpacing||1}rem;">
       <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid #ddd;padding-bottom:0.2rem;margin-bottom:0.4rem;color:var(--doc-accent,#1e3a8a);">${escHTML(sec.title)}</div>
       ${renderSectionContent(sec, s)}
     </div>`).join('');
-  rendered = rendered.replace(/\{\{sections\}\}/g, sectionsHtml);
 
-  const styleTag = css ? `<style>${css}</style>` : '';
-  return `<div class="doc-custom" style="${getDocStyles(s)}--doc-accent:${s.accentColor||'#1e3a8a'};">${styleTag}${rendered}</div>`;
+  rendered = rendered.replace(/\{\{sections\}\}/g, remainingHtml);
+
+  const scopedCss = scopeCustomCss(css);
+  const styleTag = scopedCss ? `<style>${scopedCss}</style>` : '';
+  return `<div class="doc-custom" style="${getDocStyles(s)}--doc-accent:${s.accentColor||'#1e3a8a'};box-sizing:border-box;">${styleTag}${rendered}</div>`;
 }
 
 function defaultResumeData() {
@@ -1886,39 +1924,43 @@ When finished, output your response in <RESUME_DATA> tags with updated content A
 
 ## STEP 1: Pre-Design Conversation & Design Discussion
 Before generating code, please ask me 3 quick questions to understand my design preferences:
-1. What aesthetic or layout do you prefer? (e.g. Minimalist, Executive Serif, Tech Mono, Modern Two-Column, Sidebar Layout)
+1. What aesthetic or layout do you prefer? (e.g. Executive Serif, Tech Mono, Modern Two-Column, Minimalist Grid)
 2. What color palette or theme should we use?
 3. Are there any specific sections or design details you'd like emphasized?
 
 Wait for my answers before writing the code!
 
-## STEP 2: Strict A4 PDF Boundary & Formatting Rules (for when we generate)
+## STEP 2: Strict A4 PDF Boundary & Formatting Rules
 When writing the template code:
 - **A4 Boundary & Box Sizing**: All content MUST stay strictly within A4 boundaries (210mm × 297mm). Use 'box-sizing: border-box;' everywhere.
 - **Page Overflow Control**: Keep headers, padding, margins (0.4in - 0.6in), and line heights compact so content fits comfortably on 1 page.
 - **Fonts**: Use only pre-loaded fonts: 'Inter', 'Outfit', 'Merriweather', 'JetBrains Mono'.
 - **Accent Color**: Use CSS variable \`var(--doc-accent, #1e3a8a)\` for section titles or headers so the user can change theme color dynamically in the app.
-- **Required Placeholders**:
-  - \`{{name}}\` — Candidate full name
-  - \`{{title}}\` — Job title
-  - \`{{email}}\`, \`{{phone}}\`, \`{{location}}\`, \`{{website}}\` — Contact info
-  - \`{{sections}}\` — Where all resume sections will be rendered
+- **Available Placeholders**:
+  - Contact info: \`{{name}}\`, \`{{title}}\`, \`{{email}}\`, \`{{phone}}\`, \`{{location}}\`, \`{{website}}\`
+  - Dynamic section placement: \`{{summary}}\`, \`{{experience}}\`, \`{{education}}\`, \`{{skills}}\`, \`{{projects}}\` or \`{{section:<slug>}}\`
+  - Catch-all remaining sections: \`{{sections}}\`
 
-## Output Format
-When generating code, wrap your output in <RESUME_TEMPLATE> tags:
-
+## STARTER EXAMPLE REFERENCE TEMPLATE (Use this as your foundation!)
 <RESUME_TEMPLATE>
-<template_name>My Custom Layout</template_name>
+<template_name>Executive Modern Slate</template_name>
 <style>
-  /* CSS rules here */
+  .exec-template { font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.4; }
+  .exec-header { text-align: center; border-bottom: 3px double var(--doc-accent, #1e3a8a); padding-bottom: 0.75rem; margin-bottom: 1rem; }
+  .exec-name { font-size: 24px; font-weight: 800; color: var(--doc-accent, #1e3a8a); text-transform: uppercase; letter-spacing: 0.05em; }
+  .exec-sub { font-size: 14px; font-weight: 600; color: #475569; margin-top: 0.25rem; }
+  .exec-contact { font-size: 11px; color: #64748b; margin-top: 0.4rem; display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
+  .exec-body { display: flex; flex-direction: column; gap: 0.8rem; }
 </style>
-<div class="resume-custom">
-  <header>
-    <h1>{{name}}</h1>
-    <p>{{title}}</p>
-    <div>{{email}} | {{phone}} | {{location}} | {{website}}</div>
+<div class="exec-template">
+  <header class="exec-header">
+    <div class="exec-name">{{name}}</div>
+    <div class="exec-sub">{{title}}</div>
+    <div class="exec-contact">
+      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+    </div>
   </header>
-  <main>
+  <main class="exec-body">
     {{sections}}
   </main>
 </div>
@@ -2250,11 +2292,59 @@ function makeCanvasDirectlyEditable() {
     el.contentEditable = "true";
     el.spellcheck = false;
 
-    el.onfocus = (e) => {
-      APP.activeCanvasEl = el;
-      showCanvasFloatingToolbar(el);
+    el.onmousedown = (e) => {
+      if (e.shiftKey || APP.isMultiSelectMode) {
+        // Multi-select toggle
+        if (APP.selectedCanvasElements.has(el)) {
+          APP.selectedCanvasElements.delete(el);
+          el.classList.remove('selected-canvas-el');
+        } else {
+          APP.selectedCanvasElements.add(el);
+          el.classList.add('selected-canvas-el');
+        }
+        e.preventDefault();
+        updateMultiSelectToolbar();
+      } else {
+        // Single select unless already in set
+        if (!APP.selectedCanvasElements.has(el)) {
+          clearCanvasSelection();
+          APP.selectedCanvasElements.add(el);
+          el.classList.add('selected-canvas-el');
+        }
+        APP.activeCanvasEl = el;
+        showCanvasFloatingToolbar(el);
+      }
     };
   });
+}
+
+function toggleMultiSelectMode() {
+  APP.isMultiSelectMode = !APP.isMultiSelectMode;
+  const btn = document.getElementById('multiSelectToggleBtn');
+  if (btn) {
+    btn.classList.toggle('btn-primary', APP.isMultiSelectMode);
+    btn.classList.toggle('btn-secondary', !APP.isMultiSelectMode);
+  }
+  showToast(APP.isMultiSelectMode ? 'Multi-select ON (Click elements to group select)' : 'Multi-select OFF', 'info');
+}
+
+function clearCanvasSelection() {
+  APP.selectedCanvasElements.forEach(el => el.classList.remove('selected-canvas-el'));
+  APP.selectedCanvasElements.clear();
+  hideCanvasFloatingToolbar();
+}
+
+function updateMultiSelectToolbar() {
+  const count = APP.selectedCanvasElements.size;
+  if (count === 0) {
+    hideCanvasFloatingToolbar();
+    return;
+  }
+  const firstEl = Array.from(APP.selectedCanvasElements)[0];
+  showCanvasFloatingToolbar(firstEl);
+
+  const countBadge = document.getElementById('canvasSelectCount');
+  if (countBadge) countBadge.textContent = count > 1 ? `(${count})` : '';
 }
 
 function showCanvasFloatingToolbar(el) {
@@ -2262,11 +2352,16 @@ function showCanvasFloatingToolbar(el) {
   if (!toolbar || !el) return;
 
   const rect = el.getBoundingClientRect();
-  toolbar.style.top = Math.max(10, rect.top - 42) + 'px';
+  toolbar.style.top = Math.max(10, rect.top - 46) + 'px';
   toolbar.style.left = Math.max(10, rect.left) + 'px';
   toolbar.classList.add('visible');
 
-  // Update color picker if element has custom inline color
+  const countBadge = document.getElementById('canvasSelectCount');
+  if (countBadge) {
+    const count = APP.selectedCanvasElements.size;
+    countBadge.textContent = count > 1 ? `(${count})` : '';
+  }
+
   const colorPicker = document.getElementById('canvasColorPicker');
   if (colorPicker && el.style.color) {
     colorPicker.value = rgbToHex(el.style.color) || '#7c5cfc';
@@ -2282,37 +2377,50 @@ function hideCanvasFloatingToolbar() {
 document.addEventListener('mousedown', (e) => {
   const toolbar = document.getElementById('canvasFloatingToolbar');
   const wrapper = document.getElementById('documentWrapper');
+  const multiBtn = document.getElementById('multiSelectToggleBtn');
   if (!toolbar || !wrapper) return;
-  if (!toolbar.contains(e.target) && !wrapper.contains(e.target)) {
-    hideCanvasFloatingToolbar();
+  if (!toolbar.contains(e.target) && !wrapper.contains(e.target) && (!multiBtn || !multiBtn.contains(e.target))) {
+    clearCanvasSelection();
   }
 });
 
 function formatCanvasSelection(cmd) {
-  document.execCommand(cmd, false, null);
+  if (APP.selectedCanvasElements.size > 0) {
+    APP.selectedCanvasElements.forEach(el => {
+      if (cmd === 'bold') el.style.fontWeight = el.style.fontWeight === 'bold' ? 'normal' : 'bold';
+      if (cmd === 'italic') el.style.fontStyle = el.style.fontStyle === 'italic' ? 'normal' : 'italic';
+    });
+  } else {
+    document.execCommand(cmd, false, null);
+  }
   scheduleSave();
 }
 
 function changeActiveElementFontSize(delta) {
-  if (!APP.activeCanvasEl) return;
-  const currentSize = parseFloat(window.getComputedStyle(APP.activeCanvasEl).fontSize) || 12;
-  const newSize = Math.max(8, Math.min(48, currentSize + delta));
-  APP.activeCanvasEl.style.fontSize = newSize + 'px';
+  const targets = APP.selectedCanvasElements.size > 0 ? Array.from(APP.selectedCanvasElements) : (APP.activeCanvasEl ? [APP.activeCanvasEl] : []);
+  targets.forEach(el => {
+    const currentSize = parseFloat(window.getComputedStyle(el).fontSize) || 12;
+    const newSize = Math.max(8, Math.min(48, currentSize + delta));
+    el.style.fontSize = newSize + 'px';
+  });
   scheduleSave();
 }
 
 function changeActiveElementColor(color) {
-  if (!APP.activeCanvasEl) return;
-  APP.activeCanvasEl.style.color = color;
+  const targets = APP.selectedCanvasElements.size > 0 ? Array.from(APP.selectedCanvasElements) : (APP.activeCanvasEl ? [APP.activeCanvasEl] : []);
+  targets.forEach(el => {
+    el.style.color = color;
+  });
   scheduleSave();
 }
 
 function deleteActiveCanvasElement() {
-  if (!APP.activeCanvasEl) return;
-  APP.activeCanvasEl.remove();
-  hideCanvasFloatingToolbar();
+  const targets = APP.selectedCanvasElements.size > 0 ? Array.from(APP.selectedCanvasElements) : (APP.activeCanvasEl ? [APP.activeCanvasEl] : []);
+  if (targets.length === 0) return;
+  targets.forEach(el => el.remove());
+  clearCanvasSelection();
   scheduleSave();
-  showToast('Element removed from canvas', 'info');
+  showToast(`Removed ${targets.length} element(s) from canvas`, 'info');
 }
 
 function rgbToHex(rgb) {
