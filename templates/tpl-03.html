@@ -1,2 +1,26 @@
-<style>.tpl-container{font-family:'Inter',sans-serif;color:#0f172a;padding:1.2rem;display:flex;gap:1.2rem;min-height:100%;}.tpl-left-col{width:32%;border-right:2px solid #e2e8f0;padding-right:1rem;}.tpl-right-col{width:68%;}.tpl-name{font-size:22px;font-weight:900;color:#2563eb;line-height:1.1;}.tpl-title{font-size:12px;font-weight:600;color:#64748b;margin-top:0.3rem;}.tpl-contact{font-size:11px;color:#475569;margin-top:1rem;display:flex;flex-direction:column;gap:0.4rem;}.res-section-title{font-size:12px;font-weight:700;text-transform:uppercase;color:#2563eb;border-bottom:1.5px solid #2563eb;padding-bottom:0.2rem;margin-bottom:0.5rem;}</style>
-<div class="tpl-container"><aside class="tpl-left-col"><div class="tpl-name">{{name}}</div><div class="tpl-title">{{title}}</div><div class="tpl-contact"><div>📧 {{email}}</div><div>📱 {{phone}}</div><div>📍 {{location}}</div><div>🌐 {{website}}</div></div></aside><main class="tpl-right-col">{{sections}}</main></div>
+<style>
+  .tpl03-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; display: flex; gap: 1.4rem; }
+  .tpl03-sidebar { width: 32%; border-right: 2px solid #e2e8f0; padding-right: 1.2rem; background: #fafafa; padding: 1rem; border-radius: 8px; }
+  .tpl03-main { width: 68%; }
+  .tpl03-name { font-size: 22px; font-weight: 900; color: #2563eb; line-height: 1.1; text-transform: uppercase; }
+  .tpl03-title { font-size: 12.5px; font-weight: 600; color: #64748b; margin-top: 0.4rem; }
+  .tpl03-contact { font-size: 11px; color: #475569; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem; word-break: break-word; }
+  .tpl03-contact-item { display: flex; align-items: center; gap: 0.4rem; }
+  .tpl03-container .res-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 0.2rem; margin-bottom: 0.5rem; }
+</style>
+
+<div class="tpl03-container">
+  <aside class="tpl03-sidebar">
+    <div class="tpl03-name">{{name}}</div>
+    <div class="tpl03-title">{{title}}</div>
+    <div class="tpl03-contact">
+      <div class="tpl03-contact-item">📧 {{email}}</div>
+      <div class="tpl03-contact-item">📱 {{phone}}</div>
+      <div class="tpl03-contact-item">📍 {{location}}</div>
+      <div class="tpl03-contact-item">🌐 {{website}}</div>
+    </div>
+  </aside>
+  <main class="tpl03-main">
+    {{sections}}
+  </main>
+</div>

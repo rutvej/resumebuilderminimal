@@ -1,2 +1,21 @@
-<style>.tpl-container{font-family:'Merriweather',sans-serif;color:#0f172a;padding:1.2rem;}.tpl-header{border-bottom:2px solid #059669;padding-bottom:0.6rem;margin-bottom:1rem;}.tpl-name{font-size:24px;font-weight:800;color:#059669;text-transform:uppercase;}.tpl-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.tpl-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#059669;border-left:4px solid #059669;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="tpl-container"><header class="tpl-header"><div class="tpl-name">{{name}}</div><div class="tpl-title">{{title}}</div><div class="tpl-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main class="tpl-main">{{sections}}</main></div>
+<style>
+  .tpl06-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; background: #f8fafc; }
+  .tpl06-header { background: #ffffff; border: 1px solid #e2e8f0; border-top: 5px solid #0284c7; padding: 1.2rem; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.03); margin-bottom: 1.4rem; }
+  .tpl06-name { font-size: 25px; font-weight: 800; color: #0284c7; letter-spacing: -0.01em; }
+  .tpl06-title { font-size: 13.5px; color: #475569; font-weight: 600; margin-top: 0.15rem; }
+  .tpl06-contact { font-size: 11px; color: #64748b; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .tpl06-container .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #0284c7; border-bottom: 1.5px solid #cbd5e1; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="tpl06-container">
+  <header class="tpl06-header">
+    <div class="tpl06-name">{{name}}</div>
+    <div class="tpl06-title">{{title}}</div>
+    <div class="tpl06-contact">
+      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+    </div>
+  </header>
+  <main class="tpl06-main">
+    {{sections}}
+  </main>
+</div>

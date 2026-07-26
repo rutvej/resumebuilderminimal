@@ -1,2 +1,26 @@
-<style>.tpl-container{font-family:'Inter',sans-serif;color:#0f172a;padding:0;}.tpl-header{background:#1e3a8a;color:#fff;padding:1.5rem 1.2rem;display:flex;align-items:center;gap:1.2rem;}.tpl-avatar{width:56px;height:56px;border-radius:50%;background:#ffffff;color:#1e3a8a;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid rgba(255,255,255,0.4);}.tpl-name{font-size:24px;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;}.tpl-title{font-size:13px;color:#93c5fd;font-weight:600;margin-top:0.15rem;}.tpl-contact{font-size:11px;color:#cbd5e1;margin-top:0.35rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.tpl-body{padding:1.2rem;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#1e3a8a;border-bottom:2px solid #1e3a8a;padding-bottom:0.2rem;margin-bottom:0.6rem;}</style>
-<div class="tpl-container"><header class="tpl-header"><div class="tpl-avatar">EX</div><div><div class="tpl-name">{{name}}</div><div class="tpl-title">{{title}}</div><div class="tpl-contact"><span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span></div></div></header><main class="tpl-body">{{sections}}</main></div>
+<style>
+  .tpl01-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 0; }
+  .tpl01-header { background: #1e3a8a; color: #ffffff; padding: 1.6rem 1.4rem; display: flex; align-items: center; gap: 1.4rem; border-bottom: 4px solid #3b82f6; }
+  .tpl01-avatar { width: 58px; height: 58px; border-radius: 50%; background: #ffffff; color: #1e3a8a; font-size: 22px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.5); }
+  .tpl01-name { font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.1; }
+  .tpl01-title { font-size: 13.5px; color: #93c5fd; font-weight: 600; margin-top: 0.2rem; }
+  .tpl01-contact { font-size: 11px; color: #cbd5e1; margin-top: 0.4rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .tpl01-body { padding: 1.4rem; }
+  .tpl01-body .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #1e3a8a; border-bottom: 2px solid #1e3a8a; padding-bottom: 0.25rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="tpl01-container">
+  <header class="tpl01-header">
+    <div class="tpl01-avatar">EX</div>
+    <div>
+      <div class="tpl01-name">{{name}}</div>
+      <div class="tpl01-title">{{title}}</div>
+      <div class="tpl01-contact">
+        <span>📧 {{email}}</span> • <span>📱 {{phone}}</span> • <span>📍 {{location}}</span> • <span>🌐 {{website}}</span>
+      </div>
+    </div>
+  </header>
+  <main class="tpl01-body">
+    {{sections}}
+  </main>
+</div>
