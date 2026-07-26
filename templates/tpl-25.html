@@ -1,2 +1,22 @@
-<style>.t25-wrap{font-family:'Outfit',sans-serif;color:#0f172a;padding:1.2rem;}.t25-head{border-bottom:2px solid #2563eb;padding-bottom:0.6rem;margin-bottom:1rem;}.t25-name{font-size:24px;font-weight:800;color:#2563eb;text-transform:uppercase;}.t25-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t25-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#2563eb;border-left:4px solid #2563eb;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t25-wrap"><header class="t25-head"><div class="t25-name">{{name}}</div><div class="t25-title">{{title}}</div><div class="t25-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t25-wrap { font-family: 'Inter', sans-serif; color: #0f172a; padding: 0; }
+  .t25-head { background: #0f172a; color: #ffffff; padding: 1.6rem 1.4rem; border-bottom: 5px solid #eab308; }
+  .t25-name { font-size: 27px; font-weight: 800; color: #fde047; text-transform: uppercase; letter-spacing: 0.04em; }
+  .t25-title { font-size: 13.5px; color: #fef08a; font-weight: 600; margin-top: 0.25rem; }
+  .t25-contact { font-size: 11px; color: #cbd5e1; margin-top: 0.6rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t25-body { padding: 1.4rem; }
+  .t25-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #0f172a; border-bottom: 2px solid #eab308; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t25-wrap">
+  <header class="t25-head">
+    <div class="t25-name">{{name}}</div>
+    <div class="t25-title">{{title}}</div>
+    <div class="t25-contact">
+      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+    </div>
+  </header>
+  <main class="t25-body">
+    {{sections}}
+  </main>
+</div>

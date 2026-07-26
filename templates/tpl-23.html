@@ -1,2 +1,26 @@
-<style>.t23-wrap{font-family:'JetBrains Mono',sans-serif;color:#0f172a;padding:1.2rem;}.t23-head{border-bottom:2px solid #d97706;padding-bottom:0.6rem;margin-bottom:1rem;}.t23-name{font-size:24px;font-weight:800;color:#d97706;text-transform:uppercase;}.t23-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t23-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#d97706;border-left:4px solid #d97706;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t23-wrap"><header class="t23-head"><div class="t23-name">{{name}}</div><div class="t23-title">{{title}}</div><div class="t23-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t23-wrap { font-family: 'Outfit', sans-serif; color: #0f172a; padding: 1.4rem; }
+  .t23-head { border-bottom: 3px solid #ec4899; padding-bottom: 0.9rem; margin-bottom: 1.4rem; display: flex; justify-content: space-between; align-items: flex-end; }
+  .t23-name { font-size: 30px; font-weight: 900; color: #db2777; line-height: 1; }
+  .t23-title { font-size: 13.5px; color: #be185d; font-weight: 600; margin-top: 0.25rem; }
+  .t23-contact { font-size: 11px; color: #9d174d; text-align: right; line-height: 1.45; }
+  .t23-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #db2777; border-bottom: 1.5px solid #fbcfe8; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t23-wrap">
+  <header class="t23-head">
+    <div>
+      <div class="t23-name">{{name}}</div>
+      <div class="t23-title">{{title}}</div>
+    </div>
+    <div class="t23-contact">
+      <div>{{email}}</div>
+      <div>{{phone}}</div>
+      <div>{{location}}</div>
+      <div>{{website}}</div>
+    </div>
+  </header>
+  <main class="t23-main">
+    {{sections}}
+  </main>
+</div>

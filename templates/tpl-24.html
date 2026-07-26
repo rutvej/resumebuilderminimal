@@ -1,2 +1,24 @@
-<style>.t24-wrap{font-family:'Inter',sans-serif;color:#0f172a;padding:1.2rem;}.t24-head{border-bottom:2px solid #dc2626;padding-bottom:0.6rem;margin-bottom:1rem;}.t24-name{font-size:24px;font-weight:800;color:#dc2626;text-transform:uppercase;}.t24-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t24-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#dc2626;border-left:4px solid #dc2626;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t24-wrap"><header class="t24-head"><div class="t24-name">{{name}}</div><div class="t24-title">{{title}}</div><div class="t24-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t24-wrap { font-family: 'JetBrains Mono', monospace; color: #0f172a; padding: 1.4rem; background: #fafafa; }
+  .t24-head { border: 1px solid #cbd5e1; border-top: 4px solid #6366f1; padding: 1.2rem; border-radius: 6px; margin-bottom: 1.4rem; background: #ffffff; }
+  .t24-name { font-size: 24px; font-weight: 700; color: #4f46e5; }
+  .t24-title { font-size: 13px; color: #4338ca; margin-top: 0.2rem; }
+  .t24-contact { font-size: 10.5px; color: #64748b; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t24-wrap .res-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #4f46e5; border-bottom: 1.5px solid #c7d2fe; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t24-wrap">
+  <header class="t24-head">
+    <div class="t24-name">[DATA] {{name}}</div>
+    <div class="t24-title">// {{title}}</div>
+    <div class="t24-contact">
+      <span>[{{email}}]</span>
+      <span>[{{phone}}]</span>
+      <span>[{{location}}]</span>
+      <span>[{{website}}]</span>
+    </div>
+  </header>
+  <main class="t24-main">
+    {{sections}}
+  </main>
+</div>
