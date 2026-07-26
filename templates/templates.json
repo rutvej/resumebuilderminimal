@@ -1,352 +1,542 @@
 [
   {
+    "id": "tpl-ats-01",
+    "name": "ATS Standard Professional",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 99,
+    "accent": "#1e3a8a",
+    "file": "templates/tpl-ats-01.html"
+  },
+  {
+    "id": "tpl-ats-02",
+    "name": "ATS Tech & Developer",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 99,
+    "accent": "#0f172a",
+    "file": "templates/tpl-ats-02.html"
+  },
+  {
+    "id": "tpl-ats-03",
+    "name": "ATS Executive Minimal",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 98,
+    "accent": "#059669",
+    "file": "templates/tpl-ats-03.html"
+  },
+  {
+    "id": "tpl-ats-04",
+    "name": "ATS Harvard Classic",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 100,
+    "accent": "#991b1b",
+    "file": "templates/tpl-ats-04.html"
+  },
+  {
+    "id": "tpl-ats-05",
+    "name": "ATS Modern Linear",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 98,
+    "accent": "#4f46e5",
+    "file": "templates/tpl-ats-05.html"
+  },
+  {
+    "id": "tpl-ats-06",
+    "name": "ATS Compact Single-Page",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 97,
+    "accent": "#0e7490",
+    "file": "templates/tpl-ats-06.html"
+  },
+  {
+    "id": "tpl-ats-07",
+    "name": "ATS Healthcare & Medical",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 99,
+    "accent": "#0d9488",
+    "file": "templates/tpl-ats-07.html"
+  },
+  {
+    "id": "tpl-ats-08",
+    "name": "ATS Finance & Banking",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 98,
+    "accent": "#3b82f6",
+    "file": "templates/tpl-ats-08.html"
+  },
+  {
+    "id": "tpl-ats-09",
+    "name": "ATS Product Manager",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 98,
+    "accent": "#7c3aed",
+    "file": "templates/tpl-ats-09.html"
+  },
+  {
+    "id": "tpl-ats-10",
+    "name": "ATS Clean Academic",
+    "category": "ATS Friendly",
+    "isAtsFriendly": true,
+    "atsScore": 99,
+    "accent": "#334155",
+    "file": "templates/tpl-ats-10.html"
+  },
+  {
     "id": "tpl-01",
     "name": "Executive Slate",
     "category": "Modern",
     "accent": "#1e3a8a",
-    "file": "templates/tpl-01.html"
+    "file": "templates/tpl-01.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-02",
     "name": "Tech Lead Mono",
     "category": "Executive",
     "accent": "#059669",
-    "file": "templates/tpl-02.html"
+    "file": "templates/tpl-02.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-03",
     "name": "Minimalist Ivory",
     "category": "Tech & Engineering",
     "accent": "#4f46e5",
-    "file": "templates/tpl-03.html"
+    "file": "templates/tpl-03.html",
+    "isAtsFriendly": true,
+    "atsScore": 97
   },
   {
     "id": "tpl-04",
     "name": "Nordic Clean",
     "category": "Creative & Design",
     "accent": "#0f172a",
-    "file": "templates/tpl-04.html"
+    "file": "templates/tpl-04.html",
+    "isAtsFriendly": false,
+    "atsScore": 85
   },
   {
     "id": "tpl-05",
     "name": "Corporate Blue",
     "category": "Minimalist",
     "accent": "#991b1b",
-    "file": "templates/tpl-05.html"
+    "file": "templates/tpl-05.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   },
   {
     "id": "tpl-06",
     "name": "Creative Emerald",
     "category": "Academic & Legal",
     "accent": "#7c3aed",
-    "file": "templates/tpl-06.html"
+    "file": "templates/tpl-06.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-07",
     "name": "Compact Developer",
     "category": "Compact 1-Page",
     "accent": "#b45309",
-    "file": "templates/tpl-07.html"
+    "file": "templates/tpl-07.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-08",
     "name": "Elegant Serif",
     "category": "Sidebar & Two-Column",
     "accent": "#0e7490",
-    "file": "templates/tpl-08.html"
+    "file": "templates/tpl-08.html",
+    "isAtsFriendly": false,
+    "atsScore": 89
   },
   {
     "id": "tpl-09",
     "name": "Bold Two-Column",
     "category": "Modern",
     "accent": "#6d28d9",
-    "file": "templates/tpl-09.html"
+    "file": "templates/tpl-09.html",
+    "isAtsFriendly": true,
+    "atsScore": 98
   },
   {
     "id": "tpl-10",
     "name": "Startup Indigo",
     "category": "Executive",
     "accent": "#db2777",
-    "file": "templates/tpl-10.html"
+    "file": "templates/tpl-10.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   },
   {
     "id": "tpl-11",
     "name": "Modern Grid",
     "category": "Tech & Engineering",
     "accent": "#2563eb",
-    "file": "templates/tpl-11.html"
+    "file": "templates/tpl-11.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-12",
     "name": "Minimal Dot",
     "category": "Creative & Design",
     "accent": "#0d9488",
-    "file": "templates/tpl-12.html"
+    "file": "templates/tpl-12.html",
+    "isAtsFriendly": false,
+    "atsScore": 83
   },
   {
     "id": "tpl-13",
     "name": "Split Header Navy",
     "category": "Minimalist",
     "accent": "#ea580c",
-    "file": "templates/tpl-13.html"
+    "file": "templates/tpl-13.html",
+    "isAtsFriendly": true,
+    "atsScore": 97
   },
   {
     "id": "tpl-14",
     "name": "Teal Professional",
     "category": "Academic & Legal",
     "accent": "#4338ca",
-    "file": "templates/tpl-14.html"
+    "file": "templates/tpl-14.html",
+    "isAtsFriendly": true,
+    "atsScore": 98
   },
   {
     "id": "tpl-15",
     "name": "Monochrome Tech",
     "category": "Compact 1-Page",
     "accent": "#0369a1",
-    "file": "templates/tpl-15.html"
+    "file": "templates/tpl-15.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   },
   {
     "id": "tpl-16",
     "name": "Amber Creative",
     "category": "Sidebar & Two-Column",
     "accent": "#1e3a8a",
-    "file": "templates/tpl-16.html"
+    "file": "templates/tpl-16.html",
+    "isAtsFriendly": false,
+    "atsScore": 87
   },
   {
     "id": "tpl-17",
     "name": "Classic Times",
     "category": "Modern",
     "accent": "#059669",
-    "file": "templates/tpl-17.html"
+    "file": "templates/tpl-17.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-18",
     "name": "Rose Minimal",
     "category": "Executive",
     "accent": "#4f46e5",
-    "file": "templates/tpl-18.html"
+    "file": "templates/tpl-18.html",
+    "isAtsFriendly": true,
+    "atsScore": 97
   },
   {
     "id": "tpl-19",
     "name": "Cyan Modern",
     "category": "Tech & Engineering",
     "accent": "#0f172a",
-    "file": "templates/tpl-19.html"
+    "file": "templates/tpl-19.html",
+    "isAtsFriendly": true,
+    "atsScore": 98
   },
   {
     "id": "tpl-20",
     "name": "Dark Mode Cyber",
     "category": "Creative & Design",
     "accent": "#991b1b",
-    "file": "templates/tpl-20.html"
+    "file": "templates/tpl-20.html",
+    "isAtsFriendly": false,
+    "atsScore": 91
   },
   {
     "id": "tpl-21",
     "name": "Violet Executive",
     "category": "Minimalist",
     "accent": "#7c3aed",
-    "file": "templates/tpl-21.html"
+    "file": "templates/tpl-21.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-22",
     "name": "Forest Green Standard",
     "category": "Academic & Legal",
     "accent": "#b45309",
-    "file": "templates/tpl-22.html"
+    "file": "templates/tpl-22.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-23",
     "name": "Subtle Border",
     "category": "Compact 1-Page",
     "accent": "#0e7490",
-    "file": "templates/tpl-23.html"
+    "file": "templates/tpl-23.html",
+    "isAtsFriendly": true,
+    "atsScore": 97
   },
   {
     "id": "tpl-24",
     "name": "Header Banner",
     "category": "Sidebar & Two-Column",
     "accent": "#6d28d9",
-    "file": "templates/tpl-24.html"
+    "file": "templates/tpl-24.html",
+    "isAtsFriendly": false,
+    "atsScore": 85
   },
   {
     "id": "tpl-25",
     "name": "Compact Timeline",
     "category": "Modern",
     "accent": "#db2777",
-    "file": "templates/tpl-25.html"
+    "file": "templates/tpl-25.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   },
   {
     "id": "tpl-26",
     "name": "Left Rail Modern",
     "category": "Executive",
     "accent": "#2563eb",
-    "file": "templates/tpl-26.html"
+    "file": "templates/tpl-26.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-27",
     "name": "Right Rail Slate",
     "category": "Tech & Engineering",
     "accent": "#0d9488",
-    "file": "templates/tpl-27.html"
+    "file": "templates/tpl-27.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-28",
     "name": "Centered Classic",
     "category": "Creative & Design",
     "accent": "#ea580c",
-    "file": "templates/tpl-28.html"
+    "file": "templates/tpl-28.html",
+    "isAtsFriendly": false,
+    "atsScore": 89
   },
   {
     "id": "tpl-29",
     "name": "Double Line Title",
     "category": "Minimalist",
     "accent": "#4338ca",
-    "file": "templates/tpl-29.html"
+    "file": "templates/tpl-29.html",
+    "isAtsFriendly": true,
+    "atsScore": 98
   },
   {
     "id": "tpl-30",
     "name": "Iconic Accent",
     "category": "Academic & Legal",
     "accent": "#0369a1",
-    "file": "templates/tpl-30.html"
+    "file": "templates/tpl-30.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   },
   {
     "id": "tpl-31",
     "name": "High Contrast Pro",
     "category": "Compact 1-Page",
     "accent": "#1e3a8a",
-    "file": "templates/tpl-31.html"
+    "file": "templates/tpl-31.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-32",
     "name": "Soft Shadow Light",
     "category": "Sidebar & Two-Column",
     "accent": "#059669",
-    "file": "templates/tpl-32.html"
+    "file": "templates/tpl-32.html",
+    "isAtsFriendly": false,
+    "atsScore": 83
   },
   {
     "id": "tpl-33",
     "name": "Tech Stack Focus",
     "category": "Modern",
     "accent": "#4f46e5",
-    "file": "templates/tpl-33.html"
+    "file": "templates/tpl-33.html",
+    "isAtsFriendly": true,
+    "atsScore": 97
   },
   {
     "id": "tpl-34",
     "name": "Summary Highlight",
     "category": "Executive",
     "accent": "#0f172a",
-    "file": "templates/tpl-34.html"
+    "file": "templates/tpl-34.html",
+    "isAtsFriendly": true,
+    "atsScore": 98
   },
   {
     "id": "tpl-35",
     "name": "Project Showcase",
     "category": "Tech & Engineering",
     "accent": "#991b1b",
-    "file": "templates/tpl-35.html"
+    "file": "templates/tpl-35.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   },
   {
     "id": "tpl-36",
     "name": "Skill Matrix",
     "category": "Creative & Design",
     "accent": "#7c3aed",
-    "file": "templates/tpl-36.html"
+    "file": "templates/tpl-36.html",
+    "isAtsFriendly": false,
+    "atsScore": 87
   },
   {
     "id": "tpl-37",
     "name": "Executive Gold",
     "category": "Minimalist",
     "accent": "#b45309",
-    "file": "templates/tpl-37.html"
+    "file": "templates/tpl-37.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-38",
     "name": "Minimal Boxed",
     "category": "Academic & Legal",
     "accent": "#0e7490",
-    "file": "templates/tpl-38.html"
+    "file": "templates/tpl-38.html",
+    "isAtsFriendly": true,
+    "atsScore": 97
   },
   {
     "id": "tpl-39",
     "name": "Clean Canvas",
     "category": "Compact 1-Page",
     "accent": "#6d28d9",
-    "file": "templates/tpl-39.html"
+    "file": "templates/tpl-39.html",
+    "isAtsFriendly": true,
+    "atsScore": 98
   },
   {
     "id": "tpl-40",
     "name": "Modern Split",
     "category": "Sidebar & Two-Column",
     "accent": "#db2777",
-    "file": "templates/tpl-40.html"
+    "file": "templates/tpl-40.html",
+    "isAtsFriendly": false,
+    "atsScore": 91
   },
   {
     "id": "tpl-41",
     "name": "Divider Accent",
     "category": "Modern",
     "accent": "#2563eb",
-    "file": "templates/tpl-41.html"
+    "file": "templates/tpl-41.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-42",
     "name": "Compact Academic",
     "category": "Executive",
     "accent": "#0d9488",
-    "file": "templates/tpl-42.html"
+    "file": "templates/tpl-42.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-43",
     "name": "Full Width Banner",
     "category": "Tech & Engineering",
     "accent": "#ea580c",
-    "file": "templates/tpl-43.html"
+    "file": "templates/tpl-43.html",
+    "isAtsFriendly": true,
+    "atsScore": 97
   },
   {
     "id": "tpl-44",
     "name": "Clean Line Top",
     "category": "Creative & Design",
     "accent": "#4338ca",
-    "file": "templates/tpl-44.html"
+    "file": "templates/tpl-44.html",
+    "isAtsFriendly": false,
+    "atsScore": 85
   },
   {
     "id": "tpl-45",
     "name": "Modern Minimal 2.0",
     "category": "Minimalist",
     "accent": "#0369a1",
-    "file": "templates/tpl-45.html"
+    "file": "templates/tpl-45.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   },
   {
     "id": "tpl-46",
     "name": "Classic Serif Pro",
     "category": "Academic & Legal",
     "accent": "#1e3a8a",
-    "file": "templates/tpl-46.html"
+    "file": "templates/tpl-46.html",
+    "isAtsFriendly": true,
+    "atsScore": 95
   },
   {
     "id": "tpl-47",
     "name": "Bold Sidebar 2.0",
     "category": "Compact 1-Page",
     "accent": "#059669",
-    "file": "templates/tpl-47.html"
+    "file": "templates/tpl-47.html",
+    "isAtsFriendly": true,
+    "atsScore": 96
   },
   {
     "id": "tpl-48",
     "name": "Nordic Frost",
     "category": "Sidebar & Two-Column",
     "accent": "#4f46e5",
-    "file": "templates/tpl-48.html"
+    "file": "templates/tpl-48.html",
+    "isAtsFriendly": false,
+    "atsScore": 89
   },
   {
     "id": "tpl-49",
     "name": "Developer Terminal",
     "category": "Modern",
     "accent": "#0f172a",
-    "file": "templates/tpl-49.html"
+    "file": "templates/tpl-49.html",
+    "isAtsFriendly": true,
+    "atsScore": 98
   },
   {
     "id": "tpl-50",
     "name": "Elegant Rosewood",
     "category": "Executive",
     "accent": "#991b1b",
-    "file": "templates/tpl-50.html"
+    "file": "templates/tpl-50.html",
+    "isAtsFriendly": true,
+    "atsScore": 99
   }
 ]

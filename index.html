@@ -526,9 +526,17 @@ input[type="range"] {
   padding:1.5rem; max-width:540px; width:100%; max-height:90vh; overflow-y:auto;
   animation:modalIn 0.25s ease;
 }
-@keyframes modalIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:none; } }
 .modal h3 { font-family:'Outfit',sans-serif; font-size:1.15rem; margin-bottom:1rem; }
 .modal-actions { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1.25rem; }
+
+/* Mobile Optimizations for Modals & Store */
+@media (max-width: 640px) {
+  .modal { padding: 1rem 0.8rem !important; max-height: 88vh !important; width: 96% !important; }
+  .prompt-chips { overflow-x: auto !important; white-space: nowrap !important; padding-bottom: 0.4rem !important; display: flex !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; }
+  .prompt-chips .chip { flex-shrink: 0 !important; font-size: 0.72rem !important; padding: 0.3rem 0.5rem !important; }
+  .template-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.4rem !important; }
+  #previewModalContainer { transform: scale(0.42) !important; transform-origin: top center !important; margin-bottom: -150mm !important; }
+}
 
 /* Clipboard banner */
 .clipboard-banner {
@@ -830,10 +838,18 @@ input[type="range"] {
       <div class="template-grid mb-2" id="galleryTemplateGrid"></div>
     </div>
     <div id="storeTemplatesView" style="display:none;">
-      <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:0.75rem;">
-        Click 👁️ <b>Preview</b> to inspect any template live before downloading into your offline database.
-      </p>
-      <div class="template-grid mb-2" id="storeTemplateGrid" style="max-height:380px;overflow-y:auto;"></div>
+      <div style="margin-bottom:0.75rem;">
+        <input type="text" class="form-control" id="storeSearchInput" placeholder="🔍 Search templates (e.g. ATS, Executive, Tech, Minimalist)..." oninput="filterStoreTemplates()" style="min-height:36px;font-size:0.82rem;margin-bottom:0.5rem;">
+        <div class="prompt-chips" id="storeCategoryChips">
+          <div class="chip active" onclick="selectStoreCategory('All', this)">All</div>
+          <div class="chip" onclick="selectStoreCategory('ATS Friendly', this)">✅ ATS Friendly</div>
+          <div class="chip" onclick="selectStoreCategory('Executive', this)">💼 Executive</div>
+          <div class="chip" onclick="selectStoreCategory('Tech & Engineering', this)">💻 Tech & Dev</div>
+          <div class="chip" onclick="selectStoreCategory('Creative & Design', this)">🎨 Creative</div>
+          <div class="chip" onclick="selectStoreCategory('Minimalist', this)">📐 Minimalist</div>
+        </div>
+      </div>
+      <div class="template-grid mb-2" id="storeTemplateGrid" style="max-height:350px;overflow-y:auto;"></div>
     </div>
     <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--border);padding-top:1rem;">
       <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importTemplateInput').click()">
@@ -1499,12 +1515,14 @@ function renderGalleryTemplateGrid() {
   `).join('');
 }
 
+let activeStoreCategory = 'All';
+
 async function fetchOnlineTemplatesStore() {
   const container = document.getElementById('storeTemplateGrid');
   if (!container) return;
 
   if (onlineTemplatesStore.length === 0) {
-    container.innerHTML = '<div style="font-size:0.8rem;color:var(--text-secondary);padding:1rem;text-align:center;">Loading 50+ Modern Templates...</div>';
+    container.innerHTML = '<div style="font-size:0.8rem;color:var(--text-secondary);padding:1rem;text-align:center;">Loading 60+ Modern Templates...</div>';
     try {
       const res = await fetch('templates/templates.json');
       if (res.ok) {
@@ -1516,9 +1534,42 @@ async function fetchOnlineTemplatesStore() {
     }
   }
 
-  container.innerHTML = onlineTemplatesStore.map(item => `
+  filterStoreTemplates();
+}
+
+function selectStoreCategory(cat, el) {
+  activeStoreCategory = cat;
+  document.querySelectorAll('#storeCategoryChips .chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  filterStoreTemplates();
+}
+
+function filterStoreTemplates() {
+  const container = document.getElementById('storeTemplateGrid');
+  if (!container) return;
+  const q = (document.getElementById('storeSearchInput')?.value || '').toLowerCase().trim();
+
+  const filtered = onlineTemplatesStore.filter(item => {
+    const matchesCat = activeStoreCategory === 'All' || 
+      (activeStoreCategory === 'ATS Friendly' && item.isAtsFriendly) || 
+      item.category.toLowerCase().includes(activeStoreCategory.toLowerCase());
+
+    const matchesQuery = !q || 
+      item.name.toLowerCase().includes(q) || 
+      item.category.toLowerCase().includes(q) ||
+      (q.includes('ats') && item.isAtsFriendly);
+
+    return matchesCat && matchesQuery;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="font-size:0.8rem;color:var(--text-secondary);padding:2rem;text-align:center;">No templates match your search.</div>';
+    return;
+  }
+
+  container.innerHTML = filtered.map(item => `
     <div class="template-option">
-      <span class="template-badge" style="background:var(--bg-surface);color:var(--text-secondary);border:1px solid var(--border);">${escHTML(item.category)}</span>
+      ${item.isAtsFriendly ? `<span class="template-badge" style="background:#059669;color:#fff;">✅ ATS ${item.atsScore || 98}%</span>` : `<span class="template-badge" style="background:var(--bg-surface);color:var(--text-secondary);border:1px solid var(--border);">${escHTML(item.category)}</span>`}
       <div class="template-mini-preview" style="background:${item.accent}20;display:flex;align-items:center;justify-content:center;">
         <div style="width:14px;height:14px;border-radius:50%;background:${item.accent};"></div>
       </div>
