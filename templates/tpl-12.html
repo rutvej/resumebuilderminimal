@@ -1,2 +1,21 @@
-<style>.t12-wrap{font-family:'Inter',sans-serif;color:#0f172a;padding:1.2rem;}.t12-head{border-bottom:2px solid #7c3aed;padding-bottom:0.6rem;margin-bottom:1rem;}.t12-name{font-size:24px;font-weight:800;color:#7c3aed;text-transform:uppercase;}.t12-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t12-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#7c3aed;border-left:4px solid #7c3aed;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t12-wrap"><header class="t12-head"><div class="t12-name">{{name}}</div><div class="t12-title">{{title}}</div><div class="t12-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t12-wrap { font-family: 'Outfit', sans-serif; color: #0f172a; padding: 1.4rem; background: #fafafa; }
+  .t12-head { background: #0891b2; color: #ffffff; padding: 1.4rem; border-radius: 10px; margin-bottom: 1.2rem; box-shadow: 0 4px 14px rgba(8,145,178,0.2); }
+  .t12-name { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+  .t12-title { font-size: 13.5px; color: #cffaff; font-weight: 600; margin-top: 0.2rem; }
+  .t12-contact { font-size: 11px; color: #e0f2fe; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t12-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #0891b2; border-bottom: 2px solid #0891b2; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t12-wrap">
+  <header class="t12-head">
+    <div class="t12-name">{{name}}</div>
+    <div class="t12-title">{{title}}</div>
+    <div class="t12-contact">
+      <span>📧 {{email}}</span><span>📱 {{phone}}</span><span>📍 {{location}}</span><span>🌐 {{website}}</span>
+    </div>
+  </header>
+  <main class="t12-main">
+    {{sections}}
+  </main>
+</div>

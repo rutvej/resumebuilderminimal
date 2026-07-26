@@ -1,26 +1,2 @@
-<style>
-  .tpl08-container { font-family: 'Outfit', sans-serif; color: #0f172a; padding: 1.4rem; }
-  .tpl08-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #db2777; padding-bottom: 0.9rem; margin-bottom: 1.4rem; }
-  .tpl08-name { font-size: 34px; font-weight: 900; color: #db2777; line-height: 1; letter-spacing: -0.02em; }
-  .tpl08-title { font-size: 14px; color: #475569; font-weight: 600; margin-top: 0.25rem; }
-  .tpl08-contact { font-size: 11px; color: #64748b; text-align: right; line-height: 1.4; }
-  .tpl08-container .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #db2777; border-bottom: 1px solid #fbcfe8; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
-</style>
-
-<div class="tpl08-container">
-  <header class="tpl08-header">
-    <div>
-      <div class="tpl08-name">{{name}}</div>
-      <div class="tpl08-title">{{title}}</div>
-    </div>
-    <div class="tpl08-contact">
-      <div>{{email}}</div>
-      <div>{{phone}}</div>
-      <div>{{location}}</div>
-      <div>{{website}}</div>
-    </div>
-  </header>
-  <main class="tpl08-main">
-    {{sections}}
-  </main>
-</div>
+<style>.t08-wrap{font-family:'Inter',sans-serif;color:#0f172a;padding:1.4rem;display:flex;gap:1.4rem;}.t08-side{width:32%;border-right:2px solid #e2e8f0;padding-right:1.2rem;background:#fafafa;padding:1rem;border-radius:8px;}.t08-main{width:68%;}.t08-name{font-size:22px;font-weight:900;color:#2563eb;line-height:1.1;text-transform:uppercase;}.t08-title{font-size:12.5px;font-weight:600;color:#64748b;margin-top:0.4rem;}.t08-contact{font-size:11px;color:#475569;margin-top:1.2rem;display:flex;flex-direction:column;gap:0.45rem;}.res-section-title{font-size:12px;font-weight:700;text-transform:uppercase;color:#2563eb;border-bottom:2px solid #2563eb;padding-bottom:0.2rem;margin-bottom:0.5rem;}</style>
+<div class="t08-wrap"><aside class="t08-side"><div class="t08-name">{{name}}</div><div class="t08-title">{{title}}</div><div class="t08-contact"><div>📧 {{email}}</div><div>📱 {{phone}}</div><div>📍 {{location}}</div><div>🌐 {{website}}</div></div></aside><main class="t08-main">{{sections}}</main></div>

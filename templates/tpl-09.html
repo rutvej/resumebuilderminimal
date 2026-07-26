@@ -1,24 +1,2 @@
-<style>
-  .tpl09-container { font-family: 'Outfit', sans-serif; color: #0f172a; padding: 1.5rem; letter-spacing: 0.01em; }
-  .tpl09-header { margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.9rem; }
-  .tpl09-name { font-size: 27px; font-weight: 800; color: #0f172a; }
-  .tpl09-title { font-size: 13.5px; color: #64748b; font-weight: 500; margin-top: 0.25rem; }
-  .tpl09-contact { font-size: 11px; color: #94a3b8; margin-top: 0.6rem; display: flex; gap: 1.2rem; }
-  .tpl09-container .res-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #0f172a; border-bottom: 1.5px solid #0f172a; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
-</style>
-
-<div class="tpl09-container">
-  <header class="tpl09-header">
-    <div class="tpl09-name">{{name}}</div>
-    <div class="tpl09-title">{{title}}</div>
-    <div class="tpl09-contact">
-      <span>{{email}}</span>
-      <span>{{phone}}</span>
-      <span>{{location}}</span>
-      <span>{{website}}</span>
-    </div>
-  </header>
-  <main class="tpl09-main">
-    {{sections}}
-  </main>
-</div>
+<style>.t09-wrap{font-family:'Inter',sans-serif;color:#0f172a;padding:1.4rem;border-left:4px solid #ea580c;background:#fff5ed;border-radius:0 12px 12px 0;}.t09-head{padding-left:0.8rem;margin-bottom:1.4rem;}.t09-name{font-size:26px;font-weight:800;color:#ea580c;text-transform:uppercase;letter-spacing:0.02em;}.t09-title{font-size:14px;color:#475569;font-weight:600;margin-top:0.2rem;}.t09-contact{font-size:11px;color:#64748b;margin-top:0.5rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#ea580c;border-bottom:1.5px solid #fdba74;padding-bottom:0.2rem;margin-bottom:0.6rem;}</style>
+<div class="t09-wrap"><header class="t09-head"><div class="t09-name">{{name}}</div><div class="t09-title">{{title}}</div><div class="t09-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>

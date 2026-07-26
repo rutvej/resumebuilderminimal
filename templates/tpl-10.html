@@ -1,22 +1,2 @@
-<style>
-  .tpl10-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 0; }
-  .tpl10-header { background: #1e1b4b; color: #ffffff; padding: 1.6rem 1.4rem; border-bottom: 5px solid #d97706; }
-  .tpl10-name { font-size: 27px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.04em; }
-  .tpl10-title { font-size: 13.5px; color: #fef3c7; font-weight: 600; margin-top: 0.25rem; }
-  .tpl10-contact { font-size: 11px; color: #e0e7ff; margin-top: 0.55rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
-  .tpl10-body { padding: 1.4rem; }
-  .tpl10-container .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #1e1b4b; border-bottom: 2px solid #d97706; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
-</style>
-
-<div class="tpl10-container">
-  <header class="tpl10-header">
-    <div class="tpl10-name">{{name}}</div>
-    <div class="tpl10-title">{{title}}</div>
-    <div class="tpl10-contact">
-      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
-    </div>
-  </header>
-  <main class="tpl10-body">
-    {{sections}}
-  </main>
-</div>
+<style>.t10-wrap{font-family:'Merriweather',serif;color:#1c1917;padding:1.4rem;line-height:1.5;}.t10-head{text-align:center;border-top:4px solid #451a03;border-bottom:1px solid #451a03;padding:1.2rem 0;margin-bottom:1.4rem;background:#fefce8;border-radius:4px;}.t10-name{font-size:27px;font-weight:700;color:#451a03;letter-spacing:0.05em;text-transform:uppercase;}.t10-title{font-size:13.5px;font-style:italic;color:#78350f;margin-top:0.25rem;font-weight:400;}.t10-contact{font-size:11px;color:#57534e;margin-top:0.5rem;display:flex;justify-content:center;gap:0.8rem;flex-wrap:wrap;}.t10-contact span:not(:last-child)::after{content:" | ";color:#a16207;margin-left:0.8rem;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid #d6d3d1;padding-bottom:0.2rem;margin-bottom:0.6rem;color:#451a03;}</style>
+<div class="t10-wrap"><header class="t10-head"><div class="t10-name">{{name}}</div><div class="t10-title">{{title}}</div><div class="t10-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>

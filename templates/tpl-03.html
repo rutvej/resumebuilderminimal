@@ -1,26 +1,2 @@
-<style>
-  .tpl03-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; display: flex; gap: 1.4rem; }
-  .tpl03-sidebar { width: 32%; border-right: 2px solid #e2e8f0; padding-right: 1.2rem; background: #fafafa; padding: 1rem; border-radius: 8px; }
-  .tpl03-main { width: 68%; }
-  .tpl03-name { font-size: 22px; font-weight: 900; color: #2563eb; line-height: 1.1; text-transform: uppercase; }
-  .tpl03-title { font-size: 12.5px; font-weight: 600; color: #64748b; margin-top: 0.4rem; }
-  .tpl03-contact { font-size: 11px; color: #475569; margin-top: 1.2rem; display: flex; flex-direction: column; gap: 0.45rem; word-break: break-word; }
-  .tpl03-contact-item { display: flex; align-items: center; gap: 0.4rem; }
-  .tpl03-container .res-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #2563eb; border-bottom: 2px solid #2563eb; padding-bottom: 0.2rem; margin-bottom: 0.5rem; }
-</style>
-
-<div class="tpl03-container">
-  <aside class="tpl03-sidebar">
-    <div class="tpl03-name">{{name}}</div>
-    <div class="tpl03-title">{{title}}</div>
-    <div class="tpl03-contact">
-      <div class="tpl03-contact-item">📧 {{email}}</div>
-      <div class="tpl03-contact-item">📱 {{phone}}</div>
-      <div class="tpl03-contact-item">📍 {{location}}</div>
-      <div class="tpl03-contact-item">🌐 {{website}}</div>
-    </div>
-  </aside>
-  <main class="tpl03-main">
-    {{sections}}
-  </main>
-</div>
+<style>.t03-wrap{font-family:'Inter',sans-serif;color:#000000;padding:1.4rem;}.t03-head{border-bottom:3px solid #000000;padding-bottom:0.8rem;margin-bottom:1.4rem;}.t03-name{font-size:32px;font-weight:900;letter-spacing:-0.03em;line-height:1;text-transform:uppercase;}.t03-title{font-size:14px;color:#404040;font-weight:600;margin-top:0.3rem;}.t03-contact{font-size:11px;color:#525252;margin-top:0.6rem;display:flex;gap:1rem;flex-wrap:wrap;}.res-section-title{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid #000000;padding-bottom:0.2rem;margin-bottom:0.6rem;}</style>
+<div class="t03-wrap"><header class="t03-head"><div class="t03-name">{{name}}</div><div class="t03-title">{{title}}</div><div class="t03-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>

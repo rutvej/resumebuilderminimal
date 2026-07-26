@@ -1,21 +1,2 @@
-<style>
-  .tpl07-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; border-left: 4px solid #ea580c; background: #fff5ed; border-radius: 0 12px 12px 0; }
-  .tpl07-header { padding-left: 0.8rem; margin-bottom: 1.4rem; }
-  .tpl07-name { font-size: 26px; font-weight: 800; color: #ea580c; text-transform: uppercase; letter-spacing: 0.02em; }
-  .tpl07-title { font-size: 14px; color: #475569; font-weight: 600; margin-top: 0.2rem; }
-  .tpl07-contact { font-size: 11px; color: #64748b; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
-  .tpl07-container .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #ea580c; border-bottom: 1.5px solid #fdba74; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
-</style>
-
-<div class="tpl07-container">
-  <header class="tpl07-header">
-    <div class="tpl07-name">{{name}}</div>
-    <div class="tpl07-title">{{title}}</div>
-    <div class="tpl07-contact">
-      <span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span>
-    </div>
-  </header>
-  <main class="tpl07-main">
-    {{sections}}
-  </main>
-</div>
+<style>.t07-wrap{font-family:'Outfit',sans-serif;color:#0f172a;padding:1.5rem;letter-spacing:0.01em;}.t07-head{margin-bottom:1.5rem;border-bottom:1px solid #e2e8f0;padding-bottom:0.9rem;}.t07-name{font-size:27px;font-weight:800;color:#0f172a;}.t07-title{font-size:13.5px;color:#64748b;font-weight:500;margin-top:0.25rem;}.t07-contact{font-size:11px;color:#94a3b8;margin-top:0.6rem;display:flex;gap:1.2rem;}.res-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:#0f172a;border-bottom:1.5px solid #0f172a;padding-bottom:0.2rem;margin-bottom:0.6rem;}</style>
+<div class="t07-wrap"><header class="t07-head"><div class="t07-name">{{name}}</div><div class="t07-title">{{title}}</div><div class="t07-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>

@@ -1,2 +1,21 @@
-<style>.t11-wrap{font-family:'JetBrains Mono',sans-serif;color:#0f172a;padding:1.2rem;}.t11-head{border-bottom:2px solid #0d9488;padding-bottom:0.6rem;margin-bottom:1rem;}.t11-name{font-size:24px;font-weight:800;color:#0d9488;text-transform:uppercase;}.t11-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t11-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#0d9488;border-left:4px solid #0d9488;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t11-wrap"><header class="t11-head"><div class="t11-name">{{name}}</div><div class="t11-title">{{title}}</div><div class="t11-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t11-wrap { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; background: #f1f5f9; }
+  .t11-head { background: #ffffff; border: 1px solid #cbd5e1; border-top: 5px solid #0f172a; padding: 1.2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.04); margin-bottom: 1.2rem; }
+  .t11-name { font-size: 25px; font-weight: 800; color: #0f172a; text-transform: uppercase; }
+  .t11-title { font-size: 13.5px; color: #475569; font-weight: 600; margin-top: 0.15rem; }
+  .t11-contact { font-size: 11px; color: #64748b; margin-top: 0.4rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t11-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #0f172a; border-bottom: 2px solid #0f172a; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t11-wrap">
+  <header class="t11-head">
+    <div class="t11-name">{{name}}</div>
+    <div class="t11-title">{{title}}</div>
+    <div class="t11-contact">
+      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+    </div>
+  </header>
+  <main class="t11-main">
+    {{sections}}
+  </main>
+</div>

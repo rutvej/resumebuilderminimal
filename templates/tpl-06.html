@@ -1,21 +1,2 @@
-<style>
-  .tpl06-container { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; background: #f8fafc; }
-  .tpl06-header { background: #ffffff; border: 1px solid #e2e8f0; border-top: 5px solid #0284c7; padding: 1.2rem; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.03); margin-bottom: 1.4rem; }
-  .tpl06-name { font-size: 25px; font-weight: 800; color: #0284c7; letter-spacing: -0.01em; }
-  .tpl06-title { font-size: 13.5px; color: #475569; font-weight: 600; margin-top: 0.15rem; }
-  .tpl06-contact { font-size: 11px; color: #64748b; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
-  .tpl06-container .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #0284c7; border-bottom: 1.5px solid #cbd5e1; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
-</style>
-
-<div class="tpl06-container">
-  <header class="tpl06-header">
-    <div class="tpl06-name">{{name}}</div>
-    <div class="tpl06-title">{{title}}</div>
-    <div class="tpl06-contact">
-      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
-    </div>
-  </header>
-  <main class="tpl06-main">
-    {{sections}}
-  </main>
-</div>
+<style>.t06-wrap{font-family:'Inter',sans-serif;color:#0f172a;padding:0;}.t06-head{background:#1e3a8a;color:#fff;padding:1.5rem 1.4rem;display:flex;align-items:center;gap:1.4rem;border-bottom:4px solid #3b82f6;}.t06-avatar{width:56px;height:56px;border-radius:50%;background:#ffffff;color:#1e3a8a;font-size:22px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid rgba(255,255,255,0.4);}.t06-name{font-size:25px;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;}.t06-title{font-size:13.5px;color:#93c5fd;font-weight:600;margin-top:0.15rem;}.t06-contact{font-size:11px;color:#cbd5e1;margin-top:0.35rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.t06-body{padding:1.4rem;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#1e3a8a;border-bottom:2px solid #1e3a8a;padding-bottom:0.25rem;margin-bottom:0.6rem;}</style>
+<div class="t06-wrap"><header class="t06-head"><div class="t06-avatar">EX</div><div><div class="t06-name">{{name}}</div><div class="t06-title">{{title}}</div><div class="t06-contact"><span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span></div></div></header><main class="t06-body">{{sections}}</main></div>

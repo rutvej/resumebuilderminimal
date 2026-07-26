@@ -1,2 +1,21 @@
-<style>.t15-wrap{font-family:'JetBrains Mono',sans-serif;color:#0f172a;padding:1.2rem;}.t15-head{border-bottom:2px solid #2563eb;padding-bottom:0.6rem;margin-bottom:1rem;}.t15-name{font-size:24px;font-weight:800;color:#2563eb;text-transform:uppercase;}.t15-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t15-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#2563eb;border-left:4px solid #2563eb;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t15-wrap"><header class="t15-head"><div class="t15-name">{{name}}</div><div class="t15-title">{{title}}</div><div class="t15-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t15-wrap { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; background: #f0fdf4; }
+  .t15-head { background: #ffffff; border: 1px solid #bbf7d0; border-left: 6px solid #16a34a; padding: 1.2rem; border-radius: 8px; margin-bottom: 1.4rem; box-shadow: 0 2px 8px rgba(22,163,74,0.06); }
+  .t15-name { font-size: 25px; font-weight: 800; color: #15803d; text-transform: uppercase; }
+  .t15-title { font-size: 13.5px; color: #166534; font-weight: 600; margin-top: 0.2rem; }
+  .t15-contact { font-size: 11px; color: #374151; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t15-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #15803d; border-bottom: 2px solid #16a34a; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t15-wrap">
+  <header class="t15-head">
+    <div class="t15-name">{{name}}</div>
+    <div class="t15-title">{{title}}</div>
+    <div class="t15-contact">
+      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+    </div>
+  </header>
+  <main class="t15-main">
+    {{sections}}
+  </main>
+</div>

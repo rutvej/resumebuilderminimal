@@ -1,2 +1,21 @@
-<style>.t13-wrap{font-family:'Outfit',sans-serif;color:#0f172a;padding:1.2rem;}.t13-head{border-bottom:2px solid #d97706;padding-bottom:0.6rem;margin-bottom:1rem;}.t13-name{font-size:24px;font-weight:800;color:#d97706;text-transform:uppercase;}.t13-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t13-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#d97706;border-left:4px solid #d97706;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t13-wrap"><header class="t13-head"><div class="t13-name">{{name}}</div><div class="t13-title">{{title}}</div><div class="t13-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t13-wrap { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; }
+  .t13-head { border-left: 6px solid #f97316; padding-left: 1rem; margin-bottom: 1.4rem; background: #fff7ed; padding: 1.2rem; border-radius: 0 8px 8px 0; }
+  .t13-name { font-size: 26px; font-weight: 800; color: #c2410c; text-transform: uppercase; letter-spacing: 0.02em; }
+  .t13-title { font-size: 13.5px; color: #ea580c; font-weight: 600; margin-top: 0.2rem; }
+  .t13-contact { font-size: 11px; color: #7c2d12; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t13-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #c2410c; border-bottom: 2px solid #f97316; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t13-wrap">
+  <header class="t13-head">
+    <div class="t13-name">{{name}}</div>
+    <div class="t13-title">{{title}}</div>
+    <div class="t13-contact">
+      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+    </div>
+  </header>
+  <main class="t13-main">
+    {{sections}}
+  </main>
+</div>

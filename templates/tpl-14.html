@@ -1,2 +1,24 @@
-<style>.t14-wrap{font-family:'Merriweather',sans-serif;color:#0f172a;padding:1.2rem;}.t14-head{border-bottom:2px solid #dc2626;padding-bottom:0.6rem;margin-bottom:1rem;}.t14-name{font-size:24px;font-weight:800;color:#dc2626;text-transform:uppercase;}.t14-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t14-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#dc2626;border-left:4px solid #dc2626;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t14-wrap"><header class="t14-head"><div class="t14-name">{{name}}</div><div class="t14-title">{{title}}</div><div class="t14-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t14-wrap { font-family: 'JetBrains Mono', monospace; color: #0f172a; padding: 1.4rem; }
+  .t14-head { background: #0f172a; color: #f8fafc; padding: 1.2rem; border-radius: 8px; border-top: 4px solid #10b981; margin-bottom: 1.4rem; box-shadow: 0 4px 14px rgba(15,23,42,0.25); }
+  .t14-name { font-size: 24px; font-weight: 700; color: #10b981; }
+  .t14-title { font-size: 13px; color: #94a3b8; margin-top: 0.2rem; }
+  .t14-contact { font-size: 10.5px; color: #cbd5e1; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t14-wrap .res-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #0f172a; border-bottom: 2px solid #10b981; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t14-wrap">
+  <header class="t14-head">
+    <div class="t14-name">[SEC] {{name}}</div>
+    <div class="t14-title">// {{title}}</div>
+    <div class="t14-contact">
+      <span>[{{email}}]</span>
+      <span>[{{phone}}]</span>
+      <span>[{{location}}]</span>
+      <span>[{{website}}]</span>
+    </div>
+  </header>
+  <main class="t14-main">
+    {{sections}}
+  </main>
+</div>

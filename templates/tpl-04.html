@@ -1,26 +1,2 @@
-<style>
-  .tpl04-container { font-family: 'Outfit', sans-serif; color: #0f172a; padding: 0; }
-  .tpl04-header { background: linear-gradient(135deg, #7c5cfc, #4f46e5); color: #ffffff; padding: 1.8rem 1.4rem; border-radius: 0 0 16px 16px; margin-bottom: 1.4rem; box-shadow: 0 8px 24px rgba(124,92,252,0.25); }
-  .tpl04-name { font-size: 28px; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; }
-  .tpl04-title { font-size: 14px; color: #c7d2fe; font-weight: 600; margin-top: 0.25rem; }
-  .tpl04-contact { font-size: 11px; color: #e0e7ff; margin-top: 0.75rem; display: flex; gap: 0.6rem; flex-wrap: wrap; }
-  .tpl04-chip { background: rgba(255,255,255,0.18); padding: 0.25rem 0.7rem; border-radius: 20px; backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,0.2); }
-  .tpl04-body { padding: 0 1.4rem 1.4rem 1.4rem; }
-  .tpl04-container .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #7c5cfc; border-bottom: 2px solid #7c5cfc; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
-</style>
-
-<div class="tpl04-container">
-  <header class="tpl04-header">
-    <div class="tpl04-name">{{name}}</div>
-    <div class="tpl04-title">{{title}}</div>
-    <div class="tpl04-contact">
-      <span class="tpl04-chip">{{email}}</span>
-      <span class="tpl04-chip">{{phone}}</span>
-      <span class="tpl04-chip">{{location}}</span>
-      <span class="tpl04-chip">{{website}}</span>
-    </div>
-  </header>
-  <main class="tpl04-body">
-    {{sections}}
-  </main>
-</div>
+<style>.t04-wrap{font-family:'Outfit',sans-serif;color:#0f172a;padding:0;}.t04-head{background:linear-gradient(135deg,#06b6d4,#3b82f6);color:#fff;padding:1.8rem 1.4rem;border-radius:0 0 16px 16px;margin-bottom:1.4rem;}.t04-name{font-size:28px;font-weight:800;}.t04-title{font-size:14px;color:#cffaff;font-weight:600;margin-top:0.25rem;}.t04-contact{font-size:11px;color:#e0f2fe;margin-top:0.75rem;display:flex;gap:0.6rem;flex-wrap:wrap;}.t04-chip{background:rgba(255,255,255,0.2);padding:0.25rem 0.7rem;border-radius:20px;backdrop-filter:blur(6px);}.t04-body{padding:1.4rem;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#06b6d4;border-bottom:2px solid #06b6d4;padding-bottom:0.2rem;margin-bottom:0.6rem;}</style>
+<div class="t04-wrap"><header class="t04-head"><div class="t04-name">{{name}}</div><div class="t04-title">{{title}}</div><div class="t04-contact"><span class="t04-chip">{{email}}</span><span class="t04-chip">{{phone}}</span><span class="t04-chip">{{location}}</span><span class="t04-chip">{{website}}</span></div></header><main class="t04-body">{{sections}}</main></div>

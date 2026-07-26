@@ -1,22 +1,2 @@
-<style>
-  .tpl02-container { font-family: 'Merriweather', serif; color: #1c1917; padding: 1.4rem; line-height: 1.5; }
-  .tpl02-header { text-align: center; border-top: 4px solid #451a03; border-bottom: 1px solid #451a03; padding: 1.2rem 0; margin-bottom: 1.4rem; background: #fefce8; border-radius: 4px; }
-  .tpl02-name { font-size: 27px; font-weight: 700; color: #451a03; letter-spacing: 0.05em; text-transform: uppercase; }
-  .tpl02-title { font-size: 13.5px; font-style: italic; color: #78350f; margin-top: 0.25rem; font-weight: 400; }
-  .tpl02-contact { font-size: 11px; color: #57534e; margin-top: 0.5rem; display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; }
-  .tpl02-contact span:not(:last-child)::after { content: " | "; color: #a16207; margin-left: 0.8rem; }
-  .tpl02-container .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #d6d3d1; padding-bottom: 0.2rem; margin-bottom: 0.6rem; color: #451a03; }
-</style>
-
-<div class="tpl02-container">
-  <header class="tpl02-header">
-    <div class="tpl02-name">{{name}}</div>
-    <div class="tpl02-title">{{title}}</div>
-    <div class="tpl02-contact">
-      <span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span>
-    </div>
-  </header>
-  <main class="tpl02-main">
-    {{sections}}
-  </main>
-</div>
+<style>.t02-wrap{font-family:'JetBrains Mono',monospace;color:#18181b;padding:1.4rem;}.t02-head{border-bottom:1px solid #18181b;padding-bottom:0.8rem;margin-bottom:1.2rem;display:flex;justify-content:space-between;align-items:flex-end;}.t02-name{font-size:26px;font-weight:800;letter-spacing:-0.02em;}.t02-title{font-size:13px;color:#52525b;margin-top:0.2rem;}.t02-contact{font-size:10.5px;color:#71717a;text-align:right;}.res-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#18181b;border-bottom:1px solid #e4e4e7;padding-bottom:0.2rem;margin-bottom:0.6rem;}</style>
+<div class="t02-wrap"><header class="t02-head"><div><div class="t02-name">{{name}}</div><div class="t02-title">{{title}}</div></div><div class="t02-contact"><div>{{email}}</div><div>{{phone}}</div><div>{{location}}</div><div>{{website}}</div></div></header><main>{{sections}}</main></div>

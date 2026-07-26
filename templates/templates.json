@@ -10,7 +10,7 @@
   },
   {
     "id": "tpl-ats-02",
-    "name": "ATS Classic Serif Double Rule",
+    "name": "ATS Classic Centered Serif",
     "category": "ATS Friendly",
     "isAtsFriendly": true,
     "atsScore": 99,
@@ -91,43 +91,43 @@
   },
   {
     "id": "tpl-01",
-    "name": "Executive Avatar Initial Banner",
-    "category": "Executive",
+    "name": "Notion Modular Block Deck",
+    "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 98,
-    "accent": "#1e3a8a",
+    "accent": "#6366f1",
     "file": "templates/tpl-01.html"
   },
   {
     "id": "tpl-02",
-    "name": "Classic Editorial Warm Serif",
-    "category": "Executive",
+    "name": "Linear UI High Precision",
+    "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 99,
-    "accent": "#451a03",
+    "accent": "#18181b",
     "file": "templates/tpl-02.html"
   },
   {
     "id": "tpl-03",
-    "name": "Left Sidebar Split 35/65 Column",
-    "category": "Tech & Dev",
+    "name": "Swiss Grid Typographic",
+    "category": "Minimalist",
     "isAtsFriendly": true,
-    "atsScore": 97,
-    "accent": "#2563eb",
+    "atsScore": 100,
+    "accent": "#000000",
     "file": "templates/tpl-03.html"
   },
   {
     "id": "tpl-04",
-    "name": "Full-Width Purple Gradient Header",
+    "name": "Silicon Valley Startup Hero",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 96,
-    "accent": "#7c5cfc",
+    "accent": "#06b6d4",
     "file": "templates/tpl-04.html"
   },
   {
     "id": "tpl-05",
-    "name": "Dark Monospace Terminal Prompt",
+    "name": "Terminal IDE Developer Theme",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 98,
@@ -136,52 +136,52 @@
   },
   {
     "id": "tpl-06",
-    "name": "Corporate Framed Card Deck",
+    "name": "Executive Avatar Initial Badge",
     "category": "Executive",
     "isAtsFriendly": true,
-    "atsScore": 97,
-    "accent": "#0284c7",
+    "atsScore": 98,
+    "accent": "#1e3a8a",
     "file": "templates/tpl-06.html"
   },
   {
     "id": "tpl-07",
+    "name": "Scandinavian Clean Whitespace",
+    "category": "Minimalist",
+    "isAtsFriendly": true,
+    "atsScore": 100,
+    "accent": "#0f172a",
+    "file": "templates/tpl-07.html"
+  },
+  {
+    "id": "tpl-08",
+    "name": "Asymmetric Split Rail (30/70)",
+    "category": "Tech & Dev",
+    "isAtsFriendly": true,
+    "atsScore": 97,
+    "accent": "#2563eb",
+    "file": "templates/tpl-08.html"
+  },
+  {
+    "id": "tpl-09",
     "name": "Timeline Vertical Rail Accent",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 96,
     "accent": "#ea580c",
-    "file": "templates/tpl-07.html"
-  },
-  {
-    "id": "tpl-08",
-    "name": "Asymmetric Display Pink Typography",
-    "category": "Creative & Design",
-    "isAtsFriendly": true,
-    "atsScore": 95,
-    "accent": "#db2777",
-    "file": "templates/tpl-08.html"
-  },
-  {
-    "id": "tpl-09",
-    "name": "Scandinavian Ultra-Clean Minimalist",
-    "category": "Minimalist",
-    "isAtsFriendly": true,
-    "atsScore": 100,
-    "accent": "#0f172a",
     "file": "templates/tpl-09.html"
   },
   {
     "id": "tpl-10",
-    "name": "Executive Navy Gold Accent Bar",
+    "name": "Editorial Warm Serif Double Rule",
     "category": "Executive",
     "isAtsFriendly": true,
-    "atsScore": 98,
-    "accent": "#1e1b4b",
+    "atsScore": 99,
+    "accent": "#451a03",
     "file": "templates/tpl-10.html"
   },
   {
     "id": "tpl-11",
-    "name": "Bespoke 2026 Design Layout #11",
+    "name": "Bespoke 2026 Design #11",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 100,
@@ -190,7 +190,7 @@
   },
   {
     "id": "tpl-12",
-    "name": "Bespoke 2026 Design Layout #12",
+    "name": "Bespoke 2026 Design #12",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 95,
@@ -199,7 +199,7 @@
   },
   {
     "id": "tpl-13",
-    "name": "Bespoke 2026 Design Layout #13",
+    "name": "Bespoke 2026 Design #13",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 96,
@@ -208,7 +208,7 @@
   },
   {
     "id": "tpl-14",
-    "name": "Bespoke 2026 Design Layout #14",
+    "name": "Bespoke 2026 Design #14",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 97,
@@ -217,7 +217,7 @@
   },
   {
     "id": "tpl-15",
-    "name": "Bespoke 2026 Design Layout #15",
+    "name": "Bespoke 2026 Design #15",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 98,
@@ -226,7 +226,7 @@
   },
   {
     "id": "tpl-16",
-    "name": "Bespoke 2026 Design Layout #16",
+    "name": "Bespoke 2026 Design #16",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 99,
@@ -235,7 +235,7 @@
   },
   {
     "id": "tpl-17",
-    "name": "Bespoke 2026 Design Layout #17",
+    "name": "Bespoke 2026 Design #17",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 100,
@@ -244,7 +244,7 @@
   },
   {
     "id": "tpl-18",
-    "name": "Bespoke 2026 Design Layout #18",
+    "name": "Bespoke 2026 Design #18",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 95,
@@ -253,7 +253,7 @@
   },
   {
     "id": "tpl-19",
-    "name": "Bespoke 2026 Design Layout #19",
+    "name": "Bespoke 2026 Design #19",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 96,
@@ -262,7 +262,7 @@
   },
   {
     "id": "tpl-20",
-    "name": "Bespoke 2026 Design Layout #20",
+    "name": "Bespoke 2026 Design #20",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 97,
@@ -271,7 +271,7 @@
   },
   {
     "id": "tpl-21",
-    "name": "Bespoke 2026 Design Layout #21",
+    "name": "Bespoke 2026 Design #21",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 98,
@@ -280,7 +280,7 @@
   },
   {
     "id": "tpl-22",
-    "name": "Bespoke 2026 Design Layout #22",
+    "name": "Bespoke 2026 Design #22",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 99,
@@ -289,7 +289,7 @@
   },
   {
     "id": "tpl-23",
-    "name": "Bespoke 2026 Design Layout #23",
+    "name": "Bespoke 2026 Design #23",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 100,
@@ -298,7 +298,7 @@
   },
   {
     "id": "tpl-24",
-    "name": "Bespoke 2026 Design Layout #24",
+    "name": "Bespoke 2026 Design #24",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 95,
@@ -307,7 +307,7 @@
   },
   {
     "id": "tpl-25",
-    "name": "Bespoke 2026 Design Layout #25",
+    "name": "Bespoke 2026 Design #25",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 96,
@@ -316,7 +316,7 @@
   },
   {
     "id": "tpl-26",
-    "name": "Bespoke 2026 Design Layout #26",
+    "name": "Bespoke 2026 Design #26",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 97,
@@ -325,7 +325,7 @@
   },
   {
     "id": "tpl-27",
-    "name": "Bespoke 2026 Design Layout #27",
+    "name": "Bespoke 2026 Design #27",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 98,
@@ -334,7 +334,7 @@
   },
   {
     "id": "tpl-28",
-    "name": "Bespoke 2026 Design Layout #28",
+    "name": "Bespoke 2026 Design #28",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 99,
@@ -343,7 +343,7 @@
   },
   {
     "id": "tpl-29",
-    "name": "Bespoke 2026 Design Layout #29",
+    "name": "Bespoke 2026 Design #29",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 100,
@@ -352,7 +352,7 @@
   },
   {
     "id": "tpl-30",
-    "name": "Bespoke 2026 Design Layout #30",
+    "name": "Bespoke 2026 Design #30",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 95,
@@ -361,7 +361,7 @@
   },
   {
     "id": "tpl-31",
-    "name": "Bespoke 2026 Design Layout #31",
+    "name": "Bespoke 2026 Design #31",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 96,
@@ -370,7 +370,7 @@
   },
   {
     "id": "tpl-32",
-    "name": "Bespoke 2026 Design Layout #32",
+    "name": "Bespoke 2026 Design #32",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 97,
@@ -379,7 +379,7 @@
   },
   {
     "id": "tpl-33",
-    "name": "Bespoke 2026 Design Layout #33",
+    "name": "Bespoke 2026 Design #33",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 98,
@@ -388,7 +388,7 @@
   },
   {
     "id": "tpl-34",
-    "name": "Bespoke 2026 Design Layout #34",
+    "name": "Bespoke 2026 Design #34",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 99,
@@ -397,7 +397,7 @@
   },
   {
     "id": "tpl-35",
-    "name": "Bespoke 2026 Design Layout #35",
+    "name": "Bespoke 2026 Design #35",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 100,
@@ -406,7 +406,7 @@
   },
   {
     "id": "tpl-36",
-    "name": "Bespoke 2026 Design Layout #36",
+    "name": "Bespoke 2026 Design #36",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 95,
@@ -415,7 +415,7 @@
   },
   {
     "id": "tpl-37",
-    "name": "Bespoke 2026 Design Layout #37",
+    "name": "Bespoke 2026 Design #37",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 96,
@@ -424,7 +424,7 @@
   },
   {
     "id": "tpl-38",
-    "name": "Bespoke 2026 Design Layout #38",
+    "name": "Bespoke 2026 Design #38",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 97,
@@ -433,7 +433,7 @@
   },
   {
     "id": "tpl-39",
-    "name": "Bespoke 2026 Design Layout #39",
+    "name": "Bespoke 2026 Design #39",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 98,
@@ -442,7 +442,7 @@
   },
   {
     "id": "tpl-40",
-    "name": "Bespoke 2026 Design Layout #40",
+    "name": "Bespoke 2026 Design #40",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 99,
@@ -451,7 +451,7 @@
   },
   {
     "id": "tpl-41",
-    "name": "Bespoke 2026 Design Layout #41",
+    "name": "Bespoke 2026 Design #41",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 100,
@@ -460,7 +460,7 @@
   },
   {
     "id": "tpl-42",
-    "name": "Bespoke 2026 Design Layout #42",
+    "name": "Bespoke 2026 Design #42",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 95,
@@ -469,7 +469,7 @@
   },
   {
     "id": "tpl-43",
-    "name": "Bespoke 2026 Design Layout #43",
+    "name": "Bespoke 2026 Design #43",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 96,
@@ -478,7 +478,7 @@
   },
   {
     "id": "tpl-44",
-    "name": "Bespoke 2026 Design Layout #44",
+    "name": "Bespoke 2026 Design #44",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 97,
@@ -487,7 +487,7 @@
   },
   {
     "id": "tpl-45",
-    "name": "Bespoke 2026 Design Layout #45",
+    "name": "Bespoke 2026 Design #45",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 98,
@@ -496,7 +496,7 @@
   },
   {
     "id": "tpl-46",
-    "name": "Bespoke 2026 Design Layout #46",
+    "name": "Bespoke 2026 Design #46",
     "category": "Tech & Dev",
     "isAtsFriendly": true,
     "atsScore": 99,
@@ -505,7 +505,7 @@
   },
   {
     "id": "tpl-47",
-    "name": "Bespoke 2026 Design Layout #47",
+    "name": "Bespoke 2026 Design #47",
     "category": "Creative & Design",
     "isAtsFriendly": true,
     "atsScore": 100,
@@ -514,7 +514,7 @@
   },
   {
     "id": "tpl-48",
-    "name": "Bespoke 2026 Design Layout #48",
+    "name": "Bespoke 2026 Design #48",
     "category": "Minimalist",
     "isAtsFriendly": true,
     "atsScore": 95,
@@ -523,7 +523,7 @@
   },
   {
     "id": "tpl-49",
-    "name": "Bespoke 2026 Design Layout #49",
+    "name": "Bespoke 2026 Design #49",
     "category": "2026 Modern",
     "isAtsFriendly": true,
     "atsScore": 96,
@@ -532,7 +532,7 @@
   },
   {
     "id": "tpl-50",
-    "name": "Bespoke 2026 Design Layout #50",
+    "name": "Bespoke 2026 Design #50",
     "category": "Executive",
     "isAtsFriendly": true,
     "atsScore": 97,
