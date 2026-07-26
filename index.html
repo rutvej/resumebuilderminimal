@@ -1007,6 +1007,11 @@ function handleRoute() {
   const screens = document.querySelectorAll('.screen');
   screens.forEach(s => s.classList.remove('active'));
 
+  if (hash.startsWith('/import')) {
+    handleUrlImport(hash);
+    return;
+  }
+
   if (hash.startsWith('/edit/')) {
     const id = hash.replace('/edit/', '');
     document.getElementById('editorScreen').classList.add('active');
@@ -1025,6 +1030,40 @@ function handleRoute() {
   }
   closeMobilePreview();
   lucide.createIcons();
+}
+
+async function handleUrlImport(hash) {
+  try {
+    const queryStr = hash.includes('?') ? hash.split('?')[1] : '';
+    const params = new URLSearchParams(queryStr);
+    const encodedData = params.get('data') || params.get('json');
+    const encodedTpl = params.get('html') || params.get('template');
+    const tplName = params.get('name') || 'URL Custom Template';
+
+    if (encodedTpl) {
+      const decodedHtml = decodeURIComponent(atob(encodedTpl));
+      await saveAndApplyCustomTemplate(decodedHtml, tplName);
+      showToast('Template imported from URL!', 'success');
+      return;
+    }
+
+    if (encodedData) {
+      const decodedJson = JSON.parse(decodeURIComponent(atob(encodedData)));
+      const name = decodedJson.contact?.name ? `${decodedJson.contact.name}'s Resume` : 'Imported Resume';
+      const newResume = createResumeObject(name);
+      if (decodedJson.contact) newResume.contact = decodedJson.contact;
+      if (decodedJson.sections) newResume.sections = decodedJson.sections;
+      if (decodedJson.styleOverrides) newResume.styleOverrides = decodedJson.styleOverrides;
+
+      await APP.db.put('resumes', newResume);
+      showToast('Resume imported from URL!', 'success');
+      navigateTo('/edit/' + newResume.id);
+      return;
+    }
+  } catch (e) {
+    showToast('Failed to parse import URL: ' + e.message, 'error');
+  }
+  navigateTo('/');
 }
 
 function updateBottomNav(active) {
