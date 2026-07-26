@@ -3368,7 +3368,7 @@ const DESIGNER = {
   headerBlocks: ['name', 'title', 'contact'],
   sidebarBlocks: [],
   mainBlocks: ['sections'],
-  style: { accentColor: '#1e3a8a', fontFamily: "'Inter', sans-serif", headerStyle: 'minimal', dividerStyle: 'line', spacing: 'normal' },
+  style: { accentColor: '#1e3a8a', fontFamily: "'Inter', sans-serif", headerStyle: 'minimal', dividerStyle: 'line', spacing: 'normal', sidebarWidth: '35', textAlign: 'left', fontSize: '12px', borderRadius: '3px' },
   dragState: null
 };
 
@@ -3386,10 +3386,10 @@ const DESIGNER_BLOCKS = [
 ];
 
 const DESIGNER_PRESETS = {
-  professional: { name:'Professional', icon:'🏢', desc:'Clean single-column, ATS-friendly', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['summary','experience','education','skills'], style:{ accentColor:'#1e3a8a', fontFamily:"'Inter', sans-serif", headerStyle:'underlined', dividerStyle:'line', spacing:'normal' } },
-  creative: { name:'Creative', icon:'🎨', desc:'Modern sidebar with accent header', layout:'sidebar-left', headerBlocks:['name','title'], sidebarBlocks:['contact','skills','certifications'], mainBlocks:['summary','experience','education'], style:{ accentColor:'#7c3aed', fontFamily:"'Outfit', sans-serif", headerStyle:'filled', dividerStyle:'accent-bar', spacing:'normal' } },
-  minimal: { name:'Minimal', icon:'📐', desc:'Ultra-clean, no dividers, tight spacing', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['summary','experience','education','skills'], style:{ accentColor:'#374151', fontFamily:"'Inter', sans-serif", headerStyle:'minimal', dividerStyle:'none', spacing:'compact' } },
-  academic: { name:'Academic', icon:'🎓', desc:'Formal centered header, classic look', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['education','experience','projects','skills'], style:{ accentColor:'#1e3a8a', fontFamily:"'Merriweather', serif", headerStyle:'underlined', dividerStyle:'line', spacing:'spacious' } }
+  professional: { name:'Professional', icon:'🏢', desc:'Clean single-column, ATS-friendly', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['summary','experience','education','skills'], style:{ accentColor:'#1e3a8a', fontFamily:"'Inter', sans-serif", headerStyle:'underlined', dividerStyle:'line', spacing:'normal', sidebarWidth:'35', textAlign:'left', fontSize:'12px', borderRadius:'3px' } },
+  creative: { name:'Creative', icon:'🎨', desc:'Modern sidebar with accent header', layout:'sidebar-left', headerBlocks:['name','title'], sidebarBlocks:['contact','skills','certifications'], mainBlocks:['summary','experience','education'], style:{ accentColor:'#7c3aed', fontFamily:"'Outfit', sans-serif", headerStyle:'filled', dividerStyle:'accent-bar', spacing:'normal', sidebarWidth:'33', textAlign:'left', fontSize:'12px', borderRadius:'12px' } },
+  minimal: { name:'Minimal', icon:'📐', desc:'Ultra-clean, no dividers, tight spacing', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['summary','experience','education','skills'], style:{ accentColor:'#374151', fontFamily:"'Inter', sans-serif", headerStyle:'minimal', dividerStyle:'none', spacing:'compact', sidebarWidth:'35', textAlign:'left', fontSize:'11px', borderRadius:'0px' } },
+  academic: { name:'Academic', icon:'🎓', desc:'Formal centered header, classic look', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['education','experience','projects','skills'], style:{ accentColor:'#1e3a8a', fontFamily:"'Merriweather', serif", headerStyle:'underlined', dividerStyle:'line', spacing:'spacious', sidebarWidth:'35', textAlign:'center', fontSize:'12px', borderRadius:'0px' } }
 };
 
 const ACCENT_COLORS = ['#1e3a8a','#7c3aed','#dc2626','#059669','#d97706','#0891b2','#be185d','#374151','#4338ca','#0d9488'];
@@ -3423,7 +3423,7 @@ function resetDesignerState() {
   DESIGNER.headerBlocks = ['name','title','contact'];
   DESIGNER.sidebarBlocks = [];
   DESIGNER.mainBlocks = ['sections'];
-  DESIGNER.style = { accentColor:'#1e3a8a', fontFamily:"'Inter', sans-serif", headerStyle:'minimal', dividerStyle:'line', spacing:'normal' };
+  DESIGNER.style = { accentColor:'#1e3a8a', fontFamily:"'Inter', sans-serif", headerStyle:'minimal', dividerStyle:'line', spacing:'normal', sidebarWidth: '35', textAlign: 'left', fontSize: '12px', borderRadius: '3px' };
 }
 
 async function loadDesignerTemplate(id) {
@@ -3530,16 +3530,19 @@ function renderDesignerCanvas() {
   } else {
     const sideHtml = _designerZoneHtml('sidebar', sidebarBlocks);
     const mainHtml = _designerZoneHtml('main', mainBlocks);
-    const sideCol = `<div style="width:35%;background:${style.accentColor};color:#e2e8f0;padding:0.5in 0.4in;">${sideHtml}</div>`;
-    const mainCol = `<div style="width:65%;padding:0.5in 0.5in 0.5in 0.6in;">${mainHtml}</div>`;
+    const sw = style.sidebarWidth || '35';
+    const mw = 100 - parseInt(sw);
+    const sideCol = `<div style="width:${sw}%;background:${style.accentColor};color:#e2e8f0;padding:0.5in 0.4in;">${sideHtml}</div>`;
+    const mainCol = `<div style="width:${mw}%;padding:0.5in 0.5in 0.5in 0.6in;">${mainHtml}</div>`;
     bodyHtml = `<div style="display:flex;flex:1;min-height:0;">${layout === 'sidebar-left' ? sideCol + mainCol : mainCol + sideCol}</div>`;
   }
 
-  let hdrStyle = `padding:0.5in;padding-bottom:0.3in;font-family:${fontFamily};`;
-  if (style.headerStyle === 'filled') hdrStyle = `padding:0.5in;padding-bottom:0.3in;background:${style.accentColor};color:#ffffff;font-family:${fontFamily};`;
-  else if (style.headerStyle === 'underlined') hdrStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${style.accentColor};font-family:${fontFamily};`;
+  let hdrStyle = `padding:0.5in;padding-bottom:0.3in;font-family:${fontFamily};text-align:${style.textAlign || 'left'};`;
+  if (style.headerStyle === 'filled') hdrStyle = `padding:0.5in;padding-bottom:0.3in;background:${style.accentColor};color:#ffffff;font-family:${fontFamily};text-align:${style.textAlign || 'left'};`;
+  else if (style.headerStyle === 'underlined') hdrStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${style.accentColor};font-family:${fontFamily};text-align:${style.textAlign || 'left'};`;
 
-  canvas.innerHTML = `<div style="font-family:${fontFamily};font-size:12px;line-height:1.35;display:flex;flex-direction:column;min-height:297mm;">
+  const baseFontSize = style.fontSize || '12px';
+  canvas.innerHTML = `<div style="font-family:${fontFamily};font-size:${baseFontSize};line-height:1.35;display:flex;flex-direction:column;min-height:297mm;">
     ${headerBlocks.length > 0 ? `<div style="${hdrStyle}">${headerHtml}</div>` : ''}
     ${bodyHtml}
   </div>`;
@@ -3591,8 +3594,8 @@ function _blockPreview(bid, isSidebar, isHeader, style) {
     case 'education':
       return _sectionPreview('Education', `<div><div style="font-weight:600;font-size:12px;">B.S. Computer Science</div><div style="color:${isSidebar ? 'rgba(255,255,255,0.7)' : accent};font-size:12px;">Stanford University</div></div>`, isSidebar, divCss, accent);
     case 'skills':
-      if (isSidebar) return _sectionPreview('Skills', `<div style="font-size:11px;color:rgba(255,255,255,0.85);"><div style="margin-bottom:0.1rem;">• JavaScript / TypeScript</div><div style="margin-bottom:0.1rem;">• React / Next.js</div><div>• Node.js / Python</div></div>`, true, divCss, accent);
-      return _sectionPreview('Skills', `<div style="display:flex;flex-wrap:wrap;gap:0.25rem;"><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:3px;font-size:11px;border:1px solid #e2e8f0;">JavaScript</span><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:3px;font-size:11px;border:1px solid #e2e8f0;">React</span><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:3px;font-size:11px;border:1px solid #e2e8f0;">Python</span></div>`, false, divCss, accent);
+      if (isSidebar) return _sectionPreview('Skills', `<div style="font-size:0.95em;color:rgba(255,255,255,0.85);"><div style="margin-bottom:0.1rem;">• JavaScript / TypeScript</div><div style="margin-bottom:0.1rem;">• React / Next.js</div><div>• Node.js / Python</div></div>`, true, divCss, accent);
+      return _sectionPreview('Skills', `<div style="display:flex;flex-wrap:wrap;gap:0.25rem;"><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:${style.borderRadius || '3px'};font-size:0.9em;border:1px solid #e2e8f0;">JavaScript</span><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:${style.borderRadius || '3px'};font-size:0.9em;border:1px solid #e2e8f0;">React</span><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:${style.borderRadius || '3px'};font-size:0.9em;border:1px solid #e2e8f0;">Python</span></div>`, false, divCss, accent);
     case 'projects':
       return _sectionPreview('Projects', `<div style="font-weight:600;font-size:12px;">Open Source CLI Tool</div><div style="font-size:11px;color:${isSidebar ? 'rgba(255,255,255,0.85)' : '#334155'};">Built a developer productivity tool with 2k+ GitHub stars</div>`, isSidebar, divCss, accent);
     case 'certifications':
@@ -3642,6 +3645,16 @@ function renderDesignerStylePanel() {
         </div>
       </div>
     </div>
+    ${layout !== 'single' ? `
+    <div class="designer-style-section">
+      <label>Sidebar Width</label>
+      <div class="style-chips">
+        <div class="style-chip ${style.sidebarWidth==='25'?'active':''}" onclick="setDesignerSidebarWidth('25')">25%</div>
+        <div class="style-chip ${style.sidebarWidth==='33'?'active':''}" onclick="setDesignerSidebarWidth('33')">33%</div>
+        <div class="style-chip ${style.sidebarWidth==='35'?'active':''}" onclick="setDesignerSidebarWidth('35')">35%</div>
+        <div class="style-chip ${style.sidebarWidth==='40'?'active':''}" onclick="setDesignerSidebarWidth('40')">40%</div>
+      </div>
+    </div>` : ''}
     <div class="designer-style-section">
       <label>Accent Color</label>
       <div class="color-swatches">
@@ -3650,9 +3663,25 @@ function renderDesignerStylePanel() {
       </div>
     </div>
     <div class="designer-style-section">
-      <label>Font</label>
+      <label>Font Family</label>
       <div class="style-chips">
         ${DESIGNER_FONTS.map(f => `<div class="style-chip ${style.fontFamily===f.value?'active':''}" style="font-family:${f.value};" onclick="setDesignerFont(\`${f.value}\`)">${f.label}</div>`).join('')}
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Base Font Size</label>
+      <div class="style-chips">
+        <div class="style-chip ${style.fontSize==='11px'?'active':''}" onclick="setDesignerFontSize('11px')">Small</div>
+        <div class="style-chip ${style.fontSize==='12px'?'active':''}" onclick="setDesignerFontSize('12px')">Normal</div>
+        <div class="style-chip ${style.fontSize==='13px'?'active':''}" onclick="setDesignerFontSize('13px')">Large</div>
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Header Alignment</label>
+      <div class="style-chips">
+        <div class="style-chip ${style.textAlign==='left'?'active':''}" onclick="setDesignerTextAlign('left')">Left</div>
+        <div class="style-chip ${style.textAlign==='center'?'active':''}" onclick="setDesignerTextAlign('center')">Center</div>
+        <div class="style-chip ${style.textAlign==='right'?'active':''}" onclick="setDesignerTextAlign('right')">Right</div>
       </div>
     </div>
     <div class="designer-style-section">
@@ -3678,6 +3707,14 @@ function renderDesignerStylePanel() {
         <div class="style-chip ${style.spacing==='compact'?'active':''}" onclick="setDesignerSpacing('compact')">Compact</div>
         <div class="style-chip ${style.spacing==='normal'?'active':''}" onclick="setDesignerSpacing('normal')">Normal</div>
         <div class="style-chip ${style.spacing==='spacious'?'active':''}" onclick="setDesignerSpacing('spacious')">Spacious</div>
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Item Corners</label>
+      <div class="style-chips">
+        <div class="style-chip ${style.borderRadius==='0px'?'active':''}" onclick="setDesignerBorderRadius('0px')">Square</div>
+        <div class="style-chip ${style.borderRadius==='3px'?'active':''}" onclick="setDesignerBorderRadius('3px')">Rounded</div>
+        <div class="style-chip ${style.borderRadius==='12px'?'active':''}" onclick="setDesignerBorderRadius('12px')">Pill</div>
       </div>
     </div>`;
 }
@@ -3709,6 +3746,10 @@ function setDesignerFont(f) { DESIGNER.style.fontFamily = f; renderDesignerStyle
 function setDesignerHeaderStyle(s) { DESIGNER.style.headerStyle = s; renderDesignerStylePanel(); renderDesignerCanvas(); }
 function setDesignerDivider(s) { DESIGNER.style.dividerStyle = s; renderDesignerStylePanel(); renderDesignerCanvas(); }
 function setDesignerSpacing(s) { DESIGNER.style.spacing = s; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerSidebarWidth(w) { DESIGNER.style.sidebarWidth = w; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerFontSize(s) { DESIGNER.style.fontSize = s; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerTextAlign(a) { DESIGNER.style.textAlign = a; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerBorderRadius(r) { DESIGNER.style.borderRadius = r; renderDesignerStylePanel(); renderDesignerCanvas(); }
 
 /* --- AI Panel --- */
 function renderDesignerAIPanel() {
@@ -3841,34 +3882,34 @@ function generateTemplateFromDesigner() {
     default: divCss = '';
   }
 
-  const css = `body{font-family:${fontFamily};font-size:12px;line-height:1.35;color:#1e293b;margin:0;padding:0;}
+  const css = `body{font-family:${fontFamily};font-size:${style.fontSize || '12px'};line-height:1.35;color:#1e293b;margin:0;padding:0;}
 .res-section{margin-bottom:${sectionSpacing};}
-.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.4rem;color:${accent};${divCss}}
+.res-section-title{font-size:1.05em;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.4rem;color:${accent};${divCss}}
 .res-item{margin-bottom:0.5rem;}.res-item-header{display:flex;justify-content:space-between;font-weight:600;}
-.res-item-role{color:#0f172a;}.res-item-sub{color:${accent};}.res-item-date{color:#64748b;font-weight:400;font-size:11px;}
+.res-item-role{color:#0f172a;}.res-item-sub{color:${accent};}.res-item-date{color:#64748b;font-weight:400;font-size:0.9em;}
 .res-bullets{padding-left:1.15rem;margin-top:0.2rem;color:#334155;}.res-bullets li{margin-bottom:0.15rem;}
 .res-text{color:#334155;}.res-tags{display:flex;flex-wrap:wrap;gap:0.3rem;}
-.res-tag{background:#f1f5f9;color:#334155;padding:0.12rem 0.45rem;border-radius:3px;border:1px solid #e2e8f0;font-size:11px;}
+.res-tag{background:#f1f5f9;color:#334155;padding:0.12rem 0.45rem;border-radius:${style.borderRadius || '3px'};border:1px solid #e2e8f0;font-size:0.9em;}
 .res-bullet-list{padding-left:1.15rem;color:#334155;}
-.sidebar-contact-item{color:rgba(255,255,255,0.85);margin-bottom:0.2rem;font-size:11px;}`;
+.sidebar-contact-item{color:rgba(255,255,255,0.85);margin-bottom:0.2rem;font-size:0.9em;}`;
 
   const headerHtml = headerBlocks.map(b => _blockToPlaceholder(b, false, style)).join('\n    ');
   let html = '';
 
+  let hStyle = `padding:0.5in;padding-bottom:0.3in;text-align:${style.textAlign || 'left'};`;
+  if (style.headerStyle === 'filled') hStyle = `padding:0.5in;padding-bottom:0.3in;background:${accent};color:#ffffff;text-align:${style.textAlign || 'left'};`;
+  else if (style.headerStyle === 'underlined') hStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${accent};text-align:${style.textAlign || 'left'};`;
+
   if (layout === 'single') {
     const mainHtml = mainBlocks.map(b => _blockToPlaceholder(b, false, style)).join('\n    ');
-    let hStyle = 'padding:0.5in;padding-bottom:0.3in;';
-    if (style.headerStyle === 'filled') hStyle = `padding:0.5in;padding-bottom:0.3in;background:${accent};color:#ffffff;`;
-    else if (style.headerStyle === 'underlined') hStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${accent};`;
     html = `<div style="${hStyle}">\n    ${headerHtml}\n  </div>\n  <div style="padding:0 0.5in 0.5in 0.5in;">\n    ${mainHtml}\n  </div>`;
   } else {
     const sideHtml = sidebarBlocks.map(b => _blockToPlaceholder(b, true, style)).join('\n      ');
     const mainHtml = mainBlocks.map(b => _blockToPlaceholder(b, false, style)).join('\n      ');
-    let hStyle = 'padding:0.5in;padding-bottom:0.3in;';
-    if (style.headerStyle === 'filled') hStyle = `padding:0.5in;padding-bottom:0.3in;background:${accent};color:#ffffff;`;
-    else if (style.headerStyle === 'underlined') hStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${accent};`;
-    const sideCol = `<div style="width:35%;background:${accent};color:#e2e8f0;padding:0.5in 0.4in;">\n      ${sideHtml}\n    </div>`;
-    const mainCol = `<div style="width:65%;padding:0.5in 0.5in 0.5in 0.6in;">\n      ${mainHtml}\n    </div>`;
+    const sw = style.sidebarWidth || '35';
+    const mw = 100 - parseInt(sw);
+    const sideCol = `<div style="width:${sw}%;background:${accent};color:#e2e8f0;padding:0.5in 0.4in;">\n      ${sideHtml}\n    </div>`;
+    const mainCol = `<div style="width:${mw}%;padding:0.5in 0.5in 0.5in 0.6in;">\n      ${mainHtml}\n    </div>`;
     html = `${headerBlocks.length ? `<div style="${hStyle}">\n    ${headerHtml}\n  </div>\n  ` : ''}<div style="display:flex;flex:1;">\n    ${layout === 'sidebar-left' ? sideCol+'\n    '+mainCol : mainCol+'\n    '+sideCol}\n  </div>`;
   }
 
