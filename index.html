@@ -160,10 +160,6 @@ select.form-control { cursor:pointer; appearance:none; background-image:url("dat
   font-size:0.85rem; font-weight:700; color:var(--accent);
   display:flex; align-items:center; gap:0.4rem;
 }
-.glass-panel {
-  background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-  border:1px solid var(--border);
-}
 
 /* ==============================
    COMPONENTS — SLIDER
@@ -378,18 +374,19 @@ input[type="range"] {
 /* ==============================
    STYLE PANEL — TEMPLATE PICKER
    ============================== */
-.template-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin-bottom:1rem; }
+.template-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:0.5rem; margin-bottom:1rem; }
 .template-option {
   border:2px solid var(--border); border-radius:10px; padding:0.6rem;
-  cursor:pointer; text-align:center; transition:all 0.2s;
+  cursor:pointer; text-align:center; transition:all 0.2s; position:relative;
 }
 .template-option:hover { border-color:var(--border-hover); }
 .template-option.active { border-color:var(--accent); background:var(--accent-bg); }
 .template-mini-preview {
   width:100%; height:70px; background:var(--bg-surface); border-radius:4px;
-  margin-bottom:0.4rem; overflow:hidden; padding:6px;
+  margin-bottom:0.4rem; overflow:hidden; padding:6px; display:flex; flex-direction:column; justify-content:center;
 }
-.template-option-name { font-size:0.72rem; font-weight:700; }
+.template-option-name { font-size:0.72rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.template-badge { position:absolute; top:4px; right:4px; font-size:0.6rem; padding:0.1rem 0.3rem; border-radius:3px; background:var(--accent); color:#fff; font-weight:700; }
 
 /* Mini preview CSS blocks */
 .tmp-line { height:3px; background:var(--text-tertiary); border-radius:1px; margin-bottom:3px; opacity:0.4; }
@@ -401,7 +398,7 @@ input[type="range"] {
 .tmp-sidebar-left { width:35%; background:var(--accent-bg); border-radius:2px; }
 
 /* ==============================
-   PREVIEW STUDIO & A4 MOBILE SCALING
+   PREVIEW STUDIO & NOTION-LIKE DIRECT CANVAS EDITING
    ============================== */
 .editor-preview {
   background:var(--bg-base); display:flex; flex-direction:column;
@@ -428,17 +425,42 @@ input[type="range"] {
   position:relative; transition:transform 0.15s ease, margin-bottom 0.15s ease;
 }
 
+/* Editable canvas items hover outline */
+[contenteditable="true"] { outline:none; transition:box-shadow 0.15s; border-radius:2px; }
+[contenteditable="true"]:hover { box-shadow:0 0 0 1px rgba(124,92,252,0.4); }
+[contenteditable="true"]:focus { box-shadow:0 0 0 2px var(--accent); background:rgba(124,92,252,0.04); }
+
+/* Floating Notion Mini-Toolbar */
+.canvas-toolbar {
+  position:fixed; z-index:500; display:none; align-items:center; gap:0.35rem;
+  background:#1e1e2d; border:1px solid rgba(255,255,255,0.15); border-radius:10px;
+  padding:0.4rem 0.6rem; box-shadow:0 12px 30px rgba(0,0,0,0.5);
+  backdrop-filter:blur(16px); color:#fff; font-size:0.75rem; pointer-events:auto;
+}
+.canvas-toolbar.visible { display:flex; }
+.canvas-toolbar button {
+  min-height:26px; padding:0.2rem 0.5rem; border-radius:6px; font-size:0.75rem;
+  background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); color:#fff;
+  cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:0.25rem; font-weight:600;
+  transition:all 0.15s;
+}
+.canvas-toolbar button:hover { background:var(--accent); border-color:var(--accent); }
+.canvas-toolbar input[type="color"] {
+  width:24px; height:24px; border:none; border-radius:50%; cursor:pointer; background:none;
+}
+
 /* Print CSS Rules - ONLY print the resume document! */
 @media print {
   body { background:#fff !important; color:#000 !important; margin:0 !important; padding:0 !important; }
   header, .app-header, .editor-header, .editor-sidebar, .overflow-banner, .bottom-nav, 
-  .toast-container, .modal-overlay, .clipboard-banner, .mobile-preview-close, 
+  .toast-container, .modal-overlay, .clipboard-banner, .mobile-preview-close, .canvas-toolbar,
   .dashboard, #dashboardScreen { display:none !important; }
   .screen { display:block !important; min-height:auto !important; margin:0 !important; padding:0 !important; }
   #editorScreen { display:block !important; margin:0 !important; padding:0 !important; }
   .editor-body { display:block !important; height:auto !important; margin:0 !important; padding:0 !important; }
   .editor-preview { display:block !important; background:transparent !important; padding:0 !important; margin:0 !important; position:static !important; overflow:visible !important; transform:none !important; }
   .document-wrapper { box-shadow:none !important; width:100% !important; min-height:auto !important; transform:none !important; margin:0 !important; border-radius:0 !important; }
+  [contenteditable="true"]:hover, [contenteditable="true"]:focus { box-shadow:none !important; background:transparent !important; }
   @page { size:A4 portrait; margin:0; }
 }
 
@@ -501,7 +523,7 @@ input[type="range"] {
 .modal-overlay.hidden { display:none; }
 .modal {
   background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px;
-  padding:1.5rem; max-width:480px; width:100%; max-height:90vh; overflow-y:auto;
+  padding:1.5rem; max-width:540px; width:100%; max-height:90vh; overflow-y:auto;
   animation:modalIn 0.25s ease;
 }
 @keyframes modalIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:none; } }
@@ -628,6 +650,18 @@ input[type="range"] {
 </div>
 
 <!-- ============================
+     NOTION-LIKE CANVAS FLOATING TOOLBAR
+     ============================ -->
+<div class="canvas-toolbar" id="canvasFloatingToolbar">
+  <button onclick="formatCanvasSelection('bold')" title="Bold (Ctrl+B)"><b>B</b></button>
+  <button onclick="formatCanvasSelection('italic')" title="Italic (Ctrl+I)"><i>I</i></button>
+  <button onclick="changeActiveElementFontSize(1)" title="Increase font size">A+</button>
+  <button onclick="changeActiveElementFontSize(-1)" title="Decrease font size">A-</button>
+  <input type="color" id="canvasColorPicker" onchange="changeActiveElementColor(this.value)" title="Change Text Color">
+  <button onclick="deleteActiveCanvasElement()" title="Delete element" style="color:#f87171;">✕</button>
+</div>
+
+<!-- ============================
      DASHBOARD SCREEN
      ============================ -->
 <div class="screen active" id="dashboardScreen">
@@ -640,6 +674,9 @@ input[type="range"] {
       </div>
     </div>
     <div class="header-actions">
+      <button class="btn btn-secondary btn-sm" onclick="openTemplateManagerModal()">
+        <i data-lucide="layout"></i> <span class="hide-mobile">Templates</span>
+      </button>
       <button class="btn-icon" onclick="toggleTheme()" title="Toggle Theme" id="themeToggleBtn">
         <i data-lucide="moon" id="themeIcon"></i>
       </button>
@@ -773,6 +810,29 @@ input[type="range"] {
   </div>
 </div>
 
+<div class="modal-overlay hidden" id="templateManagerModal">
+  <div class="modal" style="max-width:640px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h3>🎨 Template Gallery & Manager</h3>
+      <button class="btn btn-secondary btn-xs" onclick="closeModal('templateManagerModal')">✕</button>
+    </div>
+    <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:1rem;">
+      All templates (built-in and custom uploaded/AI-generated) are saved in your offline database and available across all resumes.
+    </p>
+    <div class="template-grid mb-2" id="galleryTemplateGrid">
+      <!-- Rendered by JS -->
+    </div>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--border);padding-top:1rem;">
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importTemplateInput').click()">
+        <i data-lucide="upload"></i> Upload Custom HTML
+      </button>
+      <button class="btn btn-magic btn-sm" onclick="closeModal('templateManagerModal');openAITemplatePrompt();">
+        <i data-lucide="sparkles"></i> Design New with AI
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay hidden" id="addSectionModal">
   <div class="modal">
     <h3>Add Section</h3>
@@ -825,6 +885,7 @@ const APP = {
   autoSaveTimer: null,
   selectedNewTemplate: 'modern-minimal',
   newSectionType: 'items',
+  activeCanvasEl: null
 };
 
 /* =============================================================================
@@ -994,7 +1055,7 @@ function toggleTheme() {
 }
 
 /* =============================================================================
-   BUILT-IN TEMPLATES
+   BUILT-IN & CUSTOM TEMPLATES REGISTRY
    ============================================================================= */
 const TEMPLATES = {
   'modern-minimal': {
@@ -1013,6 +1074,47 @@ const TEMPLATES = {
     render: renderBoldSidebar
   }
 };
+
+function registerCustomTemplateObject(tpl) {
+  TEMPLATES[tpl.id] = {
+    id: tpl.id,
+    name: tpl.name || 'Custom Template',
+    isBuiltIn: false,
+    html: tpl.html,
+    css: tpl.css,
+    preview: '<div class="tmp-line thick w90"></div><div class="tmp-line w70"></div><div class="tmp-line w50"></div>',
+    render: (r) => renderCustomTemplate(r, tpl.html, tpl.css)
+  };
+}
+
+async function loadSavedCustomTemplates() {
+  if (!APP.db) return;
+  const list = await APP.db.getAll('templates');
+  list.forEach(tpl => registerCustomTemplateObject(tpl));
+}
+
+function renderCustomTemplate(r, html, css) {
+  const s = r.styleOverrides || {};
+  let rendered = html || '';
+  const c = r.contact || {};
+  rendered = rendered.replace(/\{\{name\}\}/g, escHTML(c.name || ''));
+  rendered = rendered.replace(/\{\{title\}\}/g, escHTML(c.title || ''));
+  rendered = rendered.replace(/\{\{email\}\}/g, escHTML(c.email || ''));
+  rendered = rendered.replace(/\{\{phone\}\}/g, escHTML(c.phone || ''));
+  rendered = rendered.replace(/\{\{location\}\}/g, escHTML(c.location || ''));
+  rendered = rendered.replace(/\{\{website\}\}/g, escHTML(c.website || ''));
+
+  const sectionSpacing = `margin-bottom:${s.sectionSpacing || 1}rem;`;
+  const sectionsHtml = (r.sections || []).map(sec => `
+    <div class="res-section" style="${sectionSpacing}">
+      <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid #ddd;padding-bottom:0.2rem;margin-bottom:0.4rem;color:var(--doc-accent,#1e3a8a);">${escHTML(sec.title)}</div>
+      ${renderSectionContent(sec, s)}
+    </div>`).join('');
+  rendered = rendered.replace(/\{\{sections\}\}/g, sectionsHtml);
+
+  const styleTag = css ? `<style>${css}</style>` : '';
+  return `<div class="doc-custom" style="${getDocStyles(s)}--doc-accent:${s.accentColor||'#1e3a8a'};">${styleTag}${rendered}</div>`;
+}
 
 function defaultResumeData() {
   return {
@@ -1164,6 +1266,9 @@ async function renderDashboard() {
       <div class="dashboard-top">
         <h2>My Resumes</h2>
         <div class="dashboard-actions">
+          <button class="btn btn-secondary btn-sm" onclick="openTemplateManagerModal()">
+            <i data-lucide="layout"></i> Gallery
+          </button>
           <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importDbInput').click()">
             <i data-lucide="download"></i> Import DB
           </button>
@@ -1184,6 +1289,9 @@ async function renderDashboard() {
         <div class="dashboard-actions">
           <button class="btn btn-primary btn-sm" onclick="openModal('createResumeModal')">
             <i data-lucide="plus"></i> New
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="openTemplateManagerModal()">
+            <i data-lucide="layout"></i> Gallery
           </button>
           <button class="btn btn-secondary btn-sm" onclick="exportDatabase()">
             <i data-lucide="upload"></i> Export
@@ -1225,15 +1333,50 @@ function renderTemplatePicker(containerId, selectedId) {
   const c = document.getElementById(containerId);
   c.innerHTML = Object.values(TEMPLATES).map(t => `
     <div class="template-option ${t.id === selectedId ? 'active' : ''}" onclick="selectTemplate('${t.id}', '${containerId}')">
+      ${!t.isBuiltIn ? '<span class="template-badge">Custom</span>' : ''}
       <div class="template-mini-preview">${t.preview}</div>
-      <div class="template-option-name">${t.name}</div>
+      <div class="template-option-name">${escHTML(t.name)}</div>
     </div>
   `).join('');
 }
 
 function selectTemplate(id, containerId) {
   APP.selectedNewTemplate = id;
-  document.querySelectorAll(`#${containerId} .template-option`).forEach(o => o.classList.toggle('active', o.querySelector('.template-option-name').textContent === TEMPLATES[id].name));
+  document.querySelectorAll(`#${containerId} .template-option`).forEach(o => o.classList.toggle('active', o.querySelector('.template-option-name').textContent === (TEMPLATES[id]||{}).name));
+}
+
+function openTemplateManagerModal() {
+  renderGalleryTemplateGrid();
+  openModal('templateManagerModal');
+}
+
+function renderGalleryTemplateGrid() {
+  const container = document.getElementById('galleryTemplateGrid');
+  if (!container) return;
+  container.innerHTML = Object.values(TEMPLATES).map(t => `
+    <div class="template-option">
+      ${!t.isBuiltIn ? '<span class="template-badge">Custom</span>' : ''}
+      <div class="template-mini-preview">${t.preview}</div>
+      <div class="template-option-name" style="margin-bottom:0.4rem;">${escHTML(t.name)}</div>
+      ${!t.isBuiltIn ? `<button class="btn btn-danger btn-xs" style="width:100%;" onclick="deleteCustomTemplate('${t.id}')">Delete</button>` : '<span style="font-size:0.68rem;color:var(--text-tertiary);">Built-in</span>'}
+    </div>
+  `).join('');
+}
+
+async function deleteCustomTemplate(id) {
+  confirmAction('Delete Template', 'Delete this custom template from your gallery?', async () => {
+    delete TEMPLATES[id];
+    await APP.db.delete('templates', id);
+    renderGalleryTemplateGrid();
+    if (APP.currentResume) renderStylePanel();
+    showToast('Custom template deleted', 'info');
+  });
+}
+
+function openAITemplatePrompt() {
+  selectPromptType('design-template');
+  switchEditorTab('ai', document.querySelectorAll('.sidebar-tab')[1]);
+  generateAndShowPrompt();
 }
 
 async function createNewResume() {
@@ -1507,7 +1650,7 @@ function renderAIPanel() {
         ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'edit-all' ? 'active' : ''}" onclick="selectPromptType('edit-all')">✏️ Edit All Content</div>` : ''}
         ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'edit-section' ? 'active' : ''}" onclick="selectPromptType('edit-section')">🎯 Edit One Section</div>` : ''}
         ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'fix-overflow' ? 'active' : ''}" onclick="selectPromptType('fix-overflow')">📐 Fix 1-Page Overflow</div>` : ''}
-        <div class="chip ${APP.selectedPromptType === 'design-template' ? 'active' : ''}" onclick="selectPromptType('design-template')">🎨 Design Template</div>
+        <div class="chip ${APP.selectedPromptType === 'design-template' ? 'active' : ''}" onclick="selectPromptType('design-template')">🎨 Design Template with AI</div>
       </div>
       ${APP.selectedPromptType === 'edit-section' && hasContent ? `
         <div class="form-group">
@@ -1553,7 +1696,7 @@ function renderAIPanel() {
           <i data-lucide="clipboard"></i> Read Clipboard
         </button>
         <button class="btn btn-success btn-sm" onclick="applyAIResponse()">
-          <i data-lucide="check"></i> Apply Content
+          <i data-lucide="check"></i> Apply Content / Template
         </button>
       </div>
     </div>
@@ -1739,28 +1882,35 @@ When finished, output your response in <RESUME_DATA> tags with updated content A
   }
 
   if (type === 'design-template') {
-    return `I'm using OpenResume Studio and want a custom HTML/CSS resume template.
+    return `I want to design a custom HTML/CSS resume template for OpenResume Studio.
 
-## Requirements
-- A4 page size (210mm × 297mm)
-- Professional, modern design
-- Use only these fonts (already loaded): Inter, Outfit, Merriweather, JetBrains Mono
-- Include a <style> tag with all CSS inside the template
-- Use CSS variable var(--doc-accent, #1e3a8a) for accent color so users can customize it
+## STEP 1: Pre-Design Conversation & Design Discussion
+Before generating code, please ask me 3 quick questions to understand my design preferences:
+1. What aesthetic or layout do you prefer? (e.g. Minimalist, Executive Serif, Tech Mono, Modern Two-Column, Sidebar Layout)
+2. What color palette or theme should we use?
+3. Are there any specific sections or design details you'd like emphasized?
 
-## Template Placeholders
-Use these placeholders — the app will replace them:
-- {{name}} — Full name
-- {{title}} — Job title
-- {{email}}, {{phone}}, {{location}}, {{website}} — Contact info
-- {{sections}} — Where all resume sections get injected (as rendered HTML)
+Wait for my answers before writing the code!
+
+## STEP 2: Strict A4 PDF Boundary & Formatting Rules (for when we generate)
+When writing the template code:
+- **A4 Boundary & Box Sizing**: All content MUST stay strictly within A4 boundaries (210mm × 297mm). Use 'box-sizing: border-box;' everywhere.
+- **Page Overflow Control**: Keep headers, padding, margins (0.4in - 0.6in), and line heights compact so content fits comfortably on 1 page.
+- **Fonts**: Use only pre-loaded fonts: 'Inter', 'Outfit', 'Merriweather', 'JetBrains Mono'.
+- **Accent Color**: Use CSS variable \`var(--doc-accent, #1e3a8a)\` for section titles or headers so the user can change theme color dynamically in the app.
+- **Required Placeholders**:
+  - \`{{name}}\` — Candidate full name
+  - \`{{title}}\` — Job title
+  - \`{{email}}\`, \`{{phone}}\`, \`{{location}}\`, \`{{website}}\` — Contact info
+  - \`{{sections}}\` — Where all resume sections will be rendered
 
 ## Output Format
-Wrap your template in <RESUME_TEMPLATE> tags:
+When generating code, wrap your output in <RESUME_TEMPLATE> tags:
 
 <RESUME_TEMPLATE>
+<template_name>My Custom Layout</template_name>
 <style>
-  /* Template CSS here */
+  /* CSS rules here */
 </style>
 <div class="resume-custom">
   <header>
@@ -1772,9 +1922,7 @@ Wrap your template in <RESUME_TEMPLATE> tags:
     {{sections}}
   </main>
 </div>
-</RESUME_TEMPLATE>
-
-Feel free to use any layout: single column, two columns, sidebar, creative, etc. Make it visually impressive.`;
+</RESUME_TEMPLATE>`;
   }
 
   return 'Select a prompt type above.';
@@ -1828,7 +1976,7 @@ async function readClipboardForAI() {
   }
 }
 
-function applyAIResponse() {
+async function applyAIResponse() {
   const text = document.getElementById('aiResponseInput')?.value || APP.pendingClipboard || '';
   if (!text.trim()) { showToast('No content to apply', 'error'); return; }
 
@@ -1874,7 +2022,11 @@ function applyAIResponse() {
   // Try to parse RESUME_TEMPLATE
   const tplMatch = text.match(/<RESUME_TEMPLATE>([\s\S]*?)<\/RESUME_TEMPLATE>/);
   if (tplMatch) {
-    applyCustomTemplate(tplMatch[1].trim());
+    const rawTpl = tplMatch[1].trim();
+    const nameMatch = rawTpl.match(/<template_name>([\s\S]*?)<\/template_name>/i);
+    const name = nameMatch ? nameMatch[1].trim() : 'AI Custom Template';
+    const cleanHtml = rawTpl.replace(/<template_name>[\s\S]*?<\/template_name>/gi, '').trim();
+    await saveAndApplyCustomTemplate(cleanHtml, name);
     return;
   }
 
@@ -1897,25 +2049,47 @@ function applyAIResponse() {
     }
   } catch (e) { /* fall through */ }
 
-  showToast('Could not parse AI response. Make sure it contains valid JSON.', 'error');
+  showToast('Could not parse AI response. Make sure it contains valid JSON or <RESUME_DATA> tags.', 'error');
 }
 
-function applyCustomTemplate(html) {
-  APP.currentResume.templateId = 'custom';
-  // Separate CSS and HTML
+async function saveAndApplyCustomTemplate(html, name) {
   const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/i);
-  APP.currentResume.customTemplateCss = styleMatch ? styleMatch[1] : '';
-  APP.currentResume.customTemplateHtml = html.replace(/<style>[\s\S]*?<\/style>/gi, '').trim();
-  updatePreview(); scheduleSave();
-  showToast('Custom template applied!', 'success');
+  const css = styleMatch ? styleMatch[1] : '';
+  const cleanHtml = html.replace(/<style>[\s\S]*?<\/style>/gi, '').trim();
+
+  const customTpl = {
+    id: 'custom-' + uuid(),
+    name: name || 'Custom Template ' + (Object.keys(TEMPLATES).length + 1),
+    html: cleanHtml,
+    css: css,
+    createdAt: Date.now()
+  };
+
+  // 1. Save to IndexedDB (available to ALL resumes)
+  await APP.db.put('templates', customTpl);
+  // 2. Register in memory
+  registerCustomTemplateObject(customTpl);
+
+  // 3. Set as active template on current resume if editing
+  if (APP.currentResume) {
+    APP.currentResume.templateId = customTpl.id;
+    APP.currentResume.customTemplateHtml = cleanHtml;
+    APP.currentResume.customTemplateCss = css;
+    renderStylePanel();
+    updatePreview();
+    scheduleSave();
+  }
+
+  showToast(`Custom template "${customTpl.name}" saved & applied!`, 'success');
 }
 
-function handleImportTemplate(e) {
+async function handleImportTemplate(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (evt) => {
-    applyCustomTemplate(evt.target.result);
+  reader.onload = async (evt) => {
+    const tplName = file.name.replace(/\.[^/.]+$/, '');
+    await saveAndApplyCustomTemplate(evt.target.result, tplName);
   };
   reader.readAsText(file);
   e.target.value = '';
@@ -1930,7 +2104,12 @@ function renderStylePanel() {
 
   document.getElementById('stylePanelContent').innerHTML = `
     <div class="card mb-2">
-      <div class="card-header"><span class="card-title"><i data-lucide="layout"></i> Template</span></div>
+      <div class="card-header">
+        <span class="card-title"><i data-lucide="layout"></i> Template</span>
+        <button class="btn btn-secondary btn-xs" onclick="openTemplateManagerModal()">
+          <i data-lucide="grid"></i> Gallery
+        </button>
+      </div>
       <div class="template-grid" id="editorTemplatePicker"></div>
     </div>
 
@@ -2008,12 +2187,17 @@ function renderStylePanel() {
   // Override click to change template
   document.querySelectorAll('#editorTemplatePicker .template-option').forEach(opt => {
     const name = opt.querySelector('.template-option-name').textContent;
-    const id = Object.values(TEMPLATES).find(t => t.name === name)?.id;
-    if (id) {
+    const tpl = Object.values(TEMPLATES).find(t => t.name === name);
+    if (tpl) {
       opt.onclick = () => {
-        APP.currentResume.templateId = id;
-        APP.currentResume.customTemplateHtml = null;
-        APP.currentResume.customTemplateCss = null;
+        APP.currentResume.templateId = tpl.id;
+        if (!tpl.isBuiltIn) {
+          APP.currentResume.customTemplateHtml = tpl.html;
+          APP.currentResume.customTemplateCss = tpl.css;
+        } else {
+          APP.currentResume.customTemplateHtml = null;
+          APP.currentResume.customTemplateCss = null;
+        }
         document.querySelectorAll('#editorTemplatePicker .template-option').forEach(o => o.classList.remove('active'));
         opt.classList.add('active');
         updatePreview(); scheduleSave();
@@ -2032,41 +2216,110 @@ function updateStyle(key, value) {
 }
 
 /* =============================================================================
-   PREVIEW & MOBILE A4 SCALING
+   PREVIEW, NOTION-LIKE INLINE CANVAS EDITING & A4 MOBILE SCALING
    ============================================================================= */
 function updatePreview() {
   if (!APP.currentResume) return;
   const wrapper = document.getElementById('documentWrapper');
   const r = APP.currentResume;
 
-  if (r.templateId === 'custom' && r.customTemplateHtml) {
-    // Render custom template
-    let html = r.customTemplateHtml;
-    const c = r.contact || {};
-    html = html.replace(/\{\{name\}\}/g, escHTML(c.name || ''));
-    html = html.replace(/\{\{title\}\}/g, escHTML(c.title || ''));
-    html = html.replace(/\{\{email\}\}/g, escHTML(c.email || ''));
-    html = html.replace(/\{\{phone\}\}/g, escHTML(c.phone || ''));
-    html = html.replace(/\{\{location\}\}/g, escHTML(c.location || ''));
-    html = html.replace(/\{\{website\}\}/g, escHTML(c.website || ''));
-    // Render sections
-    const s = r.styleOverrides || {};
-    const sectionsHtml = (r.sections || []).map(sec => `
-      <div class="res-section" style="margin-bottom:${s.sectionSpacing||1}rem;">
-        <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid #ddd;padding-bottom:0.2rem;margin-bottom:0.4rem;color:var(--doc-accent,#1e3a8a);">${escHTML(sec.title)}</div>
-        ${renderSectionContent(sec, s)}
-      </div>`).join('');
-    html = html.replace(/\{\{sections\}\}/g, sectionsHtml);
-    const styles = r.customTemplateCss ? `<style>${r.customTemplateCss}</style>` : '';
-    wrapper.innerHTML = styles + html;
-    wrapper.style.cssText = getDocStyles(s);
+  const tpl = TEMPLATES[r.templateId];
+  if (tpl && !tpl.isBuiltIn) {
+    wrapper.innerHTML = tpl.render(r);
+    wrapper.style.cssText = '';
+  } else if (r.templateId === 'custom' && r.customTemplateHtml) {
+    wrapper.innerHTML = renderCustomTemplate(r, r.customTemplateHtml, r.customTemplateCss);
+    wrapper.style.cssText = '';
   } else {
-    const template = TEMPLATES[r.templateId] || TEMPLATES['modern-minimal'];
-    wrapper.innerHTML = template.render(r);
+    const builtInTpl = TEMPLATES[r.templateId] || TEMPLATES['modern-minimal'];
+    wrapper.innerHTML = builtInTpl.render(r);
     wrapper.style.cssText = '';
   }
   checkOverflow();
   updateMobileScale();
+  makeCanvasDirectlyEditable();
+}
+
+function makeCanvasDirectlyEditable() {
+  const wrapper = document.getElementById('documentWrapper');
+  if (!wrapper) return;
+
+  const editables = wrapper.querySelectorAll('.res-name, .res-title, .res-section-title, .res-item-role, .res-item-sub, .res-item-date, .res-bullets li, .res-text, .res-bullet-list li, .res-tag, .side-section-title, .side-contact-item, .side-tag');
+  
+  editables.forEach(el => {
+    el.contentEditable = "true";
+    el.spellcheck = false;
+
+    el.onfocus = (e) => {
+      APP.activeCanvasEl = el;
+      showCanvasFloatingToolbar(el);
+    };
+  });
+}
+
+function showCanvasFloatingToolbar(el) {
+  const toolbar = document.getElementById('canvasFloatingToolbar');
+  if (!toolbar || !el) return;
+
+  const rect = el.getBoundingClientRect();
+  toolbar.style.top = Math.max(10, rect.top - 42) + 'px';
+  toolbar.style.left = Math.max(10, rect.left) + 'px';
+  toolbar.classList.add('visible');
+
+  // Update color picker if element has custom inline color
+  const colorPicker = document.getElementById('canvasColorPicker');
+  if (colorPicker && el.style.color) {
+    colorPicker.value = rgbToHex(el.style.color) || '#7c5cfc';
+  }
+}
+
+function hideCanvasFloatingToolbar() {
+  const toolbar = document.getElementById('canvasFloatingToolbar');
+  if (toolbar) toolbar.classList.remove('visible');
+}
+
+// Hide toolbar when clicking outside canvas or active element
+document.addEventListener('mousedown', (e) => {
+  const toolbar = document.getElementById('canvasFloatingToolbar');
+  const wrapper = document.getElementById('documentWrapper');
+  if (!toolbar || !wrapper) return;
+  if (!toolbar.contains(e.target) && !wrapper.contains(e.target)) {
+    hideCanvasFloatingToolbar();
+  }
+});
+
+function formatCanvasSelection(cmd) {
+  document.execCommand(cmd, false, null);
+  scheduleSave();
+}
+
+function changeActiveElementFontSize(delta) {
+  if (!APP.activeCanvasEl) return;
+  const currentSize = parseFloat(window.getComputedStyle(APP.activeCanvasEl).fontSize) || 12;
+  const newSize = Math.max(8, Math.min(48, currentSize + delta));
+  APP.activeCanvasEl.style.fontSize = newSize + 'px';
+  scheduleSave();
+}
+
+function changeActiveElementColor(color) {
+  if (!APP.activeCanvasEl) return;
+  APP.activeCanvasEl.style.color = color;
+  scheduleSave();
+}
+
+function deleteActiveCanvasElement() {
+  if (!APP.activeCanvasEl) return;
+  APP.activeCanvasEl.remove();
+  hideCanvasFloatingToolbar();
+  scheduleSave();
+  showToast('Element removed from canvas', 'info');
+}
+
+function rgbToHex(rgb) {
+  if (!rgb || !rgb.startsWith('rgb')) return rgb;
+  const nums = rgb.match(/\d+/g);
+  if (!nums || nums.length < 3) return null;
+  return '#' + nums.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
 }
 
 function checkOverflow() {
@@ -2227,10 +2480,15 @@ async function handleImportDb(e) {
       if (!r.id) r.id = uuid();
       await APP.db.put('resumes', r);
     }
-    if (data.templates) for (const t of data.templates) await APP.db.put('templates', t);
+    if (data.templates) {
+      for (const t of data.templates) {
+        await APP.db.put('templates', t);
+        registerCustomTemplateObject(t);
+      }
+    }
     if (data.settings) for (const s of data.settings) await APP.db.put('settings', s);
 
-    showToast(`Imported ${data.resumes.length} resume(s)!`, 'success');
+    showToast(`Imported ${data.resumes.length} resume(s) & templates!`, 'success');
     renderDashboard();
   } catch (err) {
     showToast('Import failed: ' + err.message, 'error');
@@ -2262,6 +2520,9 @@ async function init() {
   // DB
   APP.db = new ResumeDB();
   await APP.db.init();
+
+  // Load custom templates stored in IndexedDB so they appear across ALL resumes
+  await loadSavedCustomTemplates();
 
   // Template picker defaults
   renderTemplatePicker('templatePicker', APP.selectedNewTemplate);
