@@ -1,2 +1,22 @@
-<style>.t20-wrap{font-family:'Inter',sans-serif;color:#0f172a;padding:1.2rem;}.t20-head{border-bottom:2px solid #0284c7;padding-bottom:0.6rem;margin-bottom:1rem;}.t20-name{font-size:24px;font-weight:800;color:#0284c7;text-transform:uppercase;}.t20-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t20-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#0284c7;border-left:4px solid #0284c7;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t20-wrap"><header class="t20-head"><div class="t20-name">{{name}}</div><div class="t20-title">{{title}}</div><div class="t20-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t20-wrap { font-family: 'Merriweather', serif; color: #0f172a; padding: 1.4rem; }
+  .t20-head { background: #1e1b4b; color: #ffffff; padding: 1.6rem 1.4rem; border-top: 4px solid #d97706; border-bottom: 4px solid #d97706; margin-bottom: 1.4rem; text-align: center; }
+  .t20-name { font-size: 26px; font-weight: 700; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.04em; }
+  .t20-title { font-size: 13.5px; color: #fef3c7; font-weight: 400; font-style: italic; margin-top: 0.25rem; }
+  .t20-contact { font-size: 11px; color: #e0e7ff; margin-top: 0.6rem; display: flex; justify-content: center; gap: 0.8rem; flex-wrap: wrap; }
+  .t20-contact span:not(:last-child)::after { content: " | "; color: #d97706; margin-left: 0.8rem; }
+  .t20-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #1e1b4b; border-bottom: 2px solid #d97706; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t20-wrap">
+  <header class="t20-head">
+    <div class="t20-name">{{name}}</div>
+    <div class="t20-title">{{title}}</div>
+    <div class="t20-contact">
+      <span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span>
+    </div>
+  </header>
+  <main class="t20-main">
+    {{sections}}
+  </main>
+</div>

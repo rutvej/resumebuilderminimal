@@ -1,2 +1,21 @@
-<style>.t19-wrap{font-family:'JetBrains Mono',sans-serif;color:#0f172a;padding:1.2rem;}.t19-head{border-bottom:2px solid #ea580c;padding-bottom:0.6rem;margin-bottom:1rem;}.t19-name{font-size:24px;font-weight:800;color:#ea580c;text-transform:uppercase;}.t19-title{font-size:13px;color:#475569;font-weight:600;margin-top:0.2rem;}.t19-contact{font-size:11px;color:#64748b;margin-top:0.4rem;display:flex;gap:0.8rem;flex-wrap:wrap;}.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;color:#ea580c;border-left:4px solid #ea580c;padding-left:0.5rem;margin-bottom:0.6rem;}</style>
-<div class="t19-wrap"><header class="t19-head"><div class="t19-name">{{name}}</div><div class="t19-title">{{title}}</div><div class="t19-contact"><span>{{email}}</span><span>{{phone}}</span><span>{{location}}</span><span>{{website}}</span></div></header><main>{{sections}}</main></div>
+<style>
+  .t19-wrap { font-family: 'Inter', sans-serif; color: #0f172a; padding: 1.4rem; }
+  .t19-head { border-left: 8px solid #0284c7; padding-left: 1rem; margin-bottom: 1.4rem; background: #f0f9ff; padding: 1.2rem; border-radius: 0 8px 8px 0; }
+  .t19-name { font-size: 26px; font-weight: 800; color: #0369a1; text-transform: uppercase; letter-spacing: 0.02em; }
+  .t19-title { font-size: 13.5px; color: #0284c7; font-weight: 600; margin-top: 0.2rem; }
+  .t19-contact { font-size: 11px; color: #075985; margin-top: 0.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .t19-wrap .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; color: #0369a1; border-bottom: 2px solid #0284c7; padding-bottom: 0.2rem; margin-bottom: 0.6rem; }
+</style>
+
+<div class="t19-wrap">
+  <header class="t19-head">
+    <div class="t19-name">{{name}}</div>
+    <div class="t19-title">{{title}}</div>
+    <div class="t19-contact">
+      <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+    </div>
+  </header>
+  <main class="t19-main">
+    {{sections}}
+  </main>
+</div>
