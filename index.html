@@ -2,1501 +2,2165 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>OpenResume Studio - Modern AI PWA Resume Builder</title>
-  <meta name="description" content="100% Free, Mobile-First Offline PWA AI Resume Builder & 1-Page Layout Studio. Zero servers, installable on phones & computers.">
-  <meta name="theme-color" content="#0b0f19">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <title>OpenResume Studio — Free Offline AI Resume Builder</title>
+  <meta name="description" content="100% free, offline-first PWA resume builder. Create stunning resumes with AI-powered content via ChatGPT/Claude copy-paste workflow. No sign-up, no servers.">
+  <meta name="theme-color" content="#7c5cfc">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
-  
   <style>
-    :root[data-theme="dark"] {
-      --bg-main: #09090b;
-      --bg-panel: rgba(24, 24, 27, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      --bg-card: rgba(39, 39, 42, 0.5);
-      --bg-card-hover: rgba(63, 63, 70, 0.8);
-      --border-color: rgba(63, 63, 70, 0.5);
-      --text-main: #f9fafb;
-      --text-muted: #9ca3af;
-      --primary: #8b5cf6;
-      --primary-hover: #7c3aed;
-      --primary-glow: rgba(139, 92, 246, 0.5);
-      --accent: #3b82f6;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --doc-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-    }
-
-    :root[data-theme="light"] {
-      --bg-main: #f8fafc;
-      --bg-panel: #ffffff;
-      --bg-card: #f1f5f9;
-      --bg-card-hover: #e2e8f0;
-      --border-color: #e2e8f0;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --primary-glow: rgba(79, 70, 229, 0.25);
-      --accent: #2563eb;
-      --success: #059669;
-      --warning: #d97706;
-      --doc-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15);
-    }
-
-    :root {
-      --res-font-family: 'Inter', sans-serif;
-      --res-font-size: 12px;
-      --res-line-height: 1.35;
-      --res-section-spacing: 1rem;
-      --res-margin: 0.5in;
-      --res-accent: #1e3a8a;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
-
-    header {
-      background: var(--bg-panel);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.75rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      cursor: pointer;
-    }
-
-    .brand-logo {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: 700;
-    }
-
-    .brand-text h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .brand-text p {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .btn {
-      min-height: 42px;
-      padding: 0.55rem 1rem;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.45rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: #fff;
-      box-shadow: 0 4px 14px var(--primary-glow);
-    }
-
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-    }
-
-    .btn-success {
-      background: var(--success);
-      color: #fff;
-    }
-
-    .btn-magic {
-      background: linear-gradient(135deg, #8b5cf6, #ec4899);
-      color: #fff;
-    }
-
-    .btn-sm {
-      min-height: 36px;
-      padding: 0.35rem 0.75rem;
-      font-size: 0.78rem;
-    }
-
-    .theme-toggle-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    /* Onboarding Hero */
-    .onboarding-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: var(--bg-main);
-      z-index: 1500;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      overflow-y: auto;
-    }
-
-    .onboarding-screen.hidden { display: none; }
-
-    .hero-content {
-      max-width: 850px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(99, 102, 241, 0.15);
-      color: var(--primary);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      padding: 0.4rem 1rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 2.25rem;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-      background: linear-gradient(135deg, #fff, #93c5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    @media (max-width: 600px) {
-      .hero-title { font-size: 1.65rem; }
-    }
-
-    .hero-subtitle {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin: 0 auto 2rem auto;
-      line-height: 1.5;
-    }
-
-    .path-cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    @media (max-width: 750px) {
-      .path-cards-grid { grid-template-columns: 1fr; }
-    }
-
-    .path-card {
-      background: var(--bg-panel);
-      border: 2px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.5rem 1.25rem;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .path-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px var(--primary-glow);
-    }
-
-    .path-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: rgba(99, 102, 241, 0.15);
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 0.85rem;
-    }
-
-    .path-card h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 0.35rem;
-    }
-
-    .path-card p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.4;
-      margin-bottom: 1.25rem;
-    }
-
-    /* Video Demo Animation Frame (Pure Code Animation) */
-    .tutorial-box {
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.5rem;
-      max-width: 650px;
-      width: 100%;
-      text-align: center;
-    }
-
-    .video-demo-frame {
-      width: 100%;
-      height: 240px;
-      background: linear-gradient(135deg, #090d16, #111827);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: 1rem 0;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-    }
-
-    .demo-step-anim {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 1rem;
-      animation: fadeIn 0.4s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .demo-step-anim.active { display: flex; }
-
-    .view-switcher-mobile {
-      display: flex;
-      background: var(--bg-panel);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.5rem;
-      gap: 0.4rem;
-    }
-
-    @media (min-width: 900px) {
-      .view-switcher-mobile { display: none; }
-    }
-
-    .view-switch-btn {
-      flex: 1;
-      min-height: 40px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      cursor: pointer;
-    }
-
-    .view-switch-btn.active {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .app-body {
-      display: grid;
-      grid-template-columns: 480px 1fr;
-      flex: 1;
-      height: calc(100vh - 61px);
-      overflow: hidden;
-    }
-
-    @media (max-width: 900px) {
-      .app-body { grid-template-columns: 1fr; height: auto; }
-    }
-
-    .sidebar {
-      background: var(--bg-panel);
-      border-right: 1px solid var(--border-color);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .tabs-nav {
-      display: flex;
-      background: var(--bg-main);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.5rem 0.5rem 0 0.5rem;
-      gap: 0.3rem;
-    }
-
-    .tab-btn {
-      flex: 1;
-      min-height: 44px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      border-radius: 10px 10px 0 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      border-bottom: 2px solid transparent;
-    }
-
-    .tab-btn.active {
-      color: var(--primary);
-      background: var(--bg-panel);
-      border-bottom: 2px solid var(--primary);
-    }
-
-    .tab-content-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.2rem 1rem;
-    }
-
-    .tab-pane { display: none; }
-    .tab-pane.active { display: block; }
-
-    .card-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.1rem;
-      margin-bottom: 1.1rem;
-    }
-
-    .card-box-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.85rem;
-    }
-
-    .card-box-title {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .step-badge {
-      width: 22px;
-      height: 22px;
-      background: var(--primary);
-      color: #fff;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-    }
-
-    .form-group { margin-bottom: 1rem; }
-    .form-group label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-      text-transform: uppercase;
-    }
-
-    .form-control {
-      width: 100%;
-      min-height: 44px;
-      padding: 0.65rem 0.85rem;
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--text-main);
-      font-size: 0.88rem;
-      font-family: inherit;
-    }
-
-    textarea.form-control { min-height: 85px; resize: vertical; }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-
-    .ai-preset-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .chip-btn {
-      padding: 0.35rem 0.65rem;
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .chip-btn:hover { color: var(--primary); border-color: var(--primary); }
-
-    .ai-launcher-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 0.4rem;
-    }
-
-    .launcher-pill {
-      min-height: 40px;
-      padding: 0.4rem;
-      background: var(--bg-panel);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--text-main);
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.35rem;
-    }
-
-    .launcher-pill:hover { border-color: var(--primary); color: var(--primary); }
-
-    /* Sliders Group */
-    .slider-group {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .slider-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .slider-value { color: var(--primary); font-weight: 700; }
-
-    input[type="range"] {
-      width: 100%;
-      height: 6px;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-
-    .color-swatches { display: flex; gap: 0.6rem; margin-top: 0.6rem; }
-    .swatch {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid transparent;
-    }
-    .swatch.selected { border-color: var(--text-main); box-shadow: 0 0 0 2px var(--primary-glow); }
-
-    .preview-studio {
-      background: var(--bg-main);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow-y: auto;
-      align-items: center;
-      padding: 1.5rem 1rem;
-      position: relative;
-    }
-
-    .overflow-banner {
-      background: rgba(245, 158, 11, 0.12);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      color: var(--warning);
-      padding: 0.7rem 1.25rem;
-      border-radius: 10px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
-      max-width: 210mm;
-      width: 100%;
-    }
-
-    .document-wrapper {
-      width: 210mm;
-      min-height: 297mm;
-      background: #ffffff;
-      color: #1e293b;
-      box-shadow: var(--doc-shadow);
-      border-radius: 4px;
-      padding: var(--res-margin);
-      font-family: var(--res-font-family);
-      font-size: var(--res-font-size);
-      line-height: var(--res-line-height);
-      position: relative;
-      transition: all 0.2s ease;
-    }
-
-    @media (max-width: 850px) {
-      .document-wrapper { width: 100%; min-height: auto; padding: 1.25rem; }
-    }
-
-    .res-header {
-      border-bottom: 2px solid var(--res-accent);
-      padding-bottom: 0.75rem;
-      margin-bottom: var(--res-section-spacing);
-    }
-
-    .res-name {
-      font-size: calc(var(--res-font-size) * 1.9);
-      font-weight: 700;
-      color: var(--res-accent);
-      line-height: 1.1;
-      text-transform: uppercase;
-    }
-
-    .res-title {
-      font-size: calc(var(--res-font-size) * 1.15);
-      color: #475569;
-      font-weight: 500;
-      margin-top: 0.25rem;
-    }
-
-    .res-contact-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      font-size: calc(var(--res-font-size) * 0.9);
-      color: #64748b;
-      margin-top: 0.45rem;
-    }
-
-    .res-section { margin-bottom: var(--res-section-spacing); }
-    .res-section-title {
-      font-size: calc(var(--res-font-size) * 1.15);
-      font-weight: 700;
-      color: var(--res-accent);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      border-bottom: 1px solid #e2e8f0;
-      padding-bottom: 0.25rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .res-summary-text { color: #334155; }
-    .res-item { margin-bottom: 0.6rem; }
-    .res-item-header { display: flex; justify-content: space-between; font-weight: 600; }
-    .res-item-role { color: #0f172a; }
-    .res-item-company { color: var(--res-accent); }
-    .res-item-date { color: #64748b; font-weight: 400; font-size: calc(var(--res-font-size) * 0.9); }
-    .res-bullets { padding-left: 1.2rem; margin-top: 0.25rem; color: #334155; }
-    .res-bullets li { margin-bottom: 0.2rem; }
-
-    .res-skills-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-    .res-skill-tag {
-      background: #f1f5f9;
-      color: #334155;
-      padding: 0.18rem 0.55rem;
-      border-radius: 4px;
-      font-size: calc(var(--res-font-size) * 0.88);
-      font-weight: 500;
-      border: 1px solid #e2e8f0;
-    }
-
-    @media print {
-      body { background: #fff !important; color: #000 !important; }
-      header, .sidebar, .overflow-banner, .view-switcher-mobile, .onboarding-screen { display: none !important; }
-      .app-body { display: block !important; height: auto !important; }
-      .preview-studio { background: transparent !important; padding: 0 !important; display: block !important; }
-      .document-wrapper { box-shadow: none !important; width: 100% !important; min-height: auto !important; padding: var(--res-margin) !important; }
-      @page { size: A4 portrait; margin: 0; }
-    }
+/* ==============================
+   DESIGN TOKENS
+   ============================== */
+:root[data-theme="dark"] {
+  --bg-base: #07070d;
+  --bg-surface: #0d0d15;
+  --bg-elevated: #14141e;
+  --bg-card: #1a1a26;
+  --bg-card-hover: #22222e;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.14);
+  --text-primary: #ededf4;
+  --text-secondary: #7e7e96;
+  --text-tertiary: #555568;
+  --accent: #7c5cfc;
+  --accent-light: #9b7fff;
+  --accent-dark: #6344d4;
+  --accent-bg: rgba(124,92,252,0.12);
+  --accent-glow: rgba(124,92,252,0.3);
+  --success: #34d399;
+  --success-bg: rgba(52,211,153,0.12);
+  --warning: #fbbf24;
+  --warning-bg: rgba(251,191,36,0.12);
+  --danger: #f87171;
+  --danger-bg: rgba(248,113,113,0.12);
+  --shadow-lg: 0 20px 50px -12px rgba(0,0,0,0.6);
+  --glass-bg: rgba(13,13,21,0.85);
+}
+:root[data-theme="light"] {
+  --bg-base: #f5f6fa;
+  --bg-surface: #ffffff;
+  --bg-elevated: #ffffff;
+  --bg-card: #f0f1f6;
+  --bg-card-hover: #e6e7ee;
+  --border: rgba(0,0,0,0.08);
+  --border-hover: rgba(0,0,0,0.15);
+  --text-primary: #0f0f1a;
+  --text-secondary: #6b6b80;
+  --text-tertiary: #9b9baf;
+  --accent: #6344d4;
+  --accent-light: #7c5cfc;
+  --accent-dark: #5234b0;
+  --accent-bg: rgba(99,68,212,0.08);
+  --accent-glow: rgba(99,68,212,0.2);
+  --success: #059669;
+  --success-bg: rgba(5,150,105,0.08);
+  --warning: #d97706;
+  --warning-bg: rgba(217,119,6,0.08);
+  --danger: #dc2626;
+  --danger-bg: rgba(220,38,38,0.08);
+  --shadow-lg: 0 20px 50px -12px rgba(0,0,0,0.12);
+  --glass-bg: rgba(255,255,255,0.9);
+}
+
+/* ==============================
+   RESET & BASE
+   ============================== */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { -webkit-tap-highlight-color:transparent; scroll-behavior:smooth; }
+body {
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg-base);
+  color:var(--text-primary);
+  min-height:100vh;
+  min-height:100dvh;
+  overflow-x:hidden;
+  line-height:1.5;
+}
+a { color:var(--accent); text-decoration:none; }
+input,textarea,select,button { font-family:inherit; }
+
+/* ==============================
+   COMPONENTS — BUTTONS
+   ============================== */
+.btn {
+  min-height:42px; padding:0.5rem 1rem; border-radius:10px; font-size:0.85rem;
+  font-weight:600; cursor:pointer; border:none; display:inline-flex;
+  align-items:center; justify-content:center; gap:0.45rem;
+  transition:all 0.2s ease; white-space:nowrap;
+}
+.btn:active { transform:scale(0.97); }
+.btn-primary {
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+  color:#fff; box-shadow:0 4px 14px var(--accent-glow);
+}
+.btn-primary:hover { box-shadow:0 6px 20px var(--accent-glow); filter:brightness(1.1); }
+.btn-secondary {
+  background:var(--bg-card); color:var(--text-primary);
+  border:1px solid var(--border);
+}
+.btn-secondary:hover { border-color:var(--border-hover); background:var(--bg-card-hover); }
+.btn-ghost { background:transparent; color:var(--text-secondary); }
+.btn-ghost:hover { color:var(--text-primary); background:var(--accent-bg); }
+.btn-danger { background:var(--danger-bg); color:var(--danger); }
+.btn-danger:hover { background:var(--danger); color:#fff; }
+.btn-success { background:var(--success); color:#fff; }
+.btn-magic {
+  background:linear-gradient(135deg,#7c5cfc,#ec4899);
+  color:#fff; box-shadow:0 4px 14px rgba(236,72,153,0.3);
+}
+.btn-sm { min-height:34px; padding:0.3rem 0.7rem; font-size:0.8rem; }
+.btn-xs { min-height:28px; padding:0.2rem 0.5rem; font-size:0.72rem; border-radius:6px; }
+.btn-icon {
+  width:38px; height:38px; min-height:unset; padding:0; border-radius:10px;
+  background:var(--bg-card); border:1px solid var(--border); color:var(--text-secondary);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition:all 0.2s ease;
+}
+.btn-icon:hover { color:var(--text-primary); border-color:var(--border-hover); }
+.btn-icon:active { transform:scale(0.95); }
+
+/* ==============================
+   COMPONENTS — FORMS
+   ============================== */
+.form-group { margin-bottom:0.85rem; }
+.form-group label {
+  display:block; font-size:0.72rem; font-weight:700; color:var(--text-secondary);
+  margin-bottom:0.3rem; text-transform:uppercase; letter-spacing:0.04em;
+}
+.form-control {
+  width:100%; min-height:42px; padding:0.6rem 0.8rem;
+  background:var(--bg-surface); border:1px solid var(--border); border-radius:8px;
+  color:var(--text-primary); font-size:0.88rem; transition:border-color 0.2s;
+}
+.form-control:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-bg); }
+textarea.form-control { min-height:80px; resize:vertical; line-height:1.5; }
+select.form-control { cursor:pointer; appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%237e7e96' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 0.75rem center; padding-right:2rem; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+@media(max-width:500px) { .form-row { grid-template-columns:1fr; } }
+
+/* ==============================
+   COMPONENTS — CARDS & PANELS
+   ============================== */
+.card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:12px;
+  padding:1rem; transition:all 0.2s ease;
+}
+.card:hover { border-color:var(--border-hover); }
+.card-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:0.75rem;
+}
+.card-title {
+  font-size:0.85rem; font-weight:700; color:var(--accent);
+  display:flex; align-items:center; gap:0.4rem;
+}
+.glass-panel {
+  background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--border);
+}
+
+/* ==============================
+   COMPONENTS — SLIDER
+   ============================== */
+.slider-group { margin-bottom:0.85rem; }
+.slider-header {
+  display:flex; justify-content:space-between; font-size:0.8rem; font-weight:600;
+  margin-bottom:0.4rem;
+}
+.slider-value { color:var(--accent); font-weight:700; font-size:0.78rem; }
+input[type="range"] {
+  width:100%; height:6px; accent-color:var(--accent); cursor:pointer;
+  background:var(--bg-card); border-radius:3px; border:none; outline:none;
+}
+.color-swatches { display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.4rem; }
+.swatch {
+  width:30px; height:30px; border-radius:50%; cursor:pointer;
+  border:2px solid transparent; transition:all 0.2s;
+}
+.swatch:hover { transform:scale(1.15); }
+.swatch.active { border-color:var(--text-primary); box-shadow:0 0 0 3px var(--accent-glow); }
+
+/* ==============================
+   LAYOUT — SCREENS
+   ============================== */
+.screen { display:none; min-height:100vh; min-height:100dvh; flex-direction:column; }
+.screen.active { display:flex; }
+
+/* ==============================
+   APP HEADER
+   ============================== */
+.app-header {
+  position:sticky; top:0; z-index:100; padding:0.6rem 1rem;
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.brand { display:flex; align-items:center; gap:0.55rem; cursor:pointer; }
+.brand-logo {
+  width:34px; height:34px; border-radius:9px;
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-weight:800; font-size:0.7rem;
+}
+.brand-text h1 { font-family:'Outfit',sans-serif; font-size:1rem; font-weight:700; }
+.brand-text p { font-size:0.65rem; color:var(--text-secondary); }
+.header-actions { display:flex; align-items:center; gap:0.4rem; }
+
+/* ==============================
+   DASHBOARD
+   ============================== */
+.dashboard { padding:1.5rem 1rem; max-width:900px; margin:0 auto; width:100%; flex:1; }
+.dashboard-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem; }
+.dashboard-top h2 { font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:700; }
+.dashboard-actions { display:flex; gap:0.4rem; flex-wrap:wrap; }
+.resume-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem;
+}
+.resume-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:14px;
+  padding:1.15rem; cursor:pointer; transition:all 0.25s ease; position:relative;
+}
+.resume-card:hover {
+  border-color:var(--accent); transform:translateY(-2px);
+  box-shadow:0 8px 25px var(--accent-glow);
+}
+.resume-card-name { font-weight:700; font-size:1rem; margin-bottom:0.25rem; }
+.resume-card-meta { font-size:0.75rem; color:var(--text-secondary); margin-bottom:0.85rem; }
+.resume-card-template {
+  font-size:0.7rem; color:var(--accent); background:var(--accent-bg);
+  padding:0.15rem 0.5rem; border-radius:999px; display:inline-block; margin-bottom:0.75rem;
+}
+.resume-card-actions { display:flex; gap:0.35rem; }
+.new-resume-card {
+  border:2px dashed var(--border); display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:0.5rem; min-height:160px;
+  color:var(--text-secondary); font-weight:600; cursor:pointer; transition:all 0.2s;
+  border-radius:14px; padding:1.15rem;
+}
+.new-resume-card:hover { border-color:var(--accent); color:var(--accent); }
+
+/* Empty state */
+.empty-state {
+  text-align:center; padding:3rem 1rem; color:var(--text-secondary);
+}
+.empty-state-icon { font-size:3rem; margin-bottom:1rem; opacity:0.5; }
+.empty-state h3 { font-family:'Outfit',sans-serif; font-size:1.2rem; margin-bottom:0.5rem; color:var(--text-primary); }
+.empty-state p { font-size:0.88rem; margin-bottom:1.5rem; max-width:400px; margin-left:auto; margin-right:auto; }
+
+/* ==============================
+   EDITOR LAYOUT
+   ============================== */
+.editor-header {
+  position:sticky; top:0; z-index:100; padding:0.5rem 0.75rem;
+  display:flex; align-items:center; gap:0.5rem;
+  background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.editor-header .back-btn { font-size:0.85rem; }
+.resume-name-input {
+  flex:1; background:transparent; border:1px solid transparent; border-radius:6px;
+  padding:0.3rem 0.5rem; color:var(--text-primary); font-size:0.9rem; font-weight:600;
+  min-width:0;
+}
+.resume-name-input:hover { border-color:var(--border); }
+.resume-name-input:focus { border-color:var(--accent); outline:none; background:var(--bg-surface); }
+.editor-body {
+  display:grid; grid-template-columns:420px 1fr;
+  flex:1; height:calc(100vh - 49px); height:calc(100dvh - 49px); overflow:hidden;
+}
+@media(max-width:900px) {
+  .editor-body { grid-template-columns:1fr; height:auto; }
+}
+
+/* Editor sidebar */
+.editor-sidebar {
+  display:flex; flex-direction:column; height:100%; overflow:hidden;
+  background:var(--bg-surface); border-right:1px solid var(--border);
+}
+.sidebar-tabs {
+  display:flex; padding:0.4rem 0.4rem 0; gap:0.2rem;
+  background:var(--bg-base); border-bottom:1px solid var(--border);
+}
+.sidebar-tab {
+  flex:1; min-height:42px; background:transparent; border:none;
+  color:var(--text-secondary); font-size:0.8rem; font-weight:600; cursor:pointer;
+  border-radius:8px 8px 0 0; display:flex; align-items:center; justify-content:center;
+  gap:0.35rem; border-bottom:2px solid transparent; transition:all 0.2s;
+}
+.sidebar-tab:hover { color:var(--text-primary); }
+.sidebar-tab.active { color:var(--accent); background:var(--bg-surface); border-bottom-color:var(--accent); }
+.sidebar-content { flex:1; overflow-y:auto; padding:1rem 0.85rem; padding-bottom:5rem; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* ==============================
+   EDITOR — SECTIONS ACCORDION
+   ============================== */
+.section-block { margin-bottom:0.85rem; }
+.section-block-header {
+  display:flex; align-items:center; gap:0.4rem; padding:0.6rem 0.75rem;
+  background:var(--bg-card); border:1px solid var(--border); border-radius:10px;
+  cursor:pointer; transition:all 0.2s;
+}
+.section-block-header:hover { border-color:var(--border-hover); }
+.section-block-header.open { border-radius:10px 10px 0 0; border-bottom-color:transparent; }
+.section-block-title { flex:1; font-weight:700; font-size:0.85rem; }
+.section-block-type {
+  font-size:0.68rem; color:var(--accent); background:var(--accent-bg);
+  padding:0.1rem 0.4rem; border-radius:4px; font-weight:600;
+}
+.section-block-body {
+  display:none; border:1px solid var(--border); border-top:none;
+  border-radius:0 0 10px 10px; padding:0.85rem; background:var(--bg-elevated);
+}
+.section-block-body.open { display:block; }
+.section-item {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:8px;
+  padding:0.75rem; margin-bottom:0.6rem;
+}
+.section-item-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+.section-item-num { font-size:0.72rem; font-weight:700; color:var(--accent); }
+.section-reorder { display:flex; gap:0.2rem; }
+.section-reorder button {
+  width:26px; height:26px; border:1px solid var(--border); border-radius:5px;
+  background:var(--bg-surface); color:var(--text-secondary); cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:0.7rem;
+}
+
+/* ==============================
+   AI HUB
+   ============================== */
+.ai-step {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:10px;
+  padding:0.85rem; margin-bottom:0.75rem;
+}
+.ai-step-header {
+  display:flex; align-items:center; gap:0.45rem; margin-bottom:0.6rem;
+  font-size:0.82rem; font-weight:700;
+}
+.step-badge {
+  width:22px; height:22px; background:var(--accent); color:#fff; border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:0.7rem; font-weight:700; flex-shrink:0;
+}
+.prompt-chips {
+  display:flex; flex-wrap:wrap; gap:0.35rem; margin-bottom:0.6rem;
+}
+.chip {
+  padding:0.35rem 0.65rem; background:var(--bg-surface); border:1px solid var(--border);
+  border-radius:6px; color:var(--text-secondary); font-size:0.75rem; font-weight:600;
+  cursor:pointer; transition:all 0.2s;
+}
+.chip:hover { color:var(--accent); border-color:var(--accent); }
+.chip.active { background:var(--accent-bg); color:var(--accent); border-color:var(--accent); }
+.llm-launchers { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.4rem; }
+.llm-btn {
+  min-height:38px; padding:0.35rem; background:var(--bg-surface);
+  border:1px solid var(--border); border-radius:8px; color:var(--text-primary);
+  font-size:0.78rem; font-weight:600; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:0.3rem;
+  transition:all 0.2s;
+}
+.llm-btn:hover { border-color:var(--accent); color:var(--accent); }
+.prompt-preview {
+  background:var(--bg-base); border:1px solid var(--border); border-radius:8px;
+  padding:0.6rem; font-size:0.72rem; font-family:'JetBrains Mono',monospace;
+  color:var(--text-secondary); max-height:200px; overflow-y:auto; line-height:1.5;
+  white-space:pre-wrap; word-break:break-word; margin-bottom:0.6rem;
+}
+
+/* ==============================
+   STYLE PANEL — TEMPLATE PICKER
+   ============================== */
+.template-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.5rem; margin-bottom:1rem; }
+.template-option {
+  border:2px solid var(--border); border-radius:10px; padding:0.6rem;
+  cursor:pointer; text-align:center; transition:all 0.2s;
+}
+.template-option:hover { border-color:var(--border-hover); }
+.template-option.active { border-color:var(--accent); background:var(--accent-bg); }
+.template-mini-preview {
+  width:100%; height:70px; background:var(--bg-surface); border-radius:4px;
+  margin-bottom:0.4rem; overflow:hidden; padding:6px;
+}
+.template-option-name { font-size:0.72rem; font-weight:700; }
+
+/* Mini preview CSS blocks */
+.tmp-line { height:3px; background:var(--text-tertiary); border-radius:1px; margin-bottom:3px; opacity:0.4; }
+.tmp-line.w90 { width:90%; } .tmp-line.w70 { width:70%; } .tmp-line.w50 { width:50%; }
+.tmp-line.w30 { width:30%; } .tmp-line.thick { height:5px; opacity:0.7; }
+.tmp-cols { display:flex; gap:4px; flex:1; }
+.tmp-col { flex:1; }
+.tmp-sidebar-preview { display:flex; height:100%; gap:3px; }
+.tmp-sidebar-left { width:35%; background:var(--accent-bg); border-radius:2px; }
+
+/* ==============================
+   PREVIEW STUDIO
+   ============================== */
+.editor-preview {
+  background:var(--bg-base); display:flex; flex-direction:column;
+  height:100%; overflow-y:auto; align-items:center; padding:1.5rem 1rem;
+  position:relative;
+}
+@media(max-width:900px) {
+  .editor-preview { display:none; padding:1rem 0.5rem; }
+  .editor-preview.mobile-visible { display:flex; position:fixed; inset:0; z-index:200; padding-top:3.5rem; }
+}
+.overflow-banner {
+  background:var(--warning-bg); border:1px solid rgba(251,191,36,0.3);
+  color:var(--warning); padding:0.6rem 1rem; border-radius:10px;
+  font-size:0.8rem; font-weight:600; margin-bottom:1rem;
+  display:none; align-items:center; gap:0.5rem; max-width:210mm; width:100%;
+}
+.overflow-banner.visible { display:flex; }
+
+/* Document wrapper (the A4 canvas) */
+.document-wrapper {
+  width:210mm; min-height:297mm; background:#ffffff; color:#1e293b;
+  box-shadow:var(--shadow-lg); border-radius:4px;
+  position:relative; transition:all 0.15s ease;
+}
+@media(max-width:850px) {
+  .document-wrapper { width:100%; min-height:auto; }
+}
+@media print {
+  body { background:#fff !important; }
+  .app-header,.editor-sidebar,.overflow-banner,.bottom-nav,.toast-container,.modal-overlay,
+  .clipboard-banner,.mobile-preview-close { display:none !important; }
+  .screen { display:block !important; min-height:auto !important; }
+  #dashboardScreen { display:none !important; }
+  #editorScreen { display:block !important; }
+  .editor-body { display:block !important; height:auto !important; }
+  .editor-preview { display:block !important; background:transparent !important; padding:0 !important; position:static !important; }
+  .document-wrapper { box-shadow:none !important; width:100% !important; min-height:auto !important; }
+  @page { size:A4 portrait; margin:0; }
+}
+
+/* ==============================
+   BOTTOM NAV (MOBILE)
+   ============================== */
+.bottom-nav {
+  display:none; position:fixed; bottom:0; left:0; right:0;
+  height:56px; padding-bottom:env(safe-area-inset-bottom);
+  background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-top:1px solid var(--border); z-index:150;
+  justify-content:space-around; align-items:center;
+}
+@media(max-width:900px) { .bottom-nav.visible { display:flex; } }
+.nav-item {
+  display:flex; flex-direction:column; align-items:center; gap:0.15rem;
+  background:none; border:none; color:var(--text-secondary); font-size:0.65rem;
+  font-weight:600; cursor:pointer; padding:0.3rem 0.75rem; border-radius:8px;
+  transition:all 0.2s;
+}
+.nav-item:active { transform:scale(0.92); }
+.nav-item.active { color:var(--accent); }
+.nav-item i { width:20px; height:20px; }
+
+/* Mobile preview close button */
+.mobile-preview-close {
+  display:none; position:fixed; top:0.6rem; right:0.6rem; z-index:210;
+}
+@media(max-width:900px) { .mobile-preview-close.visible { display:block; } }
+
+/* ==============================
+   TOAST NOTIFICATIONS
+   ============================== */
+.toast-container {
+  position:fixed; bottom:70px; right:1rem; z-index:500;
+  display:flex; flex-direction:column; gap:0.5rem; pointer-events:none;
+}
+@media(min-width:901px) { .toast-container { bottom:1.5rem; } }
+.toast {
+  pointer-events:auto; padding:0.7rem 1rem; border-radius:10px;
+  font-size:0.82rem; font-weight:600; display:flex; align-items:center; gap:0.4rem;
+  animation:toastIn 0.3s ease; min-width:220px; max-width:360px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+.toast-success { background:#065f46; color:#d1fae5; }
+.toast-error { background:#991b1b; color:#fecaca; }
+.toast-info { background:#1e3a5f; color:#bfdbfe; }
+.toast.removing { animation:toastOut 0.3s ease forwards; }
+@keyframes toastIn { from { opacity:0; transform:translateY(10px) scale(0.95); } to { opacity:1; transform:none; } }
+@keyframes toastOut { to { opacity:0; transform:translateY(-10px) scale(0.95); } }
+
+/* ==============================
+   MODALS
+   ============================== */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(4px); z-index:300;
+  display:flex; align-items:center; justify-content:center; padding:1rem;
+}
+.modal-overlay.hidden { display:none; }
+.modal {
+  background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px;
+  padding:1.5rem; max-width:480px; width:100%; max-height:90vh; overflow-y:auto;
+  animation:modalIn 0.25s ease;
+}
+@keyframes modalIn { from { opacity:0; transform:scale(0.95) translateY(10px); } to { opacity:1; transform:none; } }
+.modal h3 { font-family:'Outfit',sans-serif; font-size:1.15rem; margin-bottom:1rem; }
+.modal-actions { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1.25rem; }
+
+/* Clipboard banner */
+.clipboard-banner {
+  position:fixed; top:60px; left:50%; transform:translateX(-50%);
+  background:var(--accent); color:#fff; padding:0.7rem 1.2rem; border-radius:12px;
+  font-size:0.82rem; font-weight:600; display:flex; align-items:center; gap:0.6rem;
+  z-index:250; box-shadow:0 8px 30px var(--accent-glow);
+  animation:bannerIn 0.4s ease;
+}
+.clipboard-banner.hidden { display:none; }
+.clipboard-banner button {
+  padding:0.3rem 0.7rem; border-radius:6px; border:1px solid rgba(255,255,255,0.3);
+  background:rgba(255,255,255,0.15); color:#fff; font-weight:600; font-size:0.78rem;
+  cursor:pointer;
+}
+@keyframes bannerIn { from { opacity:0; transform:translateX(-50%) translateY(-10px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+
+/* Section type radio buttons */
+.type-options { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:0.75rem; }
+.type-option {
+  padding:0.4rem 0.7rem; border:1px solid var(--border); border-radius:8px;
+  font-size:0.78rem; font-weight:600; cursor:pointer; transition:all 0.2s;
+  color:var(--text-secondary);
+}
+.type-option:hover { border-color:var(--accent); color:var(--accent); }
+.type-option.active { background:var(--accent-bg); border-color:var(--accent); color:var(--accent); }
+
+/* Utility */
+.hidden { display:none !important; }
+.flex-gap { display:flex; gap:0.4rem; flex-wrap:wrap; }
+.mt-1 { margin-top:0.5rem; } .mt-2 { margin-top:1rem; }
+.mb-1 { margin-bottom:0.5rem; } .mb-2 { margin-bottom:1rem; }
+
+/* ==============================
+   RESUME DOCUMENT STYLES (inside .document-wrapper)
+   ============================== */
+.doc-modern .res-header { border-bottom:2px solid var(--doc-accent,#1e3a8a); padding-bottom:0.6rem; margin-bottom:0.8rem; }
+.doc-modern .res-name { font-weight:700; color:var(--doc-accent,#1e3a8a); text-transform:uppercase; line-height:1.1; }
+.doc-modern .res-title { color:#475569; font-weight:500; margin-top:0.2rem; }
+.doc-modern .res-contact { display:flex; flex-wrap:wrap; gap:0.6rem; color:#64748b; margin-top:0.35rem; }
+.doc-modern .res-section { margin-bottom:0.8rem; }
+.doc-modern .res-section-title { font-weight:700; color:var(--doc-accent,#1e3a8a); text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #e2e8f0; padding-bottom:0.2rem; margin-bottom:0.4rem; }
+.doc-modern .res-item { margin-bottom:0.5rem; }
+.doc-modern .res-item-header { display:flex; justify-content:space-between; font-weight:600; }
+.doc-modern .res-item-role { color:#0f172a; }
+.doc-modern .res-item-sub { color:var(--doc-accent,#1e3a8a); }
+.doc-modern .res-item-date { color:#64748b; font-weight:400; }
+.doc-modern .res-bullets { padding-left:1.15rem; margin-top:0.2rem; color:#334155; }
+.doc-modern .res-bullets li { margin-bottom:0.15rem; }
+.doc-modern .res-text { color:#334155; }
+.doc-modern .res-tags { display:flex; flex-wrap:wrap; gap:0.3rem; }
+.doc-modern .res-tag { background:#f1f5f9; color:#334155; padding:0.12rem 0.45rem; border-radius:3px; border:1px solid #e2e8f0; }
+.doc-modern .res-bullet-list { padding-left:1.15rem; color:#334155; }
+
+/* Classic template */
+.doc-classic .res-header { text-align:center; border-bottom:2px solid var(--doc-accent,#1e3a8a); padding-bottom:0.6rem; margin-bottom:0.8rem; }
+.doc-classic .res-name { font-weight:700; color:var(--doc-accent,#1e3a8a); text-transform:uppercase; letter-spacing:0.08em; line-height:1.1; }
+.doc-classic .res-title { color:#475569; font-weight:400; font-style:italic; margin-top:0.2rem; }
+.doc-classic .res-contact { display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem; color:#64748b; margin-top:0.35rem; }
+.doc-classic .res-contact span:not(:last-child)::after { content:" | "; color:#cbd5e1; }
+.doc-classic .res-section { margin-bottom:0.8rem; }
+.doc-classic .res-section-title { font-weight:700; color:var(--doc-accent,#1e3a8a); text-transform:uppercase; letter-spacing:0.06em; text-align:center; border-top:1px solid #cbd5e1; border-bottom:1px solid #cbd5e1; padding:0.2rem 0; margin-bottom:0.4rem; }
+.doc-classic .res-item { margin-bottom:0.5rem; }
+.doc-classic .res-item-header { display:flex; justify-content:space-between; font-weight:600; }
+.doc-classic .res-item-role { color:#0f172a; }
+.doc-classic .res-item-sub { color:var(--doc-accent,#1e3a8a); font-style:italic; }
+.doc-classic .res-item-date { color:#64748b; font-weight:400; }
+.doc-classic .res-bullets { padding-left:1.15rem; margin-top:0.2rem; color:#334155; }
+.doc-classic .res-bullets li { margin-bottom:0.15rem; }
+.doc-classic .res-text { color:#334155; }
+.doc-classic .res-tags { color:#334155; }
+.doc-classic .res-tag { display:inline; }
+.doc-classic .res-tag:not(:last-child)::after { content:", "; }
+.doc-classic .res-bullet-list { padding-left:1.15rem; color:#334155; }
+
+/* Sidebar template */
+.doc-sidebar { display:flex; min-height:100%; }
+.doc-sidebar .sidebar-col { width:35%; background:var(--doc-accent,#1e3a8a); color:#e2e8f0; padding:inherit; display:flex; flex-direction:column; gap:0.6rem; }
+.doc-sidebar .sidebar-col .res-name { color:#ffffff; font-weight:700; text-transform:uppercase; line-height:1.15; }
+.doc-sidebar .sidebar-col .res-title { color:rgba(255,255,255,0.75); font-weight:400; margin-top:0.15rem; }
+.doc-sidebar .sidebar-col .side-section-title { font-weight:700; color:rgba(255,255,255,0.6); text-transform:uppercase; font-size:0.85em; letter-spacing:0.06em; border-bottom:1px solid rgba(255,255,255,0.15); padding-bottom:0.15rem; margin-bottom:0.3rem; margin-top:0.5rem; }
+.doc-sidebar .sidebar-col .side-contact-item { color:rgba(255,255,255,0.85); margin-bottom:0.2rem; }
+.doc-sidebar .sidebar-col .side-tag { color:rgba(255,255,255,0.85); display:block; margin-bottom:0.1rem; padding-left:0.5rem; position:relative; }
+.doc-sidebar .sidebar-col .side-tag::before { content:"•"; position:absolute; left:0; }
+.doc-sidebar .main-col { width:65%; padding:inherit; padding-left:1rem; }
+.doc-sidebar .main-col .res-section { margin-bottom:0.7rem; }
+.doc-sidebar .main-col .res-section-title { font-weight:700; color:var(--doc-accent,#1e3a8a); text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid #e2e8f0; padding-bottom:0.15rem; margin-bottom:0.35rem; }
+.doc-sidebar .main-col .res-item { margin-bottom:0.45rem; }
+.doc-sidebar .main-col .res-item-header { display:flex; justify-content:space-between; font-weight:600; }
+.doc-sidebar .main-col .res-item-role { color:#0f172a; }
+.doc-sidebar .main-col .res-item-sub { color:var(--doc-accent,#1e3a8a); }
+.doc-sidebar .main-col .res-item-date { color:#64748b; font-weight:400; }
+.doc-sidebar .main-col .res-bullets { padding-left:1.1rem; margin-top:0.15rem; color:#334155; }
+.doc-sidebar .main-col .res-bullets li { margin-bottom:0.12rem; }
+.doc-sidebar .main-col .res-text { color:#334155; }
+.doc-sidebar .main-col .res-bullet-list { padding-left:1.1rem; color:#334155; }
+
+/* ==============================
+   ANIMATIONS
+   ============================== */
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.fade-up { animation:fadeUp 0.35s ease; }
   </style>
 </head>
 <body>
 
-  <!-- Onboarding Screen -->
-  <div class="onboarding-screen" id="onboardingScreen">
-    <div class="hero-content">
-      
-      <div class="hero-badge">
-        <i data-lucide="sparkles"></i> 100% Free • Offline PWA • Zero Data Tracking
-      </div>
+<!-- ============================
+     TOAST CONTAINER
+     ============================ -->
+<div class="toast-container" id="toastContainer"></div>
 
-      <h1 class="hero-title">Build a Perfect 1-Page Resume in Seconds</h1>
-      <p class="hero-subtitle">
-        Combine free ChatGPT/Claude text writing with pixel-perfect 1-page layout fitting. Choose your starting path below:
-      </p>
+<!-- ============================
+     CLIPBOARD BANNER
+     ============================ -->
+<div class="clipboard-banner hidden" id="clipboardBanner">
+  <span>📋 Resume data detected in clipboard!</span>
+  <button onclick="applyClipboardData()">Apply</button>
+  <button onclick="dismissClipboard()">✕</button>
+</div>
 
-      <div class="path-cards-grid">
-        
-        <!-- Path A: Edit Existing Resume -->
-        <div class="path-card" onclick="triggerImportResume()">
-          <div>
-            <div class="path-icon"><i data-lucide="file-up"></i></div>
-            <h3>Import / Edit Resume</h3>
-            <p>Upload your old PDF, Docx, or TXT file to convert & reformat.</p>
-          </div>
-          <button class="btn btn-secondary" style="width:100%;">
-            <i data-lucide="upload"></i> Upload File
-          </button>
-          <input type="file" id="fileImportInput" accept=".pdf,.docx,.txt" style="display:none;" onchange="handleResumeFileImport(event)">
-        </div>
-
-        <!-- Path B: AI Copy-Paste Center -->
-        <div class="path-card" onclick="openAiHubFromHero()">
-          <div>
-            <div class="path-icon"><i data-lucide="bot"></i></div>
-            <h3>🤖 AI Copy-Paste Hub</h3>
-            <p>Use ChatGPT/Claude prompts to write bullet points & tailor JDs.</p>
-          </div>
-          <button class="btn btn-magic" style="width:100%;">
-            <i data-lucide="sparkles"></i> Launch AI Hub
-          </button>
-        </div>
-
-        <!-- Path C: Pick Visual Template -->
-        <div class="path-card" onclick="openTemplatesFromHero()">
-          <div>
-            <div class="path-icon"><i data-lucide="layout"></i></div>
-            <h3>Pick Template First</h3>
-            <p>Choose from Modern Minimalist, Classic Serif, or Custom HTML.</p>
-          </div>
-          <button class="btn btn-secondary" style="width:100%;">
-            <i data-lucide="palette"></i> Select Template
-          </button>
-        </div>
-
-      </div>
-
-      <div style="display:flex; justify-content:center; gap:1rem;">
-        <button class="btn btn-secondary btn-sm" onclick="openVideoTutorial()">
-          <i data-lucide="play-circle"></i> 🎥 View Quick Start Guide
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Video Tutorial Modal -->
-  <div class="onboarding-screen hidden" id="videoTutorialModal">
-    <div class="tutorial-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-        <h3 style="font-family:'Outfit', sans-serif; font-size:1.2rem;">🎥 15-Second Animated Video Guide</h3>
-        <button class="btn btn-secondary btn-sm" onclick="closeVideoTutorial()">&times;</button>
-      </div>
-
-      <div class="video-demo-frame" style="background: rgba(17, 24, 39, 0.8); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; display:flex; flex-direction:column; align-items:center; padding: 2rem;">
-        <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
-        <h4 style="color:#fff; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">Interactive Tutorial</h4>
-        <p style="font-size: 0.85rem; color: #9ca3af; max-width: 80%;">
-          1. Copy your job description and paste it in the AI Hub tab.<br><br>
-          2. Generate a prompt to paste into ChatGPT.<br><br>
-          3. Paste ChatGPT's response back here to automatically populate your resume.<br><br>
-          4. Tweak the sliders under "Fit & Styles" to make it exactly 1 page.
-        </p>
-      </div>
-
-      <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="closeVideoTutorial()">
-        Got It! Start Building <i data-lucide="arrow-right"></i>
-      </button>
-    </div>
-  </div>
-
-  <!-- App Header -->
-  <header>
-    <div class="brand" onclick="showOnboarding()">
+<!-- ============================
+     DASHBOARD SCREEN
+     ============================ -->
+<div class="screen active" id="dashboardScreen">
+  <header class="app-header">
+    <div class="brand">
       <div class="brand-logo">OR</div>
       <div class="brand-text">
-        <h1>OpenResume</h1>
-        <p>Offline PWA AI Builder</p>
+        <h1>OpenResume Studio</h1>
+        <p>Offline AI Resume Builder</p>
       </div>
     </div>
-
     <div class="header-actions">
-      <button class="btn btn-magic btn-sm" onclick="switchTab('llmTab', document.querySelectorAll('.tab-btn')[1]); startFreshResume();">
-        <i data-lucide="bot"></i> 🤖 AI Hub
-      </button>
-      <button class="btn btn-secondary btn-sm" onclick="switchTab('styleTab', document.querySelectorAll('.tab-btn')[2]); startFreshResume();">
-        <i data-lucide="layout"></i> 🎨 Templates
-      </button>
-      <button class="btn btn-secondary btn-sm" onclick="showOnboarding()">
-        <i data-lucide="home"></i> Home
-      </button>
-      <button class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Theme">
+      <button class="btn-icon" onclick="toggleTheme()" title="Toggle Theme" id="themeToggleBtn">
         <i data-lucide="moon" id="themeIcon"></i>
-      </button>
-      <button class="btn btn-primary btn-sm" onclick="window.print()">
-        <i data-lucide="printer"></i> PDF
       </button>
     </div>
   </header>
 
-  <!-- Mobile View Switcher -->
-  <div class="view-switcher-mobile">
-    <button class="view-switch-btn active" id="btnSwitchControls" onclick="switchMobileView('controls')">
-      <i data-lucide="edit-3"></i> Studio Controls
-    </button>
-    <button class="view-switch-btn" id="btnSwitchPreview" onclick="switchMobileView('preview')">
-      <i data-lucide="eye"></i> Live Preview
-    </button>
-  </div>
+  <main class="dashboard" id="dashboardContent">
+    <!-- Rendered by JS -->
+  </main>
+</div>
 
-  <!-- App Main Body -->
-  <div class="app-body">
-    
-    <!-- Left Sidebar -->
-    <aside class="sidebar" id="sidebarContainer">
-      <nav class="tabs-nav">
-        <button class="tab-btn active" onclick="switchTab('contentTab', this)">
-          <i data-lucide="file-text"></i> Content
+<!-- ============================
+     EDITOR SCREEN
+     ============================ -->
+<div class="screen" id="editorScreen">
+  <header class="editor-header">
+    <button class="btn btn-ghost btn-sm back-btn" onclick="navigateTo('/')">
+      <i data-lucide="arrow-left"></i> Back
+    </button>
+    <input type="text" class="resume-name-input" id="resumeNameInput" placeholder="Resume name..." onchange="onResumeNameChange()">
+    <div class="header-actions">
+      <button class="btn btn-primary btn-sm" onclick="window.print()" title="Print / Save PDF">
+        <i data-lucide="printer"></i> <span class="hide-mobile">PDF</span>
+      </button>
+      <button class="btn-icon" onclick="duplicateCurrentResume()" title="Duplicate">
+        <i data-lucide="copy"></i>
+      </button>
+      <button class="btn-icon" style="color:var(--danger)" onclick="deleteCurrentResume()" title="Delete">
+        <i data-lucide="trash-2"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="editor-body">
+    <!-- Sidebar -->
+    <aside class="editor-sidebar" id="editorSidebar">
+      <nav class="sidebar-tabs">
+        <button class="sidebar-tab active" onclick="switchEditorTab('edit',this)">
+          <i data-lucide="edit-3"></i> Content
         </button>
-        <button class="tab-btn" onclick="switchTab('llmTab', this)">
-          <i data-lucide="bot"></i> 🤖 AI Hub
+        <button class="sidebar-tab" onclick="switchEditorTab('ai',this)">
+          <i data-lucide="sparkles"></i> AI Hub
         </button>
-        <button class="tab-btn" onclick="switchTab('styleTab', this)">
-          <i data-lucide="sliders"></i> Fit & Styles
+        <button class="sidebar-tab" onclick="switchEditorTab('style',this)">
+          <i data-lucide="palette"></i> Style
         </button>
       </nav>
 
-      <div class="tab-content-container">
-        
-        <!-- Tab 1: Content Editor -->
-        <div class="tab-pane active" id="contentTab">
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="user"></i> Personal Contact Info</span>
-            </div>
-            <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" class="form-control" id="inputName" value="Alex Rivera" oninput="updateResumeData()">
-            </div>
-            <div class="form-group">
-              <label>Target Job Title</label>
-              <input type="text" class="form-control" id="inputTitle" value="Junior Software Developer / High School Graduate" oninput="updateResumeData()">
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Email</label>
-                <input type="email" class="form-control" id="inputEmail" value="alex.rivera@email.com" oninput="updateResumeData()">
-              </div>
-              <div class="form-group">
-                <label>Phone</label>
-                <input type="text" class="form-control" id="inputPhone" value="(555) 234-5678" oninput="updateResumeData()">
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Location</label>
-                <input type="text" class="form-control" id="inputLocation" value="Austin, TX" oninput="updateResumeData()">
-              </div>
-              <div class="form-group">
-                <label>Portfolio / LinkedIn</label>
-                <input type="text" class="form-control" id="inputWebsite" value="github.com/alexrivera" oninput="updateResumeData()">
-              </div>
-            </div>
-          </div>
-
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="align-left"></i> Summary</span>
-            </div>
-            <div class="form-group">
-              <textarea class="form-control" id="inputSummary" oninput="updateResumeData()">Motivated high school graduate with a passion for web development and software engineering. Demonstrated ability in building responsive web applications, leading robotics club projects, and volunteering in community tech workshops.</textarea>
-            </div>
-          </div>
-
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="briefcase"></i> Work & Experience</span>
-              <button class="btn btn-secondary btn-sm" onclick="addExperience()"><i data-lucide="plus"></i> Add Item</button>
-            </div>
-            <div id="experienceContainer"></div>
-          </div>
-
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="graduation-cap"></i> Education</span>
-            </div>
-            <div class="form-group">
-              <label>School / Institution</label>
-              <input type="text" class="form-control" id="inputEduSchool" value="Austin Westlake High School" oninput="updateResumeData()">
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Degree / Certificate</label>
-                <input type="text" class="form-control" id="inputEduDegree" value="High School Diploma (GPA 3.8)" oninput="updateResumeData()">
-              </div>
-              <div class="form-group">
-                <label>Graduation Date</label>
-                <input type="text" class="form-control" id="inputEduDate" value="May 2026" oninput="updateResumeData()">
-              </div>
-            </div>
-          </div>
-
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="code"></i> Skills</span>
-            </div>
-            <div class="form-group">
-              <label>Comma-Separated Skills</label>
-              <input type="text" class="form-control" id="inputSkills" value="JavaScript, HTML/CSS, Python, React, Git, Team Leadership, Problem Solving" oninput="updateResumeData()">
-            </div>
-          </div>
+      <div class="sidebar-content">
+        <!-- EDIT PANEL -->
+        <div class="tab-panel active" id="editPanel">
+          <div id="editPanelContent"><!-- Rendered by JS --></div>
         </div>
 
-        <!-- Tab 2: 🤖 AI Copy-Paste Workflow Hub -->
-        <div class="tab-pane" id="llmTab">
-          <div class="card-box">
-            <div class="card-box-header">
-              <span class="card-box-title"><i data-lucide="bot" style="color:var(--primary);"></i> 🤖 AI Copy-Paste Workflow Center</span>
-            </div>
-            
-            <!-- Step 1 -->
-            <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:10px; padding:0.9rem; margin-bottom:0.85rem;">
-              <div style="font-size:0.82rem; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
-                <span class="step-badge">1</span>
-                <span>Select Task Goal & Target JD</span>
-              </div>
-              <div class="ai-preset-chips">
-                <button class="chip-btn" onclick="setPresetTask('jd')">🎯 Target JD</button>
-                <button class="chip-btn" onclick="setPresetTask('star')">⚡ STAR Metrics</button>
-                <button class="chip-btn" onclick="setPresetTask('concise')">🧹 Trim Grammar</button>
-                <button class="chip-btn" onclick="setPresetTask('teen')">🎓 High School</button>
-              </div>
-              <div class="form-group" style="margin-bottom:0.5rem;">
-                <textarea class="form-control" id="inputJd" style="min-height:55px;" placeholder="Paste target job posting here..."></textarea>
-              </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:10px; padding:0.9rem; margin-bottom:0.85rem;">
-              <div style="font-size:0.82rem; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
-                <span class="step-badge">2</span>
-                <span>Copy Prompt & Launch AI App</span>
-              </div>
-              <div class="ai-launcher-row">
-                <button class="launcher-pill" onclick="copyAndLaunchAi('https://chatgpt.com/')">
-                  <i data-lucide="message-square"></i> ChatGPT
-                </button>
-                <button class="launcher-pill" onclick="copyAndLaunchAi('https://claude.ai/new')">
-                  <i data-lucide="sparkles"></i> Claude
-                </button>
-                <button class="launcher-pill" onclick="copyAndLaunchAi('https://gemini.google.com/')">
-                  <i data-lucide="bot"></i> Gemini
-                </button>
-              </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div style="background:var(--bg-panel); border:1px solid var(--border-color); border-radius:10px; padding:0.9rem;">
-              <div style="font-size:0.82rem; font-weight:700; display:flex; align-items:center; gap:0.5rem; margin-bottom:0.6rem;">
-                <span class="step-badge">3</span>
-                <span>Ingest AI Response</span>
-              </div>
-              <div class="form-group" style="margin-bottom:0.6rem;">
-                <textarea class="form-control" id="inputLlmResponse" style="min-height:85px;" placeholder="Paste AI response here..."></textarea>
-              </div>
-              <div class="form-row">
-                <button class="btn btn-secondary" onclick="readClipboardAndIngest()">
-                  <i data-lucide="clipboard"></i> Paste Clipboard
-                </button>
-                <button class="btn btn-success" onclick="ingestLlmResponse()">
-                  <i data-lucide="zap"></i> Apply Content
-                </button>
-              </div>
-            </div>
-
-          </div>
+        <!-- AI HUB PANEL -->
+        <div class="tab-panel" id="aiPanel">
+          <div id="aiPanelContent"><!-- Rendered by JS --></div>
         </div>
 
-        <!-- Tab 3: Fit & Styles -->
-        <div class="tab-pane" id="styleTab">
-          <div class="slider-group">
-            <div class="slider-header">
-              <span>📏 Base Font Size</span>
-              <span class="slider-value" id="valFontSize">12px</span>
-            </div>
-            <input type="range" id="sliderFontSize" min="10" max="16" step="0.5" value="12" oninput="updateStyles()">
-          </div>
-
-          <div class="slider-group">
-            <div class="slider-header">
-              <span>↕️ Line Spacing</span>
-              <span class="slider-value" id="valLineHeight">1.35</span>
-            </div>
-            <input type="range" id="sliderLineHeight" min="1.0" max="2.0" step="0.05" value="1.35" oninput="updateStyles()">
-          </div>
-
-          <div class="slider-group">
-            <div class="slider-header">
-              <span>↔️ Section Spacing</span>
-              <span class="slider-value" id="valSectionSpacing">1.0rem</span>
-            </div>
-            <input type="range" id="sliderSectionSpacing" min="0.4" max="2.0" step="0.1" value="1.0" oninput="updateStyles()">
-          </div>
-
-          <div class="slider-group">
-            <div class="slider-header">
-              <span>📄 Page Margins</span>
-              <span class="slider-value" id="valMargin">0.5 in</span>
-            </div>
-            <input type="range" id="sliderMargin" min="0.25" max="1.25" step="0.05" value="0.5" oninput="updateStyles()">
-          </div>
-
-          <div class="slider-group">
-            <div class="slider-header">
-              <span>🎨 Accent Color</span>
-            </div>
-            <div class="color-swatches">
-              <div class="swatch selected" style="background:#1e3a8a;" onclick="selectColor('#1e3a8a', this)"></div>
-              <div class="swatch" style="background:#059669;" onclick="selectColor('#059669', this)"></div>
-              <div class="swatch" style="background:#4f46e5;" onclick="selectColor('#4f46e5', this)"></div>
-              <div class="swatch" style="background:#0f172a;" onclick="selectColor('#0f172a', this)"></div>
-              <div class="swatch" style="background:#991b1b;" onclick="selectColor('#991b1b', this)"></div>
-            </div>
-          </div>
-
-          <div class="slider-group">
-            <div class="slider-header">
-              <span>🅰️ Font Family</span>
-            </div>
-            <select class="form-control" id="selectFontFamily" onchange="updateStyles()">
-              <option value="'Inter', sans-serif">Modern Sans (Inter)</option>
-              <option value="'Outfit', sans-serif">Clean Display (Outfit)</option>
-              <option value="'Merriweather', serif">Classic Serif (Merriweather)</option>
-              <option value="'JetBrains Mono', monospace">Technical Mono (JetBrains)</option>
-            </select>
-          </div>
+        <!-- STYLE PANEL -->
+        <div class="tab-panel" id="stylePanel">
+          <div id="stylePanelContent"><!-- Rendered by JS --></div>
         </div>
-
       </div>
     </aside>
 
-    <!-- Right Live Preview Studio Canvas -->
-    <main class="preview-studio" id="previewStudioContainer">
-      <div class="overflow-banner" id="overflowAlert">
+    <!-- Preview -->
+    <main class="editor-preview" id="editorPreview">
+      <div class="overflow-banner" id="overflowBanner">
         <i data-lucide="alert-triangle"></i>
-        <span><b>1-Page Overflow Warning:</b> Content slightly exceeds 1 page! Reduce <b>Font Size</b> or <b>Line Spacing</b> sliders to fit perfectly.</span>
+        <span><b>Overflow:</b> Content exceeds 1 page. Reduce font sizes or spacing.</span>
       </div>
-
-      <div class="document-wrapper" id="resumeDoc">
-        <header class="res-header">
-          <div class="res-name" id="docName">Alex Rivera</div>
-          <div class="res-title" id="docTitle">Junior Software Developer</div>
-          <div class="res-contact-bar" id="docContact">
-            <span>alex.rivera@email.com</span> •
-            <span>(555) 234-5678</span> •
-            <span>Austin, TX</span> •
-            <span>github.com/alexrivera</span>
-          </div>
-        </header>
-
-        <section class="res-section">
-          <div class="res-section-title">Summary</div>
-          <div class="res-summary-text" id="docSummary">
-            Motivated high school graduate with a passion for web development and software engineering. Demonstrated ability in building responsive web applications, leading robotics club projects, and volunteering in community tech workshops.
-          </div>
-        </section>
-
-        <section class="res-section">
-          <div class="res-section-title">Experience & Projects</div>
-          <div id="docExperience"></div>
-        </section>
-
-        <section class="res-section">
-          <div class="res-section-title">Education</div>
-          <div class="res-item">
-            <div class="res-item-header">
-              <span class="res-item-role" id="docEduDegree">High School Diploma (GPA 3.8)</span>
-              <span class="res-item-date" id="docEduDate">May 2026</span>
-            </div>
-            <div class="res-item-company" id="docEduSchool">Austin Westlake High School</div>
-          </div>
-        </section>
-
-        <section class="res-section">
-          <div class="res-section-title">Skills & Technologies</div>
-          <div class="res-skills-list" id="docSkills"></div>
-        </section>
+      <div class="document-wrapper" id="documentWrapper">
+        <!-- Resume rendered here -->
       </div>
     </main>
-
   </div>
+</div>
 
-  <script>
-    let experiences = [
-      {
-        role: "Web Development Lead",
-        company: "Westlake High Robotics Club",
-        date: "2024 - Present",
-        bullets: [
-          "Developed responsive team website using HTML/CSS and JavaScript to display tournament schedules.",
-          "Coordinated 5 team members to document software code repositories on GitHub."
-        ]
-      },
-      {
-        role: "Community Tech Volunteer",
-        company: "Austin Public Library Youth Tech",
-        date: "2023 - 2024",
-        bullets: [
-          "Assisted senior citizens and youth with basic computer troubleshooting and digital literacy.",
-          "Organized weekly workshops teaching introductory Python programming logic."
-        ]
-      }
-    ];
+<!-- Mobile preview close -->
+<button class="btn btn-secondary btn-sm mobile-preview-close" id="mobilePreviewClose" onclick="closeMobilePreview()">
+  <i data-lucide="x"></i> Close Preview
+</button>
 
-    let currentPresetTask = "jd";
-    let demoInterval = null;
+<!-- ============================
+     BOTTOM NAV (MOBILE)
+     ============================ -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-item active" data-nav="home" onclick="navigateTo('/')">
+    <i data-lucide="home"></i> Home
+  </button>
+  <button class="nav-item" data-nav="edit" onclick="showEditorTab('edit')">
+    <i data-lucide="edit-3"></i> Edit
+  </button>
+  <button class="nav-item" data-nav="ai" onclick="showEditorTab('ai')">
+    <i data-lucide="sparkles"></i> AI
+  </button>
+  <button class="nav-item" data-nav="preview" onclick="showMobilePreview()">
+    <i data-lucide="eye"></i> Preview
+  </button>
+</nav>
 
-    function openAiHubFromHero() {
-      document.getElementById('onboardingScreen').classList.add('hidden');
-      switchTab('llmTab', document.querySelectorAll('.tab-btn')[1]);
-    }
+<!-- ============================
+     MODALS
+     ============================ -->
+<div class="modal-overlay hidden" id="createResumeModal">
+  <div class="modal">
+    <h3>Create New Resume</h3>
+    <div class="form-group">
+      <label>Resume Name</label>
+      <input type="text" class="form-control" id="newResumeName" placeholder="e.g. Software Engineer Resume" value="My Resume">
+    </div>
+    <div class="form-group">
+      <label>Choose Template</label>
+      <div class="template-grid" id="templatePicker">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('createResumeModal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="createNewResume()">
+        <i data-lucide="plus"></i> Create
+      </button>
+    </div>
+  </div>
+</div>
 
-    function openTemplatesFromHero() {
-      document.getElementById('onboardingScreen').classList.add('hidden');
-      switchTab('styleTab', document.querySelectorAll('.tab-btn')[2]);
-    }
+<div class="modal-overlay hidden" id="addSectionModal">
+  <div class="modal">
+    <h3>Add Section</h3>
+    <div class="form-group">
+      <label>Section Title</label>
+      <input type="text" class="form-control" id="newSectionTitle" placeholder="e.g. Projects, Certifications...">
+    </div>
+    <div class="form-group">
+      <label>Section Type</label>
+      <div class="type-options" id="sectionTypeOptions">
+        <div class="type-option active" data-type="items" onclick="selectSectionType(this)">📋 Items</div>
+        <div class="type-option" data-type="text" onclick="selectSectionType(this)">📝 Text</div>
+        <div class="type-option" data-type="tags" onclick="selectSectionType(this)">🏷️ Tags</div>
+        <div class="type-option" data-type="bullets" onclick="selectSectionType(this)">• Bullets</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('addSectionModal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" onclick="confirmAddSection()">Add Section</button>
+    </div>
+  </div>
+</div>
 
-    function showOnboarding() {
-      document.getElementById('onboardingScreen').classList.remove('hidden');
-    }
+<div class="modal-overlay hidden" id="confirmModal">
+  <div class="modal">
+    <h3 id="confirmTitle">Confirm</h3>
+    <p id="confirmMessage" style="color:var(--text-secondary);font-size:0.9rem;"></p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn btn-danger btn-sm" id="confirmActionBtn" onclick="">Confirm</button>
+    </div>
+  </div>
+</div>
 
-    function triggerImportResume() {
-      document.getElementById('fileImportInput').click();
-    }
+<!-- Hidden file inputs -->
+<input type="file" id="importDbInput" accept=".json" style="display:none" onchange="handleImportDb(event)">
+<input type="file" id="importTemplateInput" accept=".html,.htm" style="display:none" onchange="handleImportTemplate(event)">
 
-    function handleResumeFileImport(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      if(file.name.endsWith('.pdf') || file.name.endsWith('.docx')) {
-          alert('PDF/DOCX extraction is currently disabled to prevent data corruption. Please copy and paste your resume text instead!');
-          return;
-      }
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const text = evt.target.result;
-        if (text) {
-          document.getElementById('inputSummary').value = "Imported from " + file.name + "\n\n" + text.slice(0, 500) + "...";
-          updateResumeData();
-          document.getElementById('onboardingScreen').classList.add('hidden');
-          alert('📥 Resume imported from ' + file.name + '!');
+<script>
+/* =============================================================================
+   STATE
+   ============================================================================= */
+const APP = {
+  db: null,
+  resumes: [],
+  currentResume: null,
+  currentTab: 'edit',
+  selectedPromptType: 'create-content',
+  pendingClipboard: null,
+  autoSaveTimer: null,
+  selectedNewTemplate: 'modern-minimal',
+  newSectionType: 'items',
+};
+
+/* =============================================================================
+   INDEXEDDB WRAPPER
+   ============================================================================= */
+class ResumeDB {
+  constructor() { this.db = null; this.DB_NAME = 'OpenResumeStudio'; this.VERSION = 1; }
+
+  init() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(this.DB_NAME, this.VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('resumes')) {
+          const store = db.createObjectStore('resumes', { keyPath: 'id' });
+          store.createIndex('updatedAt', 'updatedAt', { unique: false });
+        }
+        if (!db.objectStoreNames.contains('templates')) {
+          db.createObjectStore('templates', { keyPath: 'id' });
+        }
+        if (!db.objectStoreNames.contains('settings')) {
+          db.createObjectStore('settings', { keyPath: 'key' });
         }
       };
-      reader.readAsText(file);
-    }
-
-    function startFreshResume() {
-      document.getElementById('onboardingScreen').classList.add('hidden');
-    }
-
-    function openVideoTutorial() {
-      document.getElementById('videoTutorialModal').classList.remove('hidden');
-    }
-
-    function closeVideoTutorial() {
-      document.getElementById('videoTutorialModal').classList.add('hidden');
-      if (demoInterval) clearInterval(demoInterval);
-      document.getElementById('onboardingScreen').classList.add('hidden');
-    }
-
-    function switchMobileView(viewMode) {
-      const sidebar = document.getElementById('sidebarContainer');
-      const preview = document.getElementById('previewStudioContainer');
-      const btnControls = document.getElementById('btnSwitchControls');
-      const btnPreview = document.getElementById('btnSwitchPreview');
-
-      if (viewMode === 'controls') {
-        sidebar.style.display = 'flex';
-        preview.style.display = 'none';
-        btnControls.classList.add('active');
-        btnPreview.classList.remove('active');
-      } else {
-        sidebar.style.display = 'none';
-        preview.style.display = 'flex';
-        btnPreview.classList.add('active');
-        btnControls.classList.remove('active');
-      }
-    }
-
-    function setPresetTask(task) {
-      currentPresetTask = task;
-    }
-
-    function copyAndLaunchAi(aiUrl) {
-      const jd = document.getElementById('inputJd').value;
-      let instruction = "Re-write bullets to target the JD using strong action verbs & STAR metrics.";
-      if (currentPresetTask === 'star') instruction = "Add measurable metrics, percentages, and STAR results to every bullet point.";
-      if (currentPresetTask === 'concise') instruction = "Trim words, fix grammar, and make sentences extremely punchy and concise.";
-      if (currentPresetTask === 'teen') instruction = "Format high school projects, volunteering, and coursework into entry-level achievements.";
-
-      const compactPrompt = `[AI RESUME TASK]
-${instruction}
-
-STRICT RULE: Return output wrapped ONLY between <RESUME_JSON> and </RESUME_JSON> tags using this COMPACT schema:
-{"n":"Name","t":"Title","s":"Summary","k":["Skill1","Skill2"],"x":[{"r":"Role","c":"Company","d":"Date","b":["Bullet1"]}]}
-
-USER DATA:
-${JSON.stringify({
-  n: document.getElementById('inputName').value,
-  t: document.getElementById('inputTitle').value,
-  s: document.getElementById('inputSummary').value,
-  k: document.getElementById('inputSkills').value.split(',').map(s=>s.trim()),
-  x: experiences.map(e=>({r:e.role, c:e.company, d:e.date, b:e.bullets}))
-})}
-
-TARGET JD:
-${jd || 'General Candidate'}`;
-
-      navigator.clipboard.writeText(compactPrompt).then(() => {
-        window.open(aiUrl, '_blank');
-      });
-    }
-
-    async function readClipboardAndIngest() {
-      try {
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          document.getElementById('inputLlmResponse').value = text;
-          ingestLlmResponse();
-        }
-      } catch (err) {
-        alert('Please manually paste the ChatGPT response text into the box.');
-      }
-    }
-
-    function ingestLlmResponse() {
-      const text = document.getElementById('inputLlmResponse').value;
-      const jsonMatch = text.match(/<RESUME_JSON>([\s\S]*?)<\/RESUME_JSON>/) || text.match(/\{[\s\S]*\}/);
-
-      if (jsonMatch) {
-        try {
-          const parsed = JSON.parse(jsonMatch[0].replace(/<RESUME_JSON>|<\/RESUME_JSON>/g, ''));
-          
-          const fullName = parsed.n || parsed.fullName;
-          const title = parsed.t || parsed.title;
-          const summary = parsed.s || parsed.summary;
-          const skills = parsed.k || parsed.skills;
-          const exps = parsed.x || parsed.experiences;
-
-          if (fullName) document.getElementById('inputName').value = fullName;
-          if (title) document.getElementById('inputTitle').value = title;
-          if (summary) document.getElementById('inputSummary').value = summary;
-          if (skills) document.getElementById('inputSkills').value = Array.isArray(skills) ? skills.join(', ') : skills;
-          
-          if (exps && Array.isArray(exps)) {
-            experiences = exps.map(e => ({
-              role: e.r || e.role || "Role",
-              company: e.c || e.company || "Organization",
-              date: e.d || e.date || "Date",
-              bullets: e.b || e.bullets || []
-            }));
-          }
-
-          updateResumeData();
-          alert('✨ Resume Applied Successfully!');
-        } catch (e) {
-          alert('Could not parse JSON payload.');
-        }
-      } else {
-        alert('No JSON found in response.');
-      }
-    }
-
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('openresume_theme', newTheme);
-      
-      const icon = document.getElementById('themeIcon');
-      if (icon) {
-        icon.setAttribute('data-lucide', newTheme === 'dark' ? 'moon' : 'sun');
-        lucide.createIcons();
-      }
-    }
-
-    const savedTheme = localStorage.getItem('openresume_theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    lucide.createIcons();
-
-    function switchTab(tabId, el) {
-      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      if (el) el.classList.add('active');
-    }
-
-    function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, tag => ({
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          "'": '&#39;',
-          '"': '&quot;'
-        }[tag] || tag));
-    }
-
-    function renderExperienceForm() {
-      const container = document.getElementById('experienceContainer');
-      if (!container) return;
-      container.innerHTML = '';
-      experiences.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'card-box';
-        card.style.padding = '0.75rem';
-        card.innerHTML = `
-          <div class="card-box-header">
-            <span class="card-box-title">Item #${index + 1}</span>
-            <button class="btn btn-secondary btn-sm" style="color:#ef4444;" onclick="deleteExperience(${index})"><i data-lucide="trash-2"></i> Delete</button>
-          </div>
-          <div class="form-group">
-            <label>Role / Title</label>
-            <input type="text" class="form-control" value="${escapeHTML(item.role)}" oninput="experiences[${index}].role = this.value; updateResumeData()">
-          </div>
-          <div class="form-group">
-            <label>Company / Organization</label>
-            <input type="text" class="form-control" value="${escapeHTML(item.company)}" oninput="experiences[${index}].company = this.value; updateResumeData()">
-          </div>
-          <div class="form-group">
-            <label>Dates</label>
-            <input type="text" class="form-control" value="${escapeHTML(item.date)}" oninput="experiences[${index}].date = this.value; updateResumeData()">
-          </div>
-          <div class="form-group">
-            <label>Bullet Points (One per line)</label>
-            <textarea class="form-control" oninput="experiences[${index}].bullets = this.value.split('\\n').filter(b=>b.trim()); updateResumeData()">${escapeHTML(item.bullets.join('\n'))}</textarea>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-      lucide.createIcons();
-    }
-
-    function renderExperiencePreview() {
-      const docContainer = document.getElementById('docExperience');
-      if (!docContainer) return;
-      docContainer.innerHTML = '';
-      experiences.forEach((item) => {
-        const docItem = document.createElement('div');
-        docItem.className = 'res-item';
-        docItem.innerHTML = `
-          <div class="res-item-header">
-            <span class="res-item-role">${escapeHTML(item.role)}</span>
-            <span class="res-item-date">${escapeHTML(item.date)}</span>
-          </div>
-          <div class="res-item-company">${escapeHTML(item.company)}</div>
-          <ul class="res-bullets">
-            ${item.bullets.map(b => `<li>${escapeHTML(b)}</li>`).join('')}
-          </ul>
-        `;
-        docContainer.appendChild(docItem);
-      });
-      checkPageOverflow();
-    }
-
-    function addExperience() {
-      experiences.push({
-        role: "Project Member",
-        company: "School Activity / Project",
-        date: "2024",
-        bullets: ["Achieved project milestones using collaborative team tools."]
-      });
-      renderExperienceForm();
-      renderExperiencePreview();
-    }
-
-    function deleteExperience(idx) {
-      experiences.splice(idx, 1);
-      renderExperienceForm();
-      renderExperiencePreview();
-    }
-
-    function updateResumeData() {
-      const nameEl = document.getElementById('docName');
-      if (nameEl) nameEl.innerText = document.getElementById('inputName').value || 'Your Name';
-      
-      const titleEl = document.getElementById('docTitle');
-      if (titleEl) titleEl.innerText = document.getElementById('inputTitle').value || 'Target Role';
-      
-      const email = document.getElementById('inputEmail').value;
-      const phone = document.getElementById('inputPhone').value;
-      const loc = document.getElementById('inputLocation').value;
-      const web = document.getElementById('inputWebsite').value;
-      
-      const contactEl = document.getElementById('docContact');
-      if (contactEl) {
-        contactEl.innerHTML = [email, phone, loc, web].filter(Boolean).map(x => `<span>${x}</span>`).join(' • ');
-      }
-
-      const sumEl = document.getElementById('docSummary');
-      if (sumEl) sumEl.innerText = document.getElementById('inputSummary').value;
-
-      const eduSchoolEl = document.getElementById('docEduSchool');
-      if (eduSchoolEl) eduSchoolEl.innerText = document.getElementById('inputEduSchool').value;
-
-      const eduDegreeEl = document.getElementById('docEduDegree');
-      if (eduDegreeEl) eduDegreeEl.innerText = document.getElementById('inputEduDegree').value;
-
-      const eduDateEl = document.getElementById('docEduDate');
-      if (eduDateEl) eduDateEl.innerText = document.getElementById('inputEduDate').value;
-
-      const skills = document.getElementById('inputSkills').value.split(',').map(s => s.trim()).filter(Boolean);
-      const skillsEl = document.getElementById('docSkills');
-      if (skillsEl) {
-        skillsEl.innerHTML = skills.map(s => `<span class="res-skill-tag">${escapeHTML(s)}</span>`).join('');
-      }
-
-      renderExperiencePreview();
-    }
-
-    function updateStyles() {
-      const fs = document.getElementById('sliderFontSize').value;
-      const lh = document.getElementById('sliderLineHeight').value;
-      const ss = document.getElementById('sliderSectionSpacing').value;
-      const mg = document.getElementById('sliderMargin').value;
-      const font = document.getElementById('selectFontFamily').value;
-
-      document.getElementById('valFontSize').innerText = fs + 'px';
-      document.getElementById('valLineHeight').innerText = lh;
-      document.getElementById('valSectionSpacing').innerText = ss + 'rem';
-      document.getElementById('valMargin').innerText = mg + ' in';
-
-      document.documentElement.style.setProperty('--res-font-size', fs + 'px');
-      document.documentElement.style.setProperty('--res-line-height', lh);
-      document.documentElement.style.setProperty('--res-section-spacing', ss + 'rem');
-      document.documentElement.style.setProperty('--res-margin', mg + 'in');
-      document.documentElement.style.setProperty('--res-font-family', font);
-
-      checkPageOverflow();
-    }
-
-    function selectColor(hex, el) {
-      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('selected'));
-      if (el) el.classList.add('selected');
-      document.documentElement.style.setProperty('--res-accent', hex);
-    }
-
-    function checkPageOverflow() {
-      setTimeout(() => {
-        const doc = document.getElementById('resumeDoc');
-        const alert = document.getElementById('overflowAlert');
-        if (!doc || !alert) return;
-        if (doc.offsetHeight > 1130) {
-          alert.style.display = 'flex';
-        } else {
-          alert.style.display = 'none';
-        }
-      }, 100);
-    }
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then((reg) => {
-          console.log('PWA ServiceWorker registered cleanly:', reg.scope);
-        }).catch((err) => {
-          console.warn('PWA ServiceWorker registration failed:', err);
-        });
-      });
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      renderExperienceForm();
-      renderExperiencePreview();
-      updateResumeData();
-      
-      const themeIcon = document.getElementById('themeIcon');
-      if (themeIcon) {
-        themeIcon.setAttribute('data-lucide', savedTheme === 'dark' ? 'moon' : 'sun');
-        lucide.createIcons();
-      }
+      req.onsuccess = () => { this.db = req.result; resolve(); };
+      req.onerror = () => reject(req.error);
     });
-  </script>
+  }
+
+  _tx(storeName, mode = 'readonly') {
+    return this.db.transaction(storeName, mode).objectStore(storeName);
+  }
+
+  getAll(storeName) {
+    return new Promise((resolve) => {
+      const req = this._tx(storeName).getAll();
+      req.onsuccess = () => resolve(req.result || []);
+    });
+  }
+
+  get(storeName, key) {
+    return new Promise((resolve) => {
+      const req = this._tx(storeName).get(key);
+      req.onsuccess = () => resolve(req.result);
+    });
+  }
+
+  put(storeName, value) {
+    return new Promise((resolve, reject) => {
+      const req = this._tx(storeName, 'readwrite').put(value);
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  delete(storeName, key) {
+    return new Promise((resolve) => {
+      const req = this._tx(storeName, 'readwrite').delete(key);
+      req.onsuccess = () => resolve();
+    });
+  }
+
+  clear(storeName) {
+    return new Promise((resolve) => {
+      const req = this._tx(storeName, 'readwrite').clear();
+      req.onsuccess = () => resolve();
+    });
+  }
+}
+
+/* =============================================================================
+   UTILITIES
+   ============================================================================= */
+function uuid() { return crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9); }
+function escHTML(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function timeAgo(ts) {
+  const d = Date.now() - ts;
+  if (d < 60000) return 'Just now';
+  if (d < 3600000) return Math.floor(d / 60000) + 'm ago';
+  if (d < 86400000) return Math.floor(d / 3600000) + 'h ago';
+  return Math.floor(d / 86400000) + 'd ago';
+}
+
+/* =============================================================================
+   TOAST
+   ============================================================================= */
+function showToast(message, type = 'info') {
+  const c = document.getElementById('toastContainer');
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.textContent = message;
+  c.appendChild(el);
+  setTimeout(() => { el.classList.add('removing'); setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+/* =============================================================================
+   MODAL HELPERS
+   ============================================================================= */
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+function confirmAction(title, message, action) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  document.getElementById('confirmActionBtn').onclick = () => { closeModal('confirmModal'); action(); };
+  openModal('confirmModal');
+}
+
+/* =============================================================================
+   ROUTER
+   ============================================================================= */
+function navigateTo(path) { window.location.hash = path; }
+
+function handleRoute() {
+  const hash = window.location.hash.slice(1) || '/';
+  const screens = document.querySelectorAll('.screen');
+  screens.forEach(s => s.classList.remove('active'));
+
+  if (hash.startsWith('/edit/')) {
+    const id = hash.replace('/edit/', '');
+    document.getElementById('editorScreen').classList.add('active');
+    document.getElementById('bottomNav').classList.add('visible');
+    updateBottomNav('edit');
+    openEditor(id);
+  } else if (hash === '/new') {
+    document.getElementById('dashboardScreen').classList.add('active');
+    document.getElementById('bottomNav').classList.remove('visible');
+    renderDashboard();
+    setTimeout(() => openModal('createResumeModal'), 100);
+  } else {
+    document.getElementById('dashboardScreen').classList.add('active');
+    document.getElementById('bottomNav').classList.remove('visible');
+    renderDashboard();
+  }
+  closeMobilePreview();
+  lucide.createIcons();
+}
+
+function updateBottomNav(active) {
+  document.querySelectorAll('.nav-item').forEach(n => {
+    n.classList.toggle('active', n.dataset.nav === active);
+  });
+}
+
+function showEditorTab(tab) {
+  if (!APP.currentResume) return;
+  if (window.location.hash.indexOf('/edit/') === -1) {
+    navigateTo('/edit/' + APP.currentResume.id);
+  }
+  closeMobilePreview();
+  switchEditorTab(tab, document.querySelector(`.sidebar-tab[onclick*="'${tab}'"]`));
+  updateBottomNav(tab);
+  // On mobile, show sidebar
+  const sidebar = document.getElementById('editorSidebar');
+  sidebar.style.display = 'flex';
+}
+
+/* =============================================================================
+   THEME
+   ============================================================================= */
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('or_theme', next);
+  const icon = document.getElementById('themeIcon');
+  if (icon) { icon.setAttribute('data-lucide', next === 'dark' ? 'moon' : 'sun'); lucide.createIcons(); }
+}
+
+/* =============================================================================
+   BUILT-IN TEMPLATES
+   ============================================================================= */
+const TEMPLATES = {
+  'modern-minimal': {
+    id: 'modern-minimal', name: 'Modern Minimal', isBuiltIn: true,
+    preview: '<div class="tmp-line thick w50"></div><div class="tmp-line w70"></div><div class="tmp-line w90"></div><div style="height:3px"></div><div class="tmp-line thick w30"></div><div class="tmp-line w90"></div><div class="tmp-line w70"></div><div style="height:3px"></div><div class="tmp-line thick w30"></div><div class="tmp-line w50"></div>',
+    render: renderModernMinimal
+  },
+  'classic-professional': {
+    id: 'classic-professional', name: 'Classic Pro', isBuiltIn: true,
+    preview: '<div style="text-align:center"><div class="tmp-line thick w50" style="margin:0 auto"></div><div class="tmp-line w30" style="margin:2px auto"></div></div><div style="height:3px;border-top:1px solid var(--text-tertiary);margin:3px 0;opacity:0.3"></div><div class="tmp-line w90"></div><div class="tmp-line w70"></div><div style="height:3px"></div><div class="tmp-line thick w30" style="margin:0 auto;text-align:center"></div><div class="tmp-line w80"></div>',
+    render: renderClassicProfessional
+  },
+  'bold-sidebar': {
+    id: 'bold-sidebar', name: 'Bold Sidebar', isBuiltIn: true,
+    preview: '<div class="tmp-sidebar-preview"><div class="tmp-sidebar-left"></div><div class="tmp-col"><div class="tmp-line thick w70"></div><div class="tmp-line w90"></div><div class="tmp-line w50"></div><div style="height:3px"></div><div class="tmp-line thick w50"></div><div class="tmp-line w80"></div></div></div>',
+    render: renderBoldSidebar
+  }
+};
+
+function defaultResumeData() {
+  return {
+    contact: { name: '', title: '', email: '', phone: '', location: '', website: '' },
+    sections: [],
+    styleOverrides: {
+      baseFontSize: 12, lineHeight: 1.35, sectionSpacing: 1.0, margins: 0.5,
+      fontFamily: "'Inter', sans-serif", accentColor: '#1e3a8a',
+      nameSize: 22, titleSize: 13, sectionTitleSize: 13, bodySize: 12, dateSize: 11, tagSize: 11
+    }
+  };
+}
+
+function createResumeObject(name, templateId) {
+  const now = Date.now();
+  return {
+    id: uuid(), name: name || 'My Resume', createdAt: now, updatedAt: now,
+    templateId: templateId || 'modern-minimal',
+    customTemplateHtml: null, customTemplateCss: null,
+    ...defaultResumeData()
+  };
+}
+
+/* =============================================================================
+   TEMPLATE RENDERERS
+   ============================================================================= */
+function getDocStyles(s) {
+  return `font-family:${s.fontFamily || "'Inter',sans-serif"};font-size:${s.baseFontSize||12}px;line-height:${s.lineHeight||1.35};padding:${s.margins||0.5}in;`;
+}
+
+function renderContactLine(c) {
+  return [c.email, c.phone, c.location, c.website].filter(Boolean).map(v => `<span>${escHTML(v)}</span>`).join(' • ');
+}
+
+function renderSectionContent(sec, s) {
+  const bodyStyle = `font-size:${s.bodySize||12}px;`;
+  const dateStyle = `font-size:${s.dateSize||11}px;`;
+  const tagStyle = `font-size:${s.tagSize||11}px;`;
+
+  if (sec.type === 'text') {
+    return `<div class="res-text" style="${bodyStyle}">${escHTML(sec.content || '')}</div>`;
+  }
+  if (sec.type === 'tags') {
+    const tags = sec.tags || [];
+    return `<div class="res-tags" style="${tagStyle}">${tags.map(t => `<span class="res-tag">${escHTML(t)}</span>`).join('')}</div>`;
+  }
+  if (sec.type === 'bullets') {
+    const bullets = sec.bullets || [];
+    return `<ul class="res-bullet-list" style="${bodyStyle}">${bullets.map(b => `<li>${escHTML(b)}</li>`).join('')}</ul>`;
+  }
+  // items
+  const items = sec.items || [];
+  return items.map(it => `
+    <div class="res-item">
+      <div class="res-item-header">
+        <span class="res-item-role" style="${bodyStyle}">${escHTML(it.heading || '')}</span>
+        <span class="res-item-date" style="${dateStyle}">${escHTML(it.date || '')}</span>
+      </div>
+      ${it.subheading ? `<div class="res-item-sub" style="${bodyStyle}">${escHTML(it.subheading)}</div>` : ''}
+      ${it.bullets && it.bullets.length ? `<ul class="res-bullets" style="${bodyStyle}">${it.bullets.map(b => `<li>${escHTML(b)}</li>`).join('')}</ul>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderModernMinimal(r) {
+  const s = r.styleOverrides || {};
+  const sectionSpacing = `margin-bottom:${s.sectionSpacing || 1}rem;`;
+  const html = `
+    <div class="doc-modern" style="${getDocStyles(s)}--doc-accent:${s.accentColor||'#1e3a8a'};">
+      <header class="res-header">
+        <div class="res-name" style="font-size:${s.nameSize||22}px;">${escHTML(r.contact.name || 'Your Name')}</div>
+        ${r.contact.title ? `<div class="res-title" style="font-size:${s.titleSize||13}px;">${escHTML(r.contact.title)}</div>` : ''}
+        <div class="res-contact" style="font-size:${s.dateSize||11}px;">${renderContactLine(r.contact)}</div>
+      </header>
+      ${(r.sections || []).map(sec => `
+        <section class="res-section" style="${sectionSpacing}">
+          <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;">${escHTML(sec.title)}</div>
+          ${renderSectionContent(sec, s)}
+        </section>
+      `).join('')}
+    </div>`;
+  return html;
+}
+
+function renderClassicProfessional(r) {
+  const s = r.styleOverrides || {};
+  const sectionSpacing = `margin-bottom:${s.sectionSpacing || 1}rem;`;
+  return `
+    <div class="doc-classic" style="${getDocStyles(s)}--doc-accent:${s.accentColor||'#1e3a8a'};font-family:${s.fontFamily||"'Merriweather',serif"};">
+      <header class="res-header">
+        <div class="res-name" style="font-size:${s.nameSize||22}px;">${escHTML(r.contact.name || 'Your Name')}</div>
+        ${r.contact.title ? `<div class="res-title" style="font-size:${s.titleSize||13}px;">${escHTML(r.contact.title)}</div>` : ''}
+        <div class="res-contact" style="font-size:${s.dateSize||11}px;">${renderContactLine(r.contact)}</div>
+      </header>
+      ${(r.sections || []).map(sec => `
+        <section class="res-section" style="${sectionSpacing}">
+          <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;">${escHTML(sec.title)}</div>
+          ${renderSectionContent(sec, s)}
+        </section>
+      `).join('')}
+    </div>`;
+}
+
+function renderBoldSidebar(r) {
+  const s = r.styleOverrides || {};
+  const c = r.contact || {};
+  const sectionSpacing = `margin-bottom:${s.sectionSpacing || 1}rem;`;
+
+  // Split: tags and bullets go to sidebar, items and text go to main
+  const sidebarSections = (r.sections || []).filter(sec => sec.type === 'tags' || sec.type === 'bullets');
+  const mainSections = (r.sections || []).filter(sec => sec.type === 'items' || sec.type === 'text');
+
+  const sideContactItems = [c.email, c.phone, c.location, c.website].filter(Boolean);
+
+  return `
+    <div class="doc-sidebar" style="font-family:${s.fontFamily||"'Inter',sans-serif"};font-size:${s.baseFontSize||12}px;line-height:${s.lineHeight||1.35};--doc-accent:${s.accentColor||'#1e3a8a'};">
+      <div class="sidebar-col" style="padding:${s.margins||0.5}in;background:${s.accentColor||'#1e3a8a'};">
+        <div class="res-name" style="font-size:${s.nameSize||22}px;">${escHTML(c.name || 'Your Name')}</div>
+        ${c.title ? `<div class="res-title" style="font-size:${s.titleSize||13}px;">${escHTML(c.title)}</div>` : ''}
+        <div class="side-section-title" style="font-size:${s.sectionTitleSize||13}px;">Contact</div>
+        ${sideContactItems.map(v => `<div class="side-contact-item" style="font-size:${s.bodySize||12}px;">${escHTML(v)}</div>`).join('')}
+        ${sidebarSections.map(sec => `
+          <div class="side-section-title" style="font-size:${s.sectionTitleSize||13}px;">${escHTML(sec.title)}</div>
+          ${sec.type === 'tags' ? (sec.tags||[]).map(t => `<div class="side-tag" style="font-size:${s.tagSize||11}px;">${escHTML(t)}</div>`).join('') : ''}
+          ${sec.type === 'bullets' ? (sec.bullets||[]).map(b => `<div class="side-tag" style="font-size:${s.bodySize||12}px;">${escHTML(b)}</div>`).join('') : ''}
+        `).join('')}
+      </div>
+      <div class="main-col" style="padding:${s.margins||0.5}in;">
+        ${mainSections.map(sec => `
+          <section class="res-section" style="${sectionSpacing}">
+            <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;">${escHTML(sec.title)}</div>
+            ${renderSectionContent(sec, s)}
+          </section>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+/* =============================================================================
+   DASHBOARD
+   ============================================================================= */
+async function renderDashboard() {
+  APP.resumes = await APP.db.getAll('resumes');
+  APP.resumes.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+  const container = document.getElementById('dashboardContent');
+  if (APP.resumes.length === 0) {
+    container.innerHTML = `
+      <div class="dashboard-top">
+        <h2>My Resumes</h2>
+        <div class="dashboard-actions">
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importDbInput').click()">
+            <i data-lucide="download"></i> Import DB
+          </button>
+        </div>
+      </div>
+      <div class="empty-state fade-up">
+        <div class="empty-state-icon">📄</div>
+        <h3>No resumes yet</h3>
+        <p>Create your first resume to get started. Pick a template and fill it with your details — or let AI write it for you.</p>
+        <button class="btn btn-primary" onclick="openModal('createResumeModal')">
+          <i data-lucide="plus"></i> Create My First Resume
+        </button>
+      </div>`;
+  } else {
+    container.innerHTML = `
+      <div class="dashboard-top">
+        <h2>My Resumes</h2>
+        <div class="dashboard-actions">
+          <button class="btn btn-primary btn-sm" onclick="openModal('createResumeModal')">
+            <i data-lucide="plus"></i> New
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="exportDatabase()">
+            <i data-lucide="upload"></i> Export
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importDbInput').click()">
+            <i data-lucide="download"></i> Import
+          </button>
+        </div>
+      </div>
+      <div class="resume-grid">
+        ${APP.resumes.map(r => `
+          <div class="resume-card fade-up" onclick="navigateTo('/edit/${r.id}')">
+            <div class="resume-card-name">${escHTML(r.name)}</div>
+            <div class="resume-card-meta">Edited ${timeAgo(r.updatedAt)}</div>
+            <div class="resume-card-template">${escHTML((TEMPLATES[r.templateId]||{}).name || r.templateId || 'Custom')}</div>
+            <div class="resume-card-actions" onclick="event.stopPropagation()">
+              <button class="btn btn-secondary btn-xs" onclick="duplicateResume('${r.id}')">
+                <i data-lucide="copy"></i> Duplicate
+              </button>
+              <button class="btn btn-danger btn-xs" onclick="deleteResume('${r.id}')">
+                <i data-lucide="trash-2"></i>
+              </button>
+            </div>
+          </div>
+        `).join('')}
+        <div class="new-resume-card" onclick="openModal('createResumeModal')">
+          <i data-lucide="plus" style="width:28px;height:28px;"></i>
+          Create New Resume
+        </div>
+      </div>`;
+  }
+  lucide.createIcons();
+}
+
+/* =============================================================================
+   CREATE / DUPLICATE / DELETE RESUME
+   ============================================================================= */
+function renderTemplatePicker(containerId, selectedId) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = Object.values(TEMPLATES).map(t => `
+    <div class="template-option ${t.id === selectedId ? 'active' : ''}" onclick="selectTemplate('${t.id}', '${containerId}')">
+      <div class="template-mini-preview">${t.preview}</div>
+      <div class="template-option-name">${t.name}</div>
+    </div>
+  `).join('');
+}
+
+function selectTemplate(id, containerId) {
+  APP.selectedNewTemplate = id;
+  document.querySelectorAll(`#${containerId} .template-option`).forEach(o => o.classList.toggle('active', o.querySelector('.template-option-name').textContent === TEMPLATES[id].name));
+}
+
+async function createNewResume() {
+  const name = document.getElementById('newResumeName').value.trim() || 'My Resume';
+  const resume = createResumeObject(name, APP.selectedNewTemplate);
+  await APP.db.put('resumes', resume);
+  closeModal('createResumeModal');
+  document.getElementById('newResumeName').value = 'My Resume';
+  showToast('Resume created!', 'success');
+  navigateTo('/edit/' + resume.id);
+}
+
+async function duplicateResume(id) {
+  const original = await APP.db.get('resumes', id);
+  if (!original) return;
+  const copy = JSON.parse(JSON.stringify(original));
+  copy.id = uuid();
+  copy.name = original.name + ' (copy)';
+  copy.createdAt = Date.now();
+  copy.updatedAt = Date.now();
+  await APP.db.put('resumes', copy);
+  showToast('Resume duplicated!', 'success');
+  renderDashboard();
+}
+
+async function deleteResume(id) {
+  confirmAction('Delete Resume', 'This resume will be permanently deleted. This cannot be undone.', async () => {
+    await APP.db.delete('resumes', id);
+    showToast('Resume deleted', 'info');
+    if (APP.currentResume && APP.currentResume.id === id) {
+      APP.currentResume = null;
+      navigateTo('/');
+    } else {
+      renderDashboard();
+    }
+  });
+}
+
+function duplicateCurrentResume() {
+  if (APP.currentResume) duplicateResume(APP.currentResume.id);
+}
+
+function deleteCurrentResume() {
+  if (APP.currentResume) deleteResume(APP.currentResume.id);
+}
+
+/* =============================================================================
+   EDITOR
+   ============================================================================= */
+async function openEditor(id) {
+  const resume = await APP.db.get('resumes', id);
+  if (!resume) { showToast('Resume not found', 'error'); navigateTo('/'); return; }
+  APP.currentResume = resume;
+  document.getElementById('resumeNameInput').value = resume.name;
+  renderEditPanel();
+  renderAIPanel();
+  renderStylePanel();
+  updatePreview();
+  lucide.createIcons();
+}
+
+function onResumeNameChange() {
+  if (!APP.currentResume) return;
+  APP.currentResume.name = document.getElementById('resumeNameInput').value.trim() || 'Untitled';
+  scheduleSave();
+}
+
+function switchEditorTab(tab, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(tab === 'edit' ? 'editPanel' : tab === 'ai' ? 'aiPanel' : 'stylePanel');
+  if (panel) panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+  APP.currentTab = tab;
+}
+
+/* =============================================================================
+   EDIT PANEL — CONTACT FIELDS + SECTIONS
+   ============================================================================= */
+function renderEditPanel() {
+  if (!APP.currentResume) return;
+  const r = APP.currentResume;
+  const c = r.contact || {};
+
+  let html = `
+    <div class="card mb-2">
+      <div class="card-header"><span class="card-title"><i data-lucide="user"></i> Contact Info</span></div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" class="form-control" value="${escHTML(c.name||'')}" onchange="updateContact('name',this.value)">
+      </div>
+      <div class="form-group">
+        <label>Target Job Title</label>
+        <input type="text" class="form-control" value="${escHTML(c.title||'')}" onchange="updateContact('title',this.value)">
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Email</label><input type="email" class="form-control" value="${escHTML(c.email||'')}" onchange="updateContact('email',this.value)"></div>
+        <div class="form-group"><label>Phone</label><input type="text" class="form-control" value="${escHTML(c.phone||'')}" onchange="updateContact('phone',this.value)"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Location</label><input type="text" class="form-control" value="${escHTML(c.location||'')}" onchange="updateContact('location',this.value)"></div>
+        <div class="form-group"><label>Portfolio / LinkedIn</label><input type="text" class="form-control" value="${escHTML(c.website||'')}" onchange="updateContact('website',this.value)"></div>
+      </div>
+    </div>`;
+
+  // Sections
+  (r.sections || []).forEach((sec, i) => {
+    html += renderSectionEditor(sec, i);
+  });
+
+  html += `
+    <button class="btn btn-secondary" style="width:100%;" onclick="openModal('addSectionModal')">
+      <i data-lucide="plus"></i> Add Section
+    </button>`;
+
+  document.getElementById('editPanelContent').innerHTML = html;
+  lucide.createIcons();
+}
+
+function renderSectionEditor(sec, idx) {
+  const total = APP.currentResume.sections.length;
+  let bodyHtml = '';
+
+  if (sec.type === 'text') {
+    bodyHtml = `<div class="form-group"><label>Content</label><textarea class="form-control" onchange="updateSectionField(${idx},'content',this.value)">${escHTML(sec.content||'')}</textarea></div>`;
+  } else if (sec.type === 'tags') {
+    bodyHtml = `<div class="form-group"><label>Tags (comma-separated)</label><input type="text" class="form-control" value="${escHTML((sec.tags||[]).join(', '))}" onchange="updateSectionTags(${idx},this.value)"></div>`;
+  } else if (sec.type === 'bullets') {
+    bodyHtml = `<div class="form-group"><label>Bullet Points (one per line)</label><textarea class="form-control" onchange="updateSectionBullets(${idx},this.value)">${escHTML((sec.bullets||[]).join('\n'))}</textarea></div>`;
+  } else {
+    // items
+    (sec.items || []).forEach((item, j) => {
+      bodyHtml += `
+        <div class="section-item">
+          <div class="section-item-header">
+            <span class="section-item-num">Item ${j + 1}</span>
+            <button class="btn btn-danger btn-xs" onclick="removeItem(${idx},${j})"><i data-lucide="x"></i></button>
+          </div>
+          <div class="form-group"><label>Heading</label><input type="text" class="form-control" value="${escHTML(item.heading||'')}" onchange="updateItem(${idx},${j},'heading',this.value)"></div>
+          <div class="form-row">
+            <div class="form-group"><label>Subheading</label><input type="text" class="form-control" value="${escHTML(item.subheading||'')}" onchange="updateItem(${idx},${j},'subheading',this.value)"></div>
+            <div class="form-group"><label>Date</label><input type="text" class="form-control" value="${escHTML(item.date||'')}" onchange="updateItem(${idx},${j},'date',this.value)"></div>
+          </div>
+          <div class="form-group"><label>Bullets (one per line)</label><textarea class="form-control" onchange="updateItemBullets(${idx},${j},this.value)">${escHTML((item.bullets||[]).join('\n'))}</textarea></div>
+        </div>`;
+    });
+    bodyHtml += `<button class="btn btn-secondary btn-sm" style="width:100%;" onclick="addItem(${idx})"><i data-lucide="plus"></i> Add Item</button>`;
+  }
+
+  return `
+    <div class="section-block">
+      <div class="section-block-header" onclick="toggleSection(this)">
+        <span class="section-block-title">${escHTML(sec.title)}</span>
+        <span class="section-block-type">${sec.type}</span>
+        <div class="section-reorder" onclick="event.stopPropagation()">
+          ${idx > 0 ? `<button onclick="moveSection(${idx},-1)" title="Move up">↑</button>` : ''}
+          ${idx < total - 1 ? `<button onclick="moveSection(${idx},1)" title="Move down">↓</button>` : ''}
+          <button onclick="removeSection(${idx})" title="Delete section" style="color:var(--danger)">✕</button>
+        </div>
+      </div>
+      <div class="section-block-body">${bodyHtml}</div>
+    </div>`;
+}
+
+function toggleSection(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+
+/* Data update helpers */
+function updateContact(field, value) {
+  if (!APP.currentResume) return;
+  APP.currentResume.contact[field] = value;
+  updatePreview(); scheduleSave();
+}
+
+function updateSectionField(idx, field, value) {
+  APP.currentResume.sections[idx][field] = value;
+  updatePreview(); scheduleSave();
+}
+
+function updateSectionTags(idx, value) {
+  APP.currentResume.sections[idx].tags = value.split(',').map(s => s.trim()).filter(Boolean);
+  updatePreview(); scheduleSave();
+}
+
+function updateSectionBullets(idx, value) {
+  APP.currentResume.sections[idx].bullets = value.split('\n').filter(s => s.trim());
+  updatePreview(); scheduleSave();
+}
+
+function updateItem(sIdx, iIdx, field, value) {
+  APP.currentResume.sections[sIdx].items[iIdx][field] = value;
+  updatePreview(); scheduleSave();
+}
+
+function updateItemBullets(sIdx, iIdx, value) {
+  APP.currentResume.sections[sIdx].items[iIdx].bullets = value.split('\n').filter(s => s.trim());
+  updatePreview(); scheduleSave();
+}
+
+function addItem(sIdx) {
+  if (!APP.currentResume.sections[sIdx].items) APP.currentResume.sections[sIdx].items = [];
+  APP.currentResume.sections[sIdx].items.push({ heading: '', subheading: '', date: '', bullets: [] });
+  renderEditPanel(); updatePreview(); scheduleSave();
+}
+
+function removeItem(sIdx, iIdx) {
+  APP.currentResume.sections[sIdx].items.splice(iIdx, 1);
+  renderEditPanel(); updatePreview(); scheduleSave();
+}
+
+function moveSection(idx, dir) {
+  const secs = APP.currentResume.sections;
+  const target = idx + dir;
+  if (target < 0 || target >= secs.length) return;
+  [secs[idx], secs[target]] = [secs[target], secs[idx]];
+  renderEditPanel(); updatePreview(); scheduleSave();
+}
+
+function removeSection(idx) {
+  confirmAction('Remove Section', `Remove "${APP.currentResume.sections[idx].title}"?`, () => {
+    APP.currentResume.sections.splice(idx, 1);
+    renderEditPanel(); updatePreview(); scheduleSave();
+  });
+}
+
+function selectSectionType(el) {
+  document.querySelectorAll('#sectionTypeOptions .type-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+  APP.newSectionType = el.dataset.type;
+}
+
+function confirmAddSection() {
+  const title = document.getElementById('newSectionTitle').value.trim();
+  if (!title) { showToast('Please enter a section title', 'error'); return; }
+  const sec = { id: uuid(), title, type: APP.newSectionType, order: APP.currentResume.sections.length };
+  if (APP.newSectionType === 'items') sec.items = [];
+  if (APP.newSectionType === 'tags') sec.tags = [];
+  if (APP.newSectionType === 'bullets') sec.bullets = [];
+  if (APP.newSectionType === 'text') sec.content = '';
+  APP.currentResume.sections.push(sec);
+  closeModal('addSectionModal');
+  document.getElementById('newSectionTitle').value = '';
+  renderEditPanel(); updatePreview(); scheduleSave();
+  showToast(`Section "${title}" added!`, 'success');
+}
+
+/* =============================================================================
+   AI HUB PANEL
+   ============================================================================= */
+function renderAIPanel() {
+  if (!APP.currentResume) return;
+  const hasContent = APP.currentResume.sections.length > 0;
+
+  document.getElementById('aiPanelContent').innerHTML = `
+    <div class="card mb-2">
+      <div class="card-header">
+        <span class="card-title"><i data-lucide="sparkles"></i> AI Copy-Paste Hub</span>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+        Generate prompts to use with ChatGPT, Claude, or Gemini. Copy the prompt, chat with the AI, then paste the result back here.
+      </p>
+    </div>
+
+    <!-- Step 1: Choose prompt type -->
+    <div class="ai-step">
+      <div class="ai-step-header"><span class="step-badge">1</span> Choose What to Do</div>
+      <div class="prompt-chips">
+        <div class="chip ${APP.selectedPromptType === 'create-content' ? 'active' : ''}" onclick="selectPromptType('create-content')">📝 Write Content (New)</div>
+        ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'edit-all' ? 'active' : ''}" onclick="selectPromptType('edit-all')">✏️ Edit All Content</div>` : ''}
+        ${hasContent ? `<div class="chip ${APP.selectedPromptType === 'edit-section' ? 'active' : ''}" onclick="selectPromptType('edit-section')">🎯 Edit One Section</div>` : ''}
+        <div class="chip ${APP.selectedPromptType === 'design-template' ? 'active' : ''}" onclick="selectPromptType('design-template')">🎨 Design Template</div>
+      </div>
+      ${APP.selectedPromptType === 'edit-section' && hasContent ? `
+        <div class="form-group">
+          <label>Which section?</label>
+          <select class="form-control" id="sectionToEdit">
+            ${APP.currentResume.sections.map((s, i) => `<option value="${i}">${escHTML(s.title)}</option>`).join('')}
+          </select>
+        </div>` : ''}
+      ${APP.selectedPromptType === 'create-content' || APP.selectedPromptType === 'edit-all' ? `
+        <div class="form-group">
+          <label>Target Job Description (optional)</label>
+          <textarea class="form-control" id="jobDescription" placeholder="Paste the job posting here to tailor your resume..."></textarea>
+        </div>` : ''}
+    </div>
+
+    <!-- Step 2: Generated prompt -->
+    <div class="ai-step">
+      <div class="ai-step-header"><span class="step-badge">2</span> Copy Prompt & Open AI</div>
+      <button class="btn btn-primary btn-sm mb-1" style="width:100%;" onclick="generateAndShowPrompt()">
+        <i data-lucide="wand-2"></i> Generate Prompt
+      </button>
+      <div class="prompt-preview" id="generatedPrompt" style="display:none;"></div>
+      <div id="promptActions" style="display:none;">
+        <button class="btn btn-magic btn-sm mb-1" style="width:100%;" onclick="copyGeneratedPrompt()">
+          <i data-lucide="clipboard-copy"></i> Copy Prompt to Clipboard
+        </button>
+        <div class="llm-launchers">
+          <button class="llm-btn" onclick="launchLLM('https://chatgpt.com/')">💬 ChatGPT</button>
+          <button class="llm-btn" onclick="launchLLM('https://claude.ai/new')">✨ Claude</button>
+          <button class="llm-btn" onclick="launchLLM('https://gemini.google.com/')">🤖 Gemini</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Paste response -->
+    <div class="ai-step">
+      <div class="ai-step-header"><span class="step-badge">3</span> Paste AI Response</div>
+      <div class="form-group">
+        <textarea class="form-control" id="aiResponseInput" placeholder="Paste the AI's response here..." style="min-height:100px;"></textarea>
+      </div>
+      <div class="flex-gap">
+        <button class="btn btn-secondary btn-sm" onclick="readClipboardForAI()">
+          <i data-lucide="clipboard"></i> Read Clipboard
+        </button>
+        <button class="btn btn-success btn-sm" onclick="applyAIResponse()">
+          <i data-lucide="check"></i> Apply Content
+        </button>
+      </div>
+    </div>
+
+    <!-- Custom template upload -->
+    <div class="ai-step">
+      <div class="ai-step-header">📄 Custom Template</div>
+      <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:0.5rem;">
+        Upload an HTML template file generated by an LLM, or paste template HTML in the response box above with &lt;RESUME_TEMPLATE&gt; tags.
+      </p>
+      <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importTemplateInput').click()">
+        <i data-lucide="upload"></i> Upload HTML Template
+      </button>
+    </div>`;
+  lucide.createIcons();
+}
+
+function selectPromptType(type) {
+  APP.selectedPromptType = type;
+  renderAIPanel();
+}
+
+function generateAndShowPrompt() {
+  const prompt = generatePrompt(APP.selectedPromptType);
+  const el = document.getElementById('generatedPrompt');
+  el.textContent = prompt;
+  el.style.display = 'block';
+  document.getElementById('promptActions').style.display = 'block';
+}
+
+function generatePrompt(type) {
+  const r = APP.currentResume;
+  const jd = document.getElementById('jobDescription')?.value || '';
+
+  if (type === 'create-content') {
+    return `I'm building my resume using OpenResume Studio. Please help me create compelling resume content.
+
+## Instructions
+Have a natural conversation with me to gather information about my background, experience, education, skills, and career goals. When we're finished, output the final resume content in the exact JSON format below, wrapped in <RESUME_DATA> tags.
+
+${jd ? `## Target Job Description\n${jd}\n` : ''}
+## Output Format (use this EXACTLY)
+<RESUME_DATA>
+{
+  "contact": {
+    "name": "Full Name",
+    "title": "Target Job Title",
+    "email": "email@example.com",
+    "phone": "Phone Number",
+    "location": "City, State",
+    "website": "Portfolio/LinkedIn URL"
+  },
+  "sections": [
+    {
+      "id": "summary",
+      "title": "Professional Summary",
+      "type": "text",
+      "content": "2-3 sentence professional summary..."
+    },
+    {
+      "id": "experience",
+      "title": "Work Experience",
+      "type": "items",
+      "items": [
+        {
+          "heading": "Job Title",
+          "subheading": "Company Name",
+          "date": "Start - End",
+          "bullets": ["Achievement with metrics...", "Another achievement..."]
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "title": "Education",
+      "type": "items",
+      "items": [{"heading": "Degree", "subheading": "University", "date": "Year", "bullets": ["Details..."]}]
+    },
+    {
+      "id": "skills",
+      "title": "Skills",
+      "type": "tags",
+      "tags": ["Skill1", "Skill2", "Skill3"]
+    }
+  ]
+}
+</RESUME_DATA>
+
+## Guidelines
+- Use strong action verbs (Led, Built, Designed, Implemented)
+- Include quantifiable metrics where possible (%, $, numbers)
+- Section types: "text" = paragraph, "items" = structured entries, "tags" = badge list, "bullets" = simple list
+- You can suggest any additional sections (Projects, Certifications, Awards, Volunteer, etc.)
+- Keep bullet points concise (1-2 lines each)`;
+  }
+
+  if (type === 'edit-all') {
+    const data = { contact: r.contact, sections: r.sections };
+    return `I'm editing my resume using OpenResume Studio. Here is my current resume content:
+
+<CURRENT_RESUME>
+${JSON.stringify(data, null, 2)}
+</CURRENT_RESUME>
+
+${jd ? `## Target Job Description\n${jd}\n` : ''}
+## Instructions
+Help me improve this resume. You can:
+- Strengthen bullet points with better action verbs and metrics
+- Improve the professional summary
+- Suggest adding or removing sections
+- Tailor for the job description above
+- Fix grammar and improve conciseness
+
+When done, output the complete updated resume in <RESUME_DATA> tags using the same JSON format. Keep the same structure: contact object + sections array with id, title, type, and appropriate content fields.`;
+  }
+
+  if (type === 'edit-section') {
+    const secIdx = parseInt(document.getElementById('sectionToEdit')?.value || '0');
+    const sec = r.sections[secIdx];
+    if (!sec) return 'No section selected.';
+    return `I want to improve a specific section of my resume. Here it is:
+
+<SECTION>
+${JSON.stringify(sec, null, 2)}
+</SECTION>
+
+Please improve this section. Make the content more compelling, concise, and impactful. When done, output the improved version in <RESUME_SECTION> tags using the same JSON format:
+
+<RESUME_SECTION>
+{
+  "id": "${sec.id}",
+  "title": "${sec.title}",
+  "type": "${sec.type}",
+  ... (same structure, improved content)
+}
+</RESUME_SECTION>`;
+  }
+
+  if (type === 'design-template') {
+    return `I'm using OpenResume Studio and want a custom HTML/CSS resume template.
+
+## Requirements
+- A4 page size (210mm × 297mm)
+- Professional, modern design
+- Use only these fonts (already loaded): Inter, Outfit, Merriweather, JetBrains Mono
+- Include a <style> tag with all CSS inside the template
+- Use CSS variable var(--doc-accent, #1e3a8a) for accent color so users can customize it
+
+## Template Placeholders
+Use these placeholders — the app will replace them:
+- {{name}} — Full name
+- {{title}} — Job title
+- {{email}}, {{phone}}, {{location}}, {{website}} — Contact info
+- {{sections}} — Where all resume sections get injected (as rendered HTML)
+
+## Output Format
+Wrap your template in <RESUME_TEMPLATE> tags:
+
+<RESUME_TEMPLATE>
+<style>
+  /* Template CSS here */
+</style>
+<div class="resume-custom">
+  <header>
+    <h1>{{name}}</h1>
+    <p>{{title}}</p>
+    <div>{{email}} | {{phone}} | {{location}} | {{website}}</div>
+  </header>
+  <main>
+    {{sections}}
+  </main>
+</div>
+</RESUME_TEMPLATE>
+
+Feel free to use any layout: single column, two columns, sidebar, creative, etc. Make it visually impressive.`;
+  }
+
+  return 'Select a prompt type above.';
+}
+
+function copyGeneratedPrompt() {
+  const text = document.getElementById('generatedPrompt').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('Prompt copied to clipboard!', 'success');
+  }).catch(() => {
+    showToast('Failed to copy. Please select and copy manually.', 'error');
+  });
+}
+
+function launchLLM(url) {
+  copyGeneratedPrompt();
+  setTimeout(() => window.open(url, '_blank'), 400);
+}
+
+async function readClipboardForAI() {
+  try {
+    const text = await navigator.clipboard.readText();
+    if (text) {
+      document.getElementById('aiResponseInput').value = text;
+      showToast('Clipboard content pasted!', 'success');
+    }
+  } catch (e) {
+    showToast('Could not read clipboard. Please paste manually.', 'info');
+  }
+}
+
+function applyAIResponse() {
+  const text = document.getElementById('aiResponseInput')?.value || APP.pendingClipboard || '';
+  if (!text.trim()) { showToast('No content to apply', 'error'); return; }
+
+  // Try to parse RESUME_DATA
+  const dataMatch = text.match(/<RESUME_DATA>([\s\S]*?)<\/RESUME_DATA>/);
+  if (dataMatch) {
+    try {
+      const parsed = JSON.parse(dataMatch[1].trim());
+      if (parsed.contact) APP.currentResume.contact = { ...APP.currentResume.contact, ...parsed.contact };
+      if (parsed.sections && Array.isArray(parsed.sections)) {
+        parsed.sections.forEach(s => { if (!s.id) s.id = uuid(); });
+        APP.currentResume.sections = parsed.sections;
+      }
+      renderEditPanel(); updatePreview(); scheduleSave();
+      showToast('Resume content applied!', 'success');
+      return;
+    } catch (e) { /* fall through */ }
+  }
+
+  // Try to parse RESUME_SECTION
+  const secMatch = text.match(/<RESUME_SECTION>([\s\S]*?)<\/RESUME_SECTION>/);
+  if (secMatch) {
+    try {
+      const parsed = JSON.parse(secMatch[1].trim());
+      if (parsed.id) {
+        const idx = APP.currentResume.sections.findIndex(s => s.id === parsed.id);
+        if (idx >= 0) {
+          APP.currentResume.sections[idx] = parsed;
+        } else {
+          APP.currentResume.sections.push(parsed);
+        }
+      }
+      renderEditPanel(); updatePreview(); scheduleSave();
+      showToast('Section updated!', 'success');
+      return;
+    } catch (e) { /* fall through */ }
+  }
+
+  // Try to parse RESUME_TEMPLATE
+  const tplMatch = text.match(/<RESUME_TEMPLATE>([\s\S]*?)<\/RESUME_TEMPLATE>/);
+  if (tplMatch) {
+    applyCustomTemplate(tplMatch[1].trim());
+    return;
+  }
+
+  // Try raw JSON
+  try {
+    const parsed = JSON.parse(text.match(/\{[\s\S]*\}/)?.[0] || '');
+    if (parsed.contact || parsed.sections) {
+      if (parsed.contact) APP.currentResume.contact = { ...APP.currentResume.contact, ...parsed.contact };
+      if (parsed.sections) {
+        parsed.sections.forEach(s => { if (!s.id) s.id = uuid(); });
+        APP.currentResume.sections = parsed.sections;
+      }
+      renderEditPanel(); updatePreview(); scheduleSave();
+      showToast('Resume content applied!', 'success');
+      return;
+    }
+  } catch (e) { /* fall through */ }
+
+  showToast('Could not parse AI response. Make sure it contains valid JSON.', 'error');
+}
+
+function applyCustomTemplate(html) {
+  APP.currentResume.templateId = 'custom';
+  // Separate CSS and HTML
+  const styleMatch = html.match(/<style>([\s\S]*?)<\/style>/i);
+  APP.currentResume.customTemplateCss = styleMatch ? styleMatch[1] : '';
+  APP.currentResume.customTemplateHtml = html.replace(/<style>[\s\S]*?<\/style>/gi, '').trim();
+  updatePreview(); scheduleSave();
+  showToast('Custom template applied!', 'success');
+}
+
+function handleImportTemplate(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    applyCustomTemplate(evt.target.result);
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+/* =============================================================================
+   STYLE PANEL
+   ============================================================================= */
+function renderStylePanel() {
+  if (!APP.currentResume) return;
+  const s = APP.currentResume.styleOverrides || {};
+
+  document.getElementById('stylePanelContent').innerHTML = `
+    <div class="card mb-2">
+      <div class="card-header"><span class="card-title"><i data-lucide="layout"></i> Template</span></div>
+      <div class="template-grid" id="editorTemplatePicker"></div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-header"><span class="card-title"><i data-lucide="move"></i> Global Layout</span></div>
+      <div class="slider-group">
+        <div class="slider-header"><span>📏 Base Font Size</span><span class="slider-value" id="vFS">${s.baseFontSize||12}px</span></div>
+        <input type="range" min="9" max="16" step="0.5" value="${s.baseFontSize||12}" oninput="updateStyle('baseFontSize',this.value);document.getElementById('vFS').textContent=this.value+'px'">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>↕️ Line Spacing</span><span class="slider-value" id="vLH">${s.lineHeight||1.35}</span></div>
+        <input type="range" min="1.0" max="2.0" step="0.05" value="${s.lineHeight||1.35}" oninput="updateStyle('lineHeight',this.value);document.getElementById('vLH').textContent=this.value">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>📐 Section Spacing</span><span class="slider-value" id="vSS">${s.sectionSpacing||1.0}rem</span></div>
+        <input type="range" min="0.2" max="2.5" step="0.1" value="${s.sectionSpacing||1.0}" oninput="updateStyle('sectionSpacing',this.value);document.getElementById('vSS').textContent=this.value+'rem'">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>📄 Page Margins</span><span class="slider-value" id="vMG">${s.margins||0.5}in</span></div>
+        <input type="range" min="0.2" max="1.25" step="0.05" value="${s.margins||0.5}" oninput="updateStyle('margins',this.value);document.getElementById('vMG').textContent=this.value+'in'">
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-header"><span class="card-title"><i data-lucide="type"></i> Element Sizes</span></div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Name</span><span class="slider-value" id="vNS">${s.nameSize||22}px</span></div>
+        <input type="range" min="14" max="32" step="1" value="${s.nameSize||22}" oninput="updateStyle('nameSize',this.value);document.getElementById('vNS').textContent=this.value+'px'">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Title</span><span class="slider-value" id="vTS">${s.titleSize||13}px</span></div>
+        <input type="range" min="9" max="20" step="0.5" value="${s.titleSize||13}" oninput="updateStyle('titleSize',this.value);document.getElementById('vTS').textContent=this.value+'px'">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Section Headings</span><span class="slider-value" id="vSTS">${s.sectionTitleSize||13}px</span></div>
+        <input type="range" min="9" max="18" step="0.5" value="${s.sectionTitleSize||13}" oninput="updateStyle('sectionTitleSize',this.value);document.getElementById('vSTS').textContent=this.value+'px'">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Body Text</span><span class="slider-value" id="vBS">${s.bodySize||12}px</span></div>
+        <input type="range" min="8" max="16" step="0.5" value="${s.bodySize||12}" oninput="updateStyle('bodySize',this.value);document.getElementById('vBS').textContent=this.value+'px'">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Date / Meta</span><span class="slider-value" id="vDS">${s.dateSize||11}px</span></div>
+        <input type="range" min="8" max="14" step="0.5" value="${s.dateSize||11}" oninput="updateStyle('dateSize',this.value);document.getElementById('vDS').textContent=this.value+'px'">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Tags / Skills</span><span class="slider-value" id="vTGS">${s.tagSize||11}px</span></div>
+        <input type="range" min="8" max="14" step="0.5" value="${s.tagSize||11}" oninput="updateStyle('tagSize',this.value);document.getElementById('vTGS').textContent=this.value+'px'">
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-header"><span class="card-title"><i data-lucide="palette"></i> Colors & Fonts</span></div>
+      <div class="slider-group">
+        <div class="slider-header"><span>🎨 Accent Color</span></div>
+        <div class="color-swatches">
+          ${['#1e3a8a','#059669','#4f46e5','#0f172a','#991b1b','#7c3aed','#b45309','#0e7490','#6d28d9'].map(c =>
+            `<div class="swatch ${(s.accentColor||'#1e3a8a')===c?'active':''}" style="background:${c};" onclick="updateStyle('accentColor','${c}');document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));this.classList.add('active')"></div>`
+          ).join('')}
+        </div>
+      </div>
+      <div class="form-group mt-1">
+        <label>Font Family</label>
+        <select class="form-control" onchange="updateStyle('fontFamily',this.value)">
+          <option value="'Inter', sans-serif" ${(s.fontFamily||'').includes('Inter')?'selected':''}>Modern Sans (Inter)</option>
+          <option value="'Outfit', sans-serif" ${(s.fontFamily||'').includes('Outfit')?'selected':''}>Clean Display (Outfit)</option>
+          <option value="'Merriweather', serif" ${(s.fontFamily||'').includes('Merriweather')?'selected':''}>Classic Serif (Merriweather)</option>
+          <option value="'JetBrains Mono', monospace" ${(s.fontFamily||'').includes('JetBrains')?'selected':''}>Technical Mono (JetBrains)</option>
+        </select>
+      </div>
+    </div>`;
+
+  // Render template picker inside style panel
+  renderTemplatePicker('editorTemplatePicker', APP.currentResume.templateId);
+  // Override click to change template
+  document.querySelectorAll('#editorTemplatePicker .template-option').forEach(opt => {
+    const name = opt.querySelector('.template-option-name').textContent;
+    const id = Object.values(TEMPLATES).find(t => t.name === name)?.id;
+    if (id) {
+      opt.onclick = () => {
+        APP.currentResume.templateId = id;
+        APP.currentResume.customTemplateHtml = null;
+        APP.currentResume.customTemplateCss = null;
+        document.querySelectorAll('#editorTemplatePicker .template-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        updatePreview(); scheduleSave();
+      };
+    }
+  });
+  lucide.createIcons();
+}
+
+function updateStyle(key, value) {
+  if (!APP.currentResume) return;
+  if (!APP.currentResume.styleOverrides) APP.currentResume.styleOverrides = {};
+  const numKeys = ['baseFontSize','lineHeight','sectionSpacing','margins','nameSize','titleSize','sectionTitleSize','bodySize','dateSize','tagSize'];
+  APP.currentResume.styleOverrides[key] = numKeys.includes(key) ? parseFloat(value) : value;
+  updatePreview(); scheduleSave();
+}
+
+/* =============================================================================
+   PREVIEW
+   ============================================================================= */
+function updatePreview() {
+  if (!APP.currentResume) return;
+  const wrapper = document.getElementById('documentWrapper');
+  const r = APP.currentResume;
+
+  if (r.templateId === 'custom' && r.customTemplateHtml) {
+    // Render custom template
+    let html = r.customTemplateHtml;
+    const c = r.contact || {};
+    html = html.replace(/\{\{name\}\}/g, escHTML(c.name || ''));
+    html = html.replace(/\{\{title\}\}/g, escHTML(c.title || ''));
+    html = html.replace(/\{\{email\}\}/g, escHTML(c.email || ''));
+    html = html.replace(/\{\{phone\}\}/g, escHTML(c.phone || ''));
+    html = html.replace(/\{\{location\}\}/g, escHTML(c.location || ''));
+    html = html.replace(/\{\{website\}\}/g, escHTML(c.website || ''));
+    // Render sections
+    const s = r.styleOverrides || {};
+    const sectionsHtml = (r.sections || []).map(sec => `
+      <div class="res-section" style="margin-bottom:${s.sectionSpacing||1}rem;">
+        <div class="res-section-title" style="font-size:${s.sectionTitleSize||13}px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid #ddd;padding-bottom:0.2rem;margin-bottom:0.4rem;color:var(--doc-accent,#1e3a8a);">${escHTML(sec.title)}</div>
+        ${renderSectionContent(sec, s)}
+      </div>`).join('');
+    html = html.replace(/\{\{sections\}\}/g, sectionsHtml);
+    const styles = r.customTemplateCss ? `<style>${r.customTemplateCss}</style>` : '';
+    wrapper.innerHTML = styles + html;
+    wrapper.style.cssText = getDocStyles(s);
+  } else {
+    const template = TEMPLATES[r.templateId] || TEMPLATES['modern-minimal'];
+    wrapper.innerHTML = template.render(r);
+    wrapper.style.cssText = '';
+  }
+  checkOverflow();
+}
+
+function checkOverflow() {
+  setTimeout(() => {
+    const doc = document.getElementById('documentWrapper');
+    const banner = document.getElementById('overflowBanner');
+    if (!doc || !banner) return;
+    // A4 at 96dpi ~= 1123px, but with margins it's less. Use 1130 as threshold.
+    banner.classList.toggle('visible', doc.scrollHeight > 1130);
+  }, 50);
+}
+
+/* Mobile preview */
+function showMobilePreview() {
+  if (!APP.currentResume) return;
+  updateBottomNav('preview');
+  const preview = document.getElementById('editorPreview');
+  const closeBtn = document.getElementById('mobilePreviewClose');
+  const sidebar = document.getElementById('editorSidebar');
+  preview.classList.add('mobile-visible');
+  closeBtn.classList.add('visible');
+  if (window.innerWidth <= 900) sidebar.style.display = 'none';
+  updatePreview();
+}
+
+function closeMobilePreview() {
+  const preview = document.getElementById('editorPreview');
+  const closeBtn = document.getElementById('mobilePreviewClose');
+  preview.classList.remove('mobile-visible');
+  closeBtn.classList.remove('visible');
+}
+
+/* =============================================================================
+   AUTO-SAVE
+   ============================================================================= */
+function scheduleSave() {
+  if (APP.autoSaveTimer) clearTimeout(APP.autoSaveTimer);
+  APP.autoSaveTimer = setTimeout(async () => {
+    if (APP.currentResume) {
+      APP.currentResume.updatedAt = Date.now();
+      await APP.db.put('resumes', APP.currentResume);
+    }
+  }, 500);
+}
+
+/* =============================================================================
+   CLIPBOARD BRIDGE
+   ============================================================================= */
+function setupClipboardBridge() {
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible') return;
+    if (!APP.currentResume) return;
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text && (text.includes('<RESUME_DATA>') || text.includes('<RESUME_SECTION>') || text.includes('<RESUME_TEMPLATE>'))) {
+        APP.pendingClipboard = text;
+        document.getElementById('clipboardBanner').classList.remove('hidden');
+      }
+    } catch (e) { /* permission denied — fine */ }
+  });
+}
+
+function applyClipboardData() {
+  if (APP.pendingClipboard) {
+    const input = document.getElementById('aiResponseInput');
+    if (input) input.value = APP.pendingClipboard;
+    applyAIResponse();
+  }
+  dismissClipboard();
+}
+
+function dismissClipboard() {
+  APP.pendingClipboard = null;
+  document.getElementById('clipboardBanner').classList.add('hidden');
+}
+
+/* =============================================================================
+   EXPORT / IMPORT DATABASE
+   ============================================================================= */
+async function exportDatabase() {
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    app: 'OpenResume Studio',
+    resumes: await APP.db.getAll('resumes'),
+    templates: await APP.db.getAll('templates'),
+    settings: await APP.db.getAll('settings')
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const filename = `openresume-backup-${new Date().toISOString().slice(0, 10)}.json`;
+
+  if ('showSaveFilePicker' in window) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: filename,
+        types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }]
+      });
+      const w = await handle.createWritable();
+      await w.write(blob);
+      await w.close();
+      showToast('Database exported!', 'success');
+      return;
+    } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  // Fallback
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+  showToast('Database downloaded!', 'success');
+}
+
+async function handleImportDb(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!data.resumes || !Array.isArray(data.resumes)) throw new Error('Invalid backup format');
+
+    for (const r of data.resumes) {
+      if (!r.id) r.id = uuid();
+      await APP.db.put('resumes', r);
+    }
+    if (data.templates) for (const t of data.templates) await APP.db.put('templates', t);
+    if (data.settings) for (const s of data.settings) await APP.db.put('settings', s);
+
+    showToast(`Imported ${data.resumes.length} resume(s)!`, 'success');
+    renderDashboard();
+  } catch (err) {
+    showToast('Import failed: ' + err.message, 'error');
+  }
+  e.target.value = '';
+}
+
+/* =============================================================================
+   PWA SERVICE WORKER
+   ============================================================================= */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.warn('SW failed:', err));
+  });
+}
+
+/* =============================================================================
+   APP INIT
+   ============================================================================= */
+async function init() {
+  // Theme
+  const savedTheme = localStorage.getItem('or_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const themeIcon = document.getElementById('themeIcon');
+  if (themeIcon) themeIcon.setAttribute('data-lucide', savedTheme === 'dark' ? 'moon' : 'sun');
+
+  // DB
+  APP.db = new ResumeDB();
+  await APP.db.init();
+
+  // Template picker defaults
+  renderTemplatePicker('templatePicker', APP.selectedNewTemplate);
+
+  // Router
+  window.addEventListener('hashchange', handleRoute);
+  handleRoute();
+
+  // Clipboard bridge
+  setupClipboardBridge();
+
+  // Icons
+  lucide.createIcons();
+}
+
+// Boot
+init().catch(err => console.error('Init failed:', err));
+</script>
+
 </body>
 </html>
