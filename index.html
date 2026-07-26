@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover, interactive-widget=resizes-content">
   <title>OpenResume Studio — Free Offline AI Resume Builder</title>
   <meta name="description" content="100% free, offline-first PWA resume builder. Create stunning resumes with AI-powered content via ChatGPT/Claude copy-paste workflow. No sign-up, no servers.">
   <meta name="theme-color" content="#7c5cfc">
@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
 /* ==============================
    DESIGN TOKENS
@@ -451,6 +452,11 @@ input[type="range"] {
 
 /* Print CSS Rules - ONLY print the resume document! */
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
   body { background:#fff !important; color:#000 !important; margin:0 !important; padding:0 !important; }
   header, .app-header, .editor-header, .editor-sidebar, .overflow-banner, .bottom-nav, 
   .toast-container, .modal-overlay, .clipboard-banner, .mobile-preview-close, .canvas-toolbar,
@@ -458,76 +464,33 @@ input[type="range"] {
   .screen { display:block !important; min-height:auto !important; margin:0 !important; padding:0 !important; }
   #editorScreen { display:block !important; margin:0 !important; padding:0 !important; }
   .editor-body { display:block !important; height:auto !important; margin:0 !important; padding:0 !important; }
-  .editor-preview { display:block !important; background:transparent !important; padding:0 !important; margin:0 !important; position:static !important; overflow:visible !important; transform:none !important; }
-  .document-wrapper { box-shadow:none !important; width:100% !important; min-height:auto !important; transform:none !important; margin:0 !important; border-radius:0 !important; }
+  .editor-preview { display:block !important; background:transparent !important; padding:0 !important; margin:0 !important; position:static !important; overflow:visible !important; transform:none !important; width:100% !important; }
+  .document-wrapper { box-shadow:none !important; width:210mm !important; min-height:297mm !important; transform:none !important; margin:0 auto !important; border-radius:0 !important; }
   [contenteditable="true"]:hover, [contenteditable="true"]:focus { box-shadow:none !important; background:transparent !important; }
   @page { size:A4 portrait; margin:0; }
 }
 
-/* ==============================
-   BOTTOM NAV (MOBILE)
-   ============================== */
-.bottom-nav {
-  display:none; position:fixed; bottom:0; left:0; right:0;
-  height:56px; padding-bottom:env(safe-area-inset-bottom);
-  background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-  border-top:1px solid var(--border); z-index:150;
-  justify-content:space-around; align-items:center;
+/* Offline badge & PWA Install styling */
+.offline-badge {
+  display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.72rem; font-weight: 700;
+  padding: 0.25rem 0.65rem; border-radius: 20px; background: var(--warning-bg); color: var(--warning);
+  border: 1px solid rgba(251,191,36,0.3);
 }
-@media(max-width:900px) { .bottom-nav.visible { display:flex; } }
-.nav-item {
-  display:flex; flex-direction:column; align-items:center; gap:0.15rem;
-  background:none; border:none; color:var(--text-secondary); font-size:0.65rem;
-  font-weight:600; cursor:pointer; padding:0.3rem 0.75rem; border-radius:8px;
-  transition:all 0.2s;
+.pwa-install-btn {
+  background: linear-gradient(135deg, #10b981, #059669) !important; color: #fff !important;
+  box-shadow: 0 4px 14px rgba(16,185,129,0.3) !important;
 }
-.nav-item:active { transform:scale(0.92); }
-.nav-item.active { color:var(--accent); }
-.nav-item i { width:20px; height:20px; }
 
-/* Mobile preview close button */
-.mobile-preview-close {
-  display:none; position:fixed; top:0.6rem; right:0.6rem; z-index:210;
+/* Preview modal container dynamic scaling */
+.preview-modal-body {
+  max-height: 72vh; overflow-y: auto; overflow-x: hidden; background: var(--bg-base);
+  padding: 1rem 0.5rem; border-radius: 12px; display: flex; justify-content: center;
+  position: relative; width: 100%;
 }
-@media(max-width:900px) { .mobile-preview-close.visible { display:block; } }
-
-/* ==============================
-   TOAST NOTIFICATIONS
-   ============================== */
-.toast-container {
-  position:fixed; bottom:70px; right:1rem; z-index:500;
-  display:flex; flex-direction:column; gap:0.5rem; pointer-events:none;
+#previewModalContainer {
+  width: 210mm; min-height: 297mm; background: #fff; color: #1e293b;
+  box-shadow: var(--shadow-lg); transition: transform 0.2s ease, margin-bottom 0.2s ease;
 }
-@media(min-width:901px) { .toast-container { bottom:1.5rem; } }
-.toast {
-  pointer-events:auto; padding:0.7rem 1rem; border-radius:10px;
-  font-size:0.82rem; font-weight:600; display:flex; align-items:center; gap:0.4rem;
-  animation:toastIn 0.3s ease; min-width:220px; max-width:360px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.3);
-}
-.toast-success { background:#065f46; color:#d1fae5; }
-.toast-error { background:#991b1b; color:#fecaca; }
-.toast-info { background:#1e3a5f; color:#bfdbfe; }
-.toast.removing { animation:toastOut 0.3s ease forwards; }
-@keyframes toastIn { from { opacity:0; transform:translateY(10px) scale(0.95); } to { opacity:1; transform:none; } }
-@keyframes toastOut { to { opacity:0; transform:translateY(-10px) scale(0.95); } }
-
-/* ==============================
-   MODALS
-   ============================== */
-.modal-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(4px); z-index:300;
-  display:flex; align-items:center; justify-content:center; padding:1rem;
-}
-.modal-overlay.hidden { display:none; }
-.modal {
-  background:var(--bg-elevated); border:1px solid var(--border); border-radius:16px;
-  padding:1.5rem; max-width:540px; width:100%; max-height:90vh; overflow-y:auto;
-  animation:modalIn 0.25s ease;
-}
-.modal h3 { font-family:'Outfit',sans-serif; font-size:1.15rem; margin-bottom:1rem; }
-.modal-actions { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1.25rem; }
 
 /* Mobile Optimizations for Modals & Store */
 @media (max-width: 640px) {
@@ -535,7 +498,6 @@ input[type="range"] {
   .prompt-chips { overflow-x: auto !important; white-space: nowrap !important; padding-bottom: 0.4rem !important; display: flex !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch; }
   .prompt-chips .chip { flex-shrink: 0 !important; font-size: 0.72rem !important; padding: 0.3rem 0.5rem !important; }
   .template-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.4rem !important; }
-  #previewModalContainer { transform: scale(0.42) !important; transform-origin: top center !important; margin-bottom: -150mm !important; }
 }
 
 /* Clipboard banner */
@@ -684,6 +646,10 @@ input[type="range"] {
       </div>
     </div>
     <div class="header-actions">
+      <div id="offlineBadge" class="offline-badge hidden">⚡ Offline</div>
+      <button class="btn pwa-install-btn btn-sm hidden" id="pwaInstallBtn" onclick="installPWA()">
+        <i data-lucide="download-cloud"></i> <span class="hide-mobile">Install App</span>
+      </button>
       <button class="btn btn-secondary btn-sm" onclick="openTemplateManagerModal()">
         <i data-lucide="layout"></i> <span class="hide-mobile">Templates</span>
       </button>
@@ -708,8 +674,8 @@ input[type="range"] {
     </button>
     <input type="text" class="resume-name-input" id="resumeNameInput" placeholder="Resume name..." onchange="onResumeNameChange()">
     <div class="header-actions">
-      <button class="btn btn-primary btn-sm" onclick="window.print()" title="Print / Save PDF">
-        <i data-lucide="printer"></i> <span class="hide-mobile">PDF</span>
+      <button class="btn btn-primary btn-sm" onclick="openExportModal()" title="Download PDF or Export">
+        <i data-lucide="download"></i> <span>Download PDF</span>
       </button>
       <button class="btn-icon" onclick="duplicateCurrentResume()" title="Duplicate">
         <i data-lucide="copy"></i>
@@ -864,18 +830,55 @@ input[type="range"] {
 
 <!-- Template Live Preview Modal -->
 <div class="modal-overlay hidden" id="templatePreviewModal" style="z-index:400;">
-  <div class="modal" style="max-width:800px;width:95%;">
+  <div class="modal" style="max-width:820px;width:95%;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
       <h3 id="previewModalTitle">Template Live Preview</h3>
       <button class="btn btn-secondary btn-xs" onclick="closeModal('templatePreviewModal')">✕</button>
     </div>
-    <div style="max-height:70vh;overflow-y:auto;background:var(--bg-base);padding:1rem;border-radius:8px;display:flex;justify-content:center;">
-      <div id="previewModalContainer" style="width:210mm;min-height:297mm;background:#fff;color:#1e293b;box-shadow:var(--shadow-lg);transform:scale(0.75);transform-origin:top center;"></div>
+    <div class="preview-modal-body">
+      <div id="previewModalContainer"></div>
     </div>
     <div class="modal-actions" style="margin-top:1rem;">
       <button class="btn btn-secondary btn-sm" onclick="closeModal('templatePreviewModal')">Cancel</button>
       <button class="btn btn-primary btn-sm" id="installPreviewTplBtn" onclick="">
         <i data-lucide="download"></i> Install & Use Template
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PDF / Export Modal -->
+<div class="modal-overlay hidden" id="exportModal" style="z-index:400;">
+  <div class="modal" style="max-width:440px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h3>📄 Download & Export Resume</h3>
+      <button class="btn btn-secondary btn-xs" onclick="closeModal('exportModal')">✕</button>
+    </div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:1.2rem;line-height:1.4;">Select your download format for pixel-perfect single-page or multi-page resumes:</p>
+    
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+      <button class="btn btn-primary" style="width:100%;justify-content:flex-start;padding:0.75rem 1rem;" onclick="closeModal('exportModal');downloadPDF();">
+        <i data-lucide="file-down" style="width:22px;height:22px;"></i>
+        <div style="text-align:left;margin-left:0.5rem;">
+          <div style="font-weight:700;font-size:0.9rem;">📥 Download High-Res PDF</div>
+          <div style="font-size:0.72rem;opacity:0.85;font-weight:400;">Pixel-perfect PDF file saved directly to phone</div>
+        </div>
+      </button>
+
+      <button class="btn btn-secondary" style="width:100%;justify-content:flex-start;padding:0.75rem 1rem;" onclick="closeModal('exportModal');window.print();">
+        <i data-lucide="printer" style="width:22px;height:22px;"></i>
+        <div style="text-align:left;margin-left:0.5rem;">
+          <div style="font-weight:700;font-size:0.9rem;">🖨️ System Print / Save PDF</div>
+          <div style="font-size:0.72rem;opacity:0.85;font-weight:400;">Opens standard browser print dialog</div>
+        </div>
+      </button>
+
+      <button class="btn btn-secondary" style="width:100%;justify-content:flex-start;padding:0.75rem 1rem;" onclick="closeModal('exportModal');exportDatabase();">
+        <i data-lucide="database" style="width:22px;height:22px;"></i>
+        <div style="text-align:left;margin-left:0.5rem;">
+          <div style="font-weight:700;font-size:0.9rem;">💾 Export JSON Data Backup</div>
+          <div style="font-size:0.72rem;opacity:0.85;font-weight:400;">Save complete resume data backup file</div>
+        </div>
       </button>
     </div>
   </div>
@@ -1069,6 +1072,16 @@ function handleRoute() {
     document.getElementById('bottomNav').classList.remove('visible');
     renderDashboard();
     setTimeout(() => openModal('createResumeModal'), 100);
+  } else if (hash === '/ai') {
+    if (APP.currentResume) {
+      document.getElementById('editorScreen').classList.add('active');
+      document.getElementById('bottomNav').classList.add('visible');
+      switchEditorTab('ai');
+    } else {
+      document.getElementById('dashboardScreen').classList.add('active');
+      document.getElementById('bottomNav').classList.remove('visible');
+      renderDashboard();
+    }
   } else {
     document.getElementById('dashboardScreen').classList.add('active');
     document.getElementById('bottomNav').classList.remove('visible');
@@ -1509,10 +1522,82 @@ function renderGalleryTemplateGrid() {
       <div class="template-mini-preview">${t.preview}</div>
       <div class="template-option-name" style="margin-bottom:0.4rem;">${escHTML(t.name)}</div>
       <div style="display:flex;gap:0.3rem;">
-        ${!t.isBuiltIn ? `<button class="btn btn-danger btn-xs" style="width:100%;" onclick="deleteCustomTemplate('${t.id}')">Delete</button>` : '<span style="font-size:0.68rem;color:var(--text-tertiary);width:100%;">Built-in</span>'}
+        <button class="btn btn-secondary btn-xs" style="flex:1;" onclick="previewInstalledTemplate('${t.id}')">👁️ Preview</button>
+        ${!t.isBuiltIn ? `<button class="btn btn-danger btn-xs" style="flex:1;" onclick="deleteCustomTemplate('${t.id}')">Delete</button>` : ''}
       </div>
     </div>
   `).join('');
+}
+
+function updatePreviewModalScale() {
+  const container = document.getElementById('previewModalContainer');
+  if (!container) return;
+  const parent = container.parentElement;
+  if (!parent) return;
+
+  const parentWidth = parent.clientWidth - 16;
+  const docWidthPx = 794; // 210mm at 96dpi
+
+  if (parentWidth > 0 && parentWidth < docWidthPx) {
+    const scale = Math.min(1, Math.max(0.3, parentWidth / docWidthPx));
+    container.style.transform = `scale(${scale})`;
+    container.style.transformOrigin = 'top center';
+    const docHeightPx = container.scrollHeight || 1123;
+    const scaledHeight = docHeightPx * scale;
+    container.style.marginBottom = `-${(docHeightPx - scaledHeight) - 10}px`;
+  } else {
+    container.style.transform = 'scale(0.85)';
+    container.style.transformOrigin = 'top center';
+    const docHeightPx = container.scrollHeight || 1123;
+    const scaledHeight = docHeightPx * 0.85;
+    container.style.marginBottom = `-${(docHeightPx - scaledHeight) - 10}px`;
+  }
+}
+
+async function previewInstalledTemplate(id) {
+  const item = TEMPLATES[id];
+  if (!item) return;
+
+  document.getElementById('previewModalTitle').textContent = `Preview: ${item.name}`;
+  const container = document.getElementById('previewModalContainer');
+  container.innerHTML = '<div style="padding:2rem;text-align:center;color:#64748b;">Loading template...</div>';
+
+  openModal('templatePreviewModal');
+
+  const mockResume = APP.currentResume || {
+    contact: { name: 'Alex Morgan', title: 'Senior Software Engineer', email: 'alex@example.com', phone: '+1 555-0199', location: 'San Francisco, CA', website: 'alexmorgan.dev' },
+    sections: [
+      { title: 'Professional Summary', type: 'text', content: 'Results-driven engineer with 8+ years experience scaling high-concurrency web apps.' },
+      { title: 'Experience', type: 'items', items: [{ heading: 'Staff Software Engineer', subheading: 'Acme Corp', date: '2021 - Present', bullets: ['Architected micro-frontend app boosting speed by 40%.', 'Mentored 12 engineers.'] }] },
+      { title: 'Skills', type: 'tags', tags: ['JavaScript', 'HTML/CSS', 'Node.js', 'PWA', 'IndexedDB'] }
+    ],
+    styleOverrides: { accentColor: '#1e3a8a' }
+  };
+
+  if (item.render) {
+    container.innerHTML = item.render(mockResume);
+  } else if (item.html) {
+    container.innerHTML = renderCustomTemplate(mockResume, item.html, item.css || '');
+  }
+
+  const installBtn = document.getElementById('installPreviewTplBtn');
+  installBtn.innerHTML = '<i data-lucide="check"></i> Apply Template';
+  installBtn.onclick = () => {
+    closeModal('templatePreviewModal');
+    if (APP.currentResume) {
+      APP.currentResume.templateId = id;
+      scheduleSave();
+      updatePreview();
+      showToast(`Applied "${item.name}"!`, 'success');
+    } else {
+      APP.selectedNewTemplate = id;
+      closeModal('templateManagerModal');
+      openModal('createResumeModal');
+    }
+  };
+
+  setTimeout(updatePreviewModalScale, 50);
+  lucide.createIcons();
 }
 
 let activeStoreCategory = 'All';
@@ -1606,10 +1691,14 @@ async function previewOnlineTemplate(id) {
     };
 
     container.innerHTML = renderCustomTemplate(mockResume, text, '');
-    document.getElementById('installPreviewTplBtn').onclick = () => {
+    const installBtn = document.getElementById('installPreviewTplBtn');
+    installBtn.innerHTML = '<i data-lucide="download"></i> Install & Use Template';
+    installBtn.onclick = () => {
       closeModal('templatePreviewModal');
       installOnlineTemplate(id, text);
     };
+    setTimeout(updatePreviewModalScale, 50);
+    lucide.createIcons();
   } catch (e) {
     container.innerHTML = `<div style="padding:2rem;color:red;">Error loading preview: ${e.message}</div>`;
   }
@@ -2728,7 +2817,64 @@ function closeMobilePreview() {
 }
 
 /* Resize listener for scaling */
-window.addEventListener('resize', updateMobileScale);
+window.addEventListener('resize', () => {
+  updateMobileScale();
+  updatePreviewModalScale();
+});
+
+/* =============================================================================
+   PDF HIGH-RES EXPORT ENGINE
+   ============================================================================= */
+function openExportModal() {
+  openModal('exportModal');
+  lucide.createIcons();
+}
+
+async function downloadPDF() {
+  const docEl = document.getElementById('documentWrapper');
+  if (!docEl) return;
+
+  showToast('Generating high-res PDF...', 'info');
+
+  // Clone document wrapper to clean up outlines
+  const clone = docEl.cloneNode(true);
+  clone.style.transform = 'none';
+  clone.style.margin = '0';
+  clone.style.boxShadow = 'none';
+  clone.style.width = '210mm';
+  clone.style.borderRadius = '0';
+
+  // Remove contenteditable outlines and active selection highlights
+  const editables = clone.querySelectorAll('[contenteditable]');
+  editables.forEach(el => {
+    el.removeAttribute('contenteditable');
+    el.style.boxShadow = 'none';
+    el.style.background = 'transparent';
+  });
+
+  const filename = `${(APP.currentResume?.name || 'Resume').replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
+
+  const opt = {
+    margin: 0,
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  try {
+    if (typeof html2pdf !== 'undefined') {
+      await html2pdf().set(opt).from(clone).save();
+      showToast('PDF downloaded successfully!', 'success');
+    } else {
+      window.print();
+    }
+  } catch (err) {
+    console.error('PDF export error:', err);
+    showToast('Direct download error, opening print dialog...', 'warning');
+    window.print();
+  }
+}
 
 /* =============================================================================
    AUTO-SAVE
@@ -2840,6 +2986,48 @@ async function handleImportDb(e) {
 }
 
 /* =============================================================================
+   PWA INSTALLATION & OFFLINE DETECTOR
+   ============================================================================= */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('pwaInstallBtn');
+  if (btn) btn.classList.remove('hidden');
+});
+
+async function installPWA() {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') {
+    showToast('OpenResume Studio installed!', 'success');
+    const btn = document.getElementById('pwaInstallBtn');
+    if (btn) btn.classList.add('hidden');
+  }
+  deferredPrompt = null;
+}
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  const btn = document.getElementById('pwaInstallBtn');
+  if (btn) btn.classList.add('hidden');
+  showToast('OpenResume Studio installed successfully!', 'success');
+});
+
+function checkOnlineStatus() {
+  const badge = document.getElementById('offlineBadge');
+  if (!badge) return;
+  if (!navigator.onLine) {
+    badge.classList.remove('hidden');
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+window.addEventListener('online', checkOnlineStatus);
+window.addEventListener('offline', checkOnlineStatus);
+
+/* =============================================================================
    PWA SERVICE WORKER
    ============================================================================= */
 if ('serviceWorker' in navigator) {
@@ -2859,6 +3047,9 @@ async function init() {
   document.documentElement.setAttribute('data-theme', savedTheme);
   const themeIcon = document.getElementById('themeIcon');
   if (themeIcon) themeIcon.setAttribute('data-lucide', savedTheme === 'dark' ? 'moon' : 'sun');
+
+  // Network Status
+  checkOnlineStatus();
 
   // DB
   APP.db = new ResumeDB();
