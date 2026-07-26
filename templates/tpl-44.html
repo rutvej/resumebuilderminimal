@@ -1,0 +1,27 @@
+<style>
+      .tpl-container { display: flex; min-height: 100%; font-family: 'JetBrains Mono', monospace; color: #1e293b; }
+      .tpl-sidebar { width: 34%; background: #4338ca; color: #ffffff; padding: 1.2rem; }
+      .tpl-sidebar .res-name { font-size: 22px; font-weight: 800; text-transform: uppercase; color: #fff; line-height: 1.15; }
+      .tpl-sidebar .res-title { font-size: 13px; opacity: 0.85; margin-top: 0.2rem; margin-bottom: 1rem; }
+      .tpl-sidebar .side-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 0.2rem; margin-top: 1rem; margin-bottom: 0.5rem; }
+      .tpl-sidebar .side-item { font-size: 11px; opacity: 0.9; margin-bottom: 0.3rem; word-break: break-word; }
+      .tpl-main { flex: 1; padding: 1.2rem; }
+      .tpl-main .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #4338ca; padding-bottom: 0.2rem; margin-bottom: 0.6rem; color: #4338ca; }
+    </style>
+
+      <div class=tpl-container>
+        <aside class=tpl-sidebar>
+          <div class=res-name>{{name}}</div>
+          <div class=res-title>{{title}}</div>
+          <div class=side-title>Contact</div>
+          <div class=side-item>{{email}}</div>
+          <div class=side-item>{{phone}}</div>
+          <div class=side-item>{{location}}</div>
+          <div class=side-item>{{website}}</div>
+          {{skills}}
+        </aside>
+        <main class=tpl-main>
+          {{sections}}
+        </main>
+      </div>
+    

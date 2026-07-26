@@ -813,16 +813,27 @@ input[type="range"] {
 </div>
 
 <div class="modal-overlay hidden" id="templateManagerModal">
-  <div class="modal" style="max-width:640px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-      <h3>🎨 Template Gallery & Manager</h3>
+  <div class="modal" style="max-width:720px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <h3>🎨 Template Gallery & 50+ Modern Store</h3>
       <button class="btn btn-secondary btn-xs" onclick="closeModal('templateManagerModal')">✕</button>
     </div>
-    <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:1rem;">
-      All templates (built-in and custom uploaded/AI-generated) are saved in your offline database and available across all resumes.
-    </p>
-    <div class="template-grid mb-2" id="galleryTemplateGrid">
-      <!-- Rendered by JS -->
+    <div class="sidebar-tabs mb-2" style="border-bottom:1px solid var(--border);">
+      <button class="sidebar-tab active" id="galleryTabInstalled" onclick="switchGalleryTab('installed')">
+        💾 Installed (<span id="installedCount">0</span>)
+      </button>
+      <button class="sidebar-tab" id="galleryTabStore" onclick="switchGalleryTab('store')">
+        🌐 50+ Modern Store
+      </button>
+    </div>
+    <div id="installedTemplatesView">
+      <div class="template-grid mb-2" id="galleryTemplateGrid"></div>
+    </div>
+    <div id="storeTemplatesView" style="display:none;">
+      <p style="font-size:0.78rem;color:var(--text-secondary);margin-bottom:0.75rem;">
+        Click 👁️ <b>Preview</b> to inspect any template live before downloading into your offline database.
+      </p>
+      <div class="template-grid mb-2" id="storeTemplateGrid" style="max-height:380px;overflow-y:auto;"></div>
     </div>
     <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--border);padding-top:1rem;">
       <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importTemplateInput').click()">
@@ -830,6 +841,25 @@ input[type="range"] {
       </button>
       <button class="btn btn-magic btn-sm" onclick="closeModal('templateManagerModal');openAITemplatePrompt();">
         <i data-lucide="sparkles"></i> Design New with AI
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Template Live Preview Modal -->
+<div class="modal-overlay hidden" id="templatePreviewModal" style="z-index:400;">
+  <div class="modal" style="max-width:800px;width:95%;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <h3 id="previewModalTitle">Template Live Preview</h3>
+      <button class="btn btn-secondary btn-xs" onclick="closeModal('templatePreviewModal')">✕</button>
+    </div>
+    <div style="max-height:70vh;overflow-y:auto;background:var(--bg-base);padding:1rem;border-radius:8px;display:flex;justify-content:center;">
+      <div id="previewModalContainer" style="width:210mm;min-height:297mm;background:#fff;color:#1e293b;box-shadow:var(--shadow-lg);transform:scale(0.75);transform-origin:top center;"></div>
+    </div>
+    <div class="modal-actions" style="margin-top:1rem;">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('templatePreviewModal')">Cancel</button>
+      <button class="btn btn-primary btn-sm" id="installPreviewTplBtn" onclick="">
+        <i data-lucide="download"></i> Install & Use Template
       </button>
     </div>
   </div>
@@ -1422,22 +1452,137 @@ function selectTemplate(id, containerId) {
   document.querySelectorAll(`#${containerId} .template-option`).forEach(o => o.classList.toggle('active', o.querySelector('.template-option-name').textContent === (TEMPLATES[id]||{}).name));
 }
 
-function openTemplateManagerModal() {
+let onlineTemplatesStore = [];
+
+async function openTemplateManagerModal() {
   renderGalleryTemplateGrid();
+  switchGalleryTab('installed');
   openModal('templateManagerModal');
+  fetchOnlineTemplatesStore();
+}
+
+function switchGalleryTab(tab) {
+  const installedView = document.getElementById('installedTemplatesView');
+  const storeView = document.getElementById('storeTemplatesView');
+  const tabInst = document.getElementById('galleryTabInstalled');
+  const tabStore = document.getElementById('galleryTabStore');
+
+  if (tab === 'installed') {
+    installedView.style.display = 'block';
+    storeView.style.display = 'none';
+    tabInst.classList.add('active');
+    tabStore.classList.remove('active');
+  } else {
+    installedView.style.display = 'none';
+    storeView.style.display = 'block';
+    tabInst.classList.remove('active');
+    tabStore.classList.add('active');
+  }
 }
 
 function renderGalleryTemplateGrid() {
   const container = document.getElementById('galleryTemplateGrid');
+  const countEl = document.getElementById('installedCount');
+  const templates = Object.values(TEMPLATES);
+  if (countEl) countEl.textContent = templates.length;
   if (!container) return;
-  container.innerHTML = Object.values(TEMPLATES).map(t => `
+
+  container.innerHTML = templates.map(t => `
     <div class="template-option">
       ${!t.isBuiltIn ? '<span class="template-badge">Custom</span>' : ''}
       <div class="template-mini-preview">${t.preview}</div>
       <div class="template-option-name" style="margin-bottom:0.4rem;">${escHTML(t.name)}</div>
-      ${!t.isBuiltIn ? `<button class="btn btn-danger btn-xs" style="width:100%;" onclick="deleteCustomTemplate('${t.id}')">Delete</button>` : '<span style="font-size:0.68rem;color:var(--text-tertiary);">Built-in</span>'}
+      <div style="display:flex;gap:0.3rem;">
+        ${!t.isBuiltIn ? `<button class="btn btn-danger btn-xs" style="width:100%;" onclick="deleteCustomTemplate('${t.id}')">Delete</button>` : '<span style="font-size:0.68rem;color:var(--text-tertiary);width:100%;">Built-in</span>'}
+      </div>
     </div>
   `).join('');
+}
+
+async function fetchOnlineTemplatesStore() {
+  const container = document.getElementById('storeTemplateGrid');
+  if (!container) return;
+
+  if (onlineTemplatesStore.length === 0) {
+    container.innerHTML = '<div style="font-size:0.8rem;color:var(--text-secondary);padding:1rem;text-align:center;">Loading 50+ Modern Templates...</div>';
+    try {
+      const res = await fetch('templates/templates.json');
+      if (res.ok) {
+        onlineTemplatesStore = await res.json();
+      }
+    } catch (e) {
+      container.innerHTML = '<div style="font-size:0.8rem;color:var(--danger);padding:1rem;text-align:center;">Could not load online store catalog.</div>';
+      return;
+    }
+  }
+
+  container.innerHTML = onlineTemplatesStore.map(item => `
+    <div class="template-option">
+      <span class="template-badge" style="background:var(--bg-surface);color:var(--text-secondary);border:1px solid var(--border);">${escHTML(item.category)}</span>
+      <div class="template-mini-preview" style="background:${item.accent}20;display:flex;align-items:center;justify-content:center;">
+        <div style="width:14px;height:14px;border-radius:50%;background:${item.accent};"></div>
+      </div>
+      <div class="template-option-name" style="margin-bottom:0.4rem;">${escHTML(item.name)}</div>
+      <div style="display:flex;gap:0.3rem;">
+        <button class="btn btn-secondary btn-xs" style="flex:1;" onclick="previewOnlineTemplate('${item.id}')">👁️ Preview</button>
+        <button class="btn btn-primary btn-xs" style="flex:1;" onclick="installOnlineTemplate('${item.id}')">📥 Use</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function previewOnlineTemplate(id) {
+  const item = onlineTemplatesStore.find(t => t.id === id);
+  if (!item) return;
+
+  document.getElementById('previewModalTitle').textContent = `Preview: ${item.name} (${item.category})`;
+  const container = document.getElementById('previewModalContainer');
+  container.innerHTML = '<div style="padding:2rem;text-align:center;color:#64748b;">Loading template...</div>';
+
+  openModal('templatePreviewModal');
+
+  try {
+    const res = await fetch(item.file);
+    const text = await res.text();
+    const mockResume = APP.currentResume || {
+      contact: { name: 'Alex Morgan', title: 'Senior Software Engineer', email: 'alex@example.com', phone: '+1 555-0199', location: 'San Francisco, CA', website: 'alexmorgan.dev' },
+      sections: [
+        { title: 'Professional Summary', type: 'text', content: 'Results-driven engineer with 8+ years experience scaling high-concurrency web apps.' },
+        { title: 'Experience', type: 'items', items: [{ heading: 'Staff Software Engineer', subheading: 'Acme Corp', date: '2021 - Present', bullets: ['Architected micro-frontend app boosting speed by 40%.', 'Mentored 12 engineers.'] }] },
+        { title: 'Skills', type: 'tags', tags: ['JavaScript', 'HTML/CSS', 'Node.js', 'PWA', 'IndexedDB'] }
+      ],
+      styleOverrides: { accentColor: item.accent }
+    };
+
+    container.innerHTML = renderCustomTemplate(mockResume, text, '');
+    document.getElementById('installPreviewTplBtn').onclick = () => {
+      closeModal('templatePreviewModal');
+      installOnlineTemplate(id, text);
+    };
+  } catch (e) {
+    container.innerHTML = `<div style="padding:2rem;color:red;">Error loading preview: ${e.message}</div>`;
+  }
+}
+
+async function installOnlineTemplate(id, preloadedText) {
+  const item = onlineTemplatesStore.find(t => t.id === id);
+  if (!item) return;
+
+  let text = preloadedText;
+  if (!text) {
+    try {
+      const res = await fetch(item.file);
+      text = await res.text();
+    } catch (e) {
+      showToast('Failed to download template file', 'error');
+      return;
+    }
+  }
+
+  await saveAndApplyCustomTemplate(text, item.name);
+  renderGalleryTemplateGrid();
+  closeModal('templateManagerModal');
+  showToast(`Installed & Applied "${item.name}"!`, 'success');
 }
 
 async function deleteCustomTemplate(id) {

@@ -1,0 +1,23 @@
+<style>
+      .tpl-container { font-family: 'Merriweather', serif; color: #1e293b; padding: 1.2rem; text-align: center; }
+      .tpl-header { border-bottom: 2px solid #ea580c; padding-bottom: 0.8rem; margin-bottom: 1rem; }
+      .tpl-name { font-size: 24px; font-weight: 800; color: #ea580c; text-transform: uppercase; letter-spacing: 0.06em; }
+      .tpl-title { font-size: 14px; color: #475569; font-weight: 500; margin-top: 0.2rem; }
+      .tpl-contact { font-size: 11px; color: #64748b; margin-top: 0.4rem; display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap; }
+      .tpl-main { text-align: left; }
+      .tpl-main .res-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; padding: 0.2rem 0; margin-bottom: 0.6rem; color: #ea580c; }
+    </style>
+
+      <div class=tpl-container>
+        <header class=tpl-header>
+          <div class=tpl-name>{{name}}</div>
+          <div class=tpl-title>{{title}}</div>
+          <div class=tpl-contact>
+            <span>{{email}}</span> • <span>{{phone}}</span> • <span>{{location}}</span> • <span>{{website}}</span>
+          </div>
+        </header>
+        <main class=tpl-main>
+          {{sections}}
+        </main>
+      </div>
+    
