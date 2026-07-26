@@ -460,7 +460,7 @@ input[type="range"] {
   body { background:#fff !important; color:#000 !important; margin:0 !important; padding:0 !important; }
   header, .app-header, .editor-header, .editor-sidebar, .overflow-banner, .bottom-nav, 
   .toast-container, .modal-overlay, .clipboard-banner, .mobile-preview-close, .canvas-toolbar,
-  .dashboard, #dashboardScreen { display:none !important; }
+  .dashboard, #dashboardScreen, #designerScreen, .designer-header, .designer-panel { display:none !important; }
   .screen { display:block !important; min-height:auto !important; margin:0 !important; padding:0 !important; }
   #editorScreen { display:block !important; margin:0 !important; padding:0 !important; }
   .editor-body { display:block !important; height:auto !important; margin:0 !important; padding:0 !important; }
@@ -667,6 +667,192 @@ input[type="range"] {
    ============================== */
 @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 .fade-up { animation:fadeUp 0.35s ease; }
+
+/* ==============================
+   TEMPLATE DESIGNER
+   ============================== */
+#designerScreen { display:none; flex-direction:column; height:100vh; height:100dvh; }
+#designerScreen.active { display:flex !important; }
+
+.designer-header {
+  display:flex; align-items:center; gap:0.5rem; padding:0.6rem 1rem;
+  background:var(--glass-bg); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border); z-index:10; min-height:52px;
+}
+.designer-title-input {
+  flex:1; background:transparent; border:none; color:var(--text-primary);
+  font-size:0.95rem; font-weight:600; outline:none; min-width:0;
+}
+
+.designer-canvas-area {
+  flex:1; overflow-y:auto; overflow-x:hidden; display:flex;
+  justify-content:center; padding:1rem 0.5rem; background:var(--bg-base);
+  -webkit-overflow-scrolling:touch;
+}
+.designer-canvas {
+  width:210mm; min-height:297mm; background:#ffffff; color:#1e293b;
+  box-shadow:var(--shadow-lg); border-radius:4px; position:relative;
+  transform-origin:top center; transition:transform 0.15s ease;
+}
+
+.designer-zone {
+  min-height:32px; position:relative; transition:all 0.2s;
+  border:2px dashed transparent; border-radius:4px; margin:2px 0;
+}
+.designer-zone.drag-over { border-color:var(--accent); background:rgba(124,92,252,0.06); }
+
+.designer-block {
+  display:flex; align-items:flex-start; gap:0.4rem; padding:0.25rem 0.3rem;
+  border-radius:4px; cursor:default; position:relative;
+  transition:background 0.15s, box-shadow 0.15s;
+  user-select:none; -webkit-user-select:none;
+}
+.designer-block:hover { background:rgba(124,92,252,0.05); }
+.designer-block.dragging { opacity:0.4; box-shadow:0 0 0 2px var(--accent); }
+.designer-block .drag-handle {
+  color:#cbd5e1; font-size:0.65rem; cursor:grab; flex-shrink:0;
+  display:flex; align-items:center; padding-top:0.15rem; touch-action:none;
+  opacity:0; transition:opacity 0.15s;
+}
+.designer-block:hover .drag-handle { opacity:1; }
+.designer-block .remove-block {
+  position:absolute; top:2px; right:2px; background:none; border:none; color:#94a3b8;
+  cursor:pointer; font-size:0.65rem; padding:0.15rem 0.25rem; border-radius:4px;
+  opacity:0; transition:opacity 0.15s, color 0.15s; z-index:2;
+}
+.designer-block:hover .remove-block { opacity:1; }
+.designer-block .remove-block:hover { color:#f87171; }
+
+.designer-drag-ghost {
+  position:fixed; z-index:9999; pointer-events:none;
+  background:var(--bg-elevated); border:2px solid var(--accent);
+  border-radius:8px; padding:0.4rem 0.8rem; font-size:0.8rem;
+  font-weight:600; color:var(--text-primary); box-shadow:0 8px 24px rgba(0,0,0,0.3);
+  display:flex; align-items:center; gap:0.4rem;
+  transform:translate(-50%,-50%); opacity:0.95;
+}
+
+.designer-panel {
+  background:var(--bg-surface); border-top:1px solid var(--border);
+  display:flex; flex-direction:column; max-height:42vh; min-height:175px;
+  position:relative; z-index:5;
+}
+.designer-tabs {
+  display:flex; border-bottom:1px solid var(--border); flex-shrink:0;
+}
+.designer-tab {
+  flex:1; padding:0.55rem 0.5rem; background:none; border:none;
+  color:var(--text-secondary); font-size:0.75rem; font-weight:700;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  gap:0.3rem; transition:all 0.2s; border-bottom:2px solid transparent;
+}
+.designer-tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.designer-tab-content { flex:1; overflow-y:auto; padding:0.75rem; -webkit-overflow-scrolling:touch; }
+.designer-tab-panel { display:none; }
+.designer-tab-panel.active { display:block; }
+
+.block-palette { display:flex; flex-wrap:wrap; gap:0.4rem; }
+.palette-block {
+  display:flex; align-items:center; gap:0.3rem; padding:0.4rem 0.65rem;
+  background:var(--bg-card); border:1.5px solid var(--border);
+  border-radius:10px; cursor:pointer; font-size:0.76rem; font-weight:600;
+  color:var(--text-primary); transition:all 0.2s;
+  touch-action:manipulation; user-select:none; -webkit-user-select:none;
+}
+.palette-block:active { transform:scale(0.95); }
+.palette-block:hover { border-color:var(--accent); background:var(--accent-bg); }
+.palette-block.placed { border-color:var(--success); background:var(--success-bg); opacity:0.7; }
+.palette-block .palette-check { color:var(--success); font-size:0.7rem; margin-left:0.1rem; }
+
+.designer-style-section { margin-bottom:0.9rem; }
+.designer-style-section > label {
+  display:block; font-size:0.7rem; font-weight:700; color:var(--text-secondary);
+  text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.35rem;
+}
+
+.layout-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; }
+.layout-card {
+  border:2px solid var(--border); border-radius:10px; padding:0.45rem;
+  cursor:pointer; text-align:center; transition:all 0.2s; background:var(--bg-card);
+}
+.layout-card.active { border-color:var(--accent); background:var(--accent-bg); }
+.layout-card:active { transform:scale(0.96); }
+.layout-card-preview {
+  height:32px; border-radius:3px; overflow:hidden; margin-bottom:0.2rem;
+  border:1px solid var(--border); background:var(--bg-surface);
+}
+.layout-card-preview.lcp-single .lcp-header { height:30%; background:var(--accent-bg); }
+.layout-card-preview.lcp-single .lcp-body { height:70%; }
+.layout-card-preview.lcp-sidebar-left { display:flex; }
+.layout-card-preview.lcp-sidebar-left .lcp-side { width:35%; background:var(--accent-bg); }
+.layout-card-preview.lcp-sidebar-left .lcp-main { width:65%; }
+.layout-card-preview.lcp-sidebar-right { display:flex; }
+.layout-card-preview.lcp-sidebar-right .lcp-main { width:65%; }
+.layout-card-preview.lcp-sidebar-right .lcp-side { width:35%; background:var(--accent-bg); }
+.layout-card-label { font-size:0.66rem; font-weight:700; }
+
+.color-swatches { display:flex; flex-wrap:wrap; gap:0.3rem; align-items:center; }
+.color-swatch {
+  width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent;
+  transition:all 0.15s;
+}
+.color-swatch:active { transform:scale(0.9); }
+.color-swatch.active { border-color:var(--text-primary); box-shadow:0 0 0 2px var(--bg-surface); }
+.color-swatch-custom {
+  width:26px; height:26px; border:2px dashed var(--border); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  font-size:0.65rem; color:var(--text-secondary); position:relative; overflow:hidden;
+}
+.color-swatch-custom input[type="color"] {
+  position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;
+}
+
+.style-chips { display:flex; flex-wrap:wrap; gap:0.3rem; }
+.style-chip {
+  padding:0.3rem 0.55rem; border-radius:8px; border:1.5px solid var(--border);
+  background:var(--bg-card); cursor:pointer; font-size:0.7rem; font-weight:600;
+  color:var(--text-primary); transition:all 0.2s;
+}
+.style-chip:active { transform:scale(0.95); }
+.style-chip.active { border-color:var(--accent); background:var(--accent-bg); color:var(--accent); }
+
+.ai-preset-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.4rem; }
+.ai-preset-card {
+  border:1.5px solid var(--border); border-radius:12px; padding:0.6rem;
+  cursor:pointer; transition:all 0.2s; background:var(--bg-card); text-align:center;
+}
+.ai-preset-card:hover { border-color:var(--accent); background:var(--accent-bg); }
+.ai-preset-card:active { transform:scale(0.97); }
+.ai-preset-icon { font-size:1.3rem; margin-bottom:0.2rem; }
+.ai-preset-name { font-size:0.78rem; font-weight:700; margin-bottom:0.1rem; }
+.ai-preset-desc { font-size:0.66rem; color:var(--text-secondary); line-height:1.25; }
+
+.ai-suggest-btn {
+  width:100%; padding:0.65rem; border-radius:12px; border:none;
+  background:linear-gradient(135deg, #7c5cfc, #a78bfa, #7c5cfc);
+  background-size:200% 200%; animation:gradientShift 3s ease infinite;
+  color:#fff; font-weight:700; font-size:0.82rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:0.4rem;
+  margin-bottom:0.7rem; transition:transform 0.15s;
+}
+.ai-suggest-btn:active { transform:scale(0.97); }
+@keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+.zone-empty-hint {
+  padding:0.6rem; text-align:center; color:#94a3b8; font-size:0.7rem;
+  font-weight:500; font-style:italic;
+}
+
+@media(max-width:640px) {
+  .designer-canvas-area { padding:0.5rem 0.2rem; }
+  .designer-panel { min-height:160px; max-height:48vh; }
+  .block-palette { gap:0.3rem; }
+  .palette-block { padding:0.35rem 0.5rem; font-size:0.72rem; }
+  .layout-cards { gap:0.3rem; }
+  .ai-preset-grid { gap:0.3rem; }
+  .designer-tab { font-size:0.72rem; padding:0.5rem 0.3rem; }
+}
+
   </style>
 </head>
 <body>
@@ -804,6 +990,46 @@ input[type="range"] {
   </div>
 </div>
 
+<!-- ============================
+     TEMPLATE DESIGNER SCREEN
+     ============================ -->
+<div class="screen" id="designerScreen">
+  <header class="designer-header">
+    <button class="btn btn-ghost btn-sm" onclick="exitDesigner()">
+      <i data-lucide="arrow-left"></i> Back
+    </button>
+    <input type="text" class="designer-title-input" id="designerTitleInput" placeholder="Template name..." value="My Custom Template">
+    <button class="btn btn-primary btn-sm" onclick="saveDesignerTemplate()">
+      <i data-lucide="save"></i> Save
+    </button>
+  </header>
+
+  <div class="designer-canvas-area" id="designerCanvasArea">
+    <div class="designer-canvas" id="designerCanvas">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <div class="designer-panel">
+    <div class="designer-tabs">
+      <button class="designer-tab active" data-dtab="blocks" onclick="switchDesignerTab('blocks',this)">
+        📦 Blocks
+      </button>
+      <button class="designer-tab" data-dtab="style" onclick="switchDesignerTab('style',this)">
+        🎨 Style
+      </button>
+      <button class="designer-tab" data-dtab="ai" onclick="switchDesignerTab('ai',this)">
+        ✨ AI
+      </button>
+    </div>
+    <div class="designer-tab-content">
+      <div class="designer-tab-panel active" id="designerBlocksPanel"></div>
+      <div class="designer-tab-panel" id="designerStylePanel"></div>
+      <div class="designer-tab-panel" id="designerAIPanel"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Mobile preview close -->
 <button class="btn btn-secondary btn-sm mobile-preview-close" id="mobilePreviewClose" onclick="closeMobilePreview()">
   <i data-lucide="x"></i> Close Preview
@@ -885,10 +1111,13 @@ input[type="range"] {
     </div>
     <div style="display:flex;gap:0.5rem;flex-wrap:wrap;justify-content:space-between;border-top:1px solid var(--border);padding-top:1rem;">
       <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importTemplateInput').click()">
-        <i data-lucide="upload"></i> Upload Custom HTML
+        <i data-lucide="upload"></i> Upload HTML
+      </button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal('templateManagerModal');navigateTo('/designer');">
+        <i data-lucide="wand-2"></i> 🎨 Design Custom
       </button>
       <button class="btn btn-magic btn-sm" onclick="closeModal('templateManagerModal');openAITemplatePrompt();">
-        <i data-lucide="sparkles"></i> Design New with AI
+        <i data-lucide="sparkles"></i> AI Generate
       </button>
     </div>
   </div>
@@ -1138,6 +1367,11 @@ function handleRoute() {
     document.getElementById('bottomNav').classList.remove('visible');
     renderDashboard();
     setTimeout(() => openModal('createResumeModal'), 100);
+  } else if (hash === '/designer' || hash.startsWith('/designer/')) {
+    const editId = hash.startsWith('/designer/') ? hash.replace('/designer/', '') : null;
+    document.getElementById('designerScreen').classList.add('active');
+    document.getElementById('bottomNav').classList.remove('visible');
+    openDesigner(editId);
   } else if (hash === '/ai') {
     if (APP.currentResume) {
       document.getElementById('editorScreen').classList.add('active');
@@ -1468,6 +1702,9 @@ async function renderDashboard() {
       <div class="dashboard-top">
         <h2>My Resumes</h2>
         <div class="dashboard-actions">
+          <button class="btn btn-magic btn-sm" onclick="navigateTo('/designer')">
+            <i data-lucide="wand-2"></i> Design Template
+          </button>
           <button class="btn btn-secondary btn-sm" onclick="openTemplateManagerModal()">
             <i data-lucide="layout"></i> Gallery
           </button>
@@ -1491,6 +1728,9 @@ async function renderDashboard() {
         <div class="dashboard-actions">
           <button class="btn btn-primary btn-sm" onclick="openModal('createResumeModal')">
             <i data-lucide="plus"></i> New
+          </button>
+          <button class="btn btn-magic btn-sm" onclick="navigateTo('/designer')">
+            <i data-lucide="wand-2"></i> Design
           </button>
           <button class="btn btn-secondary btn-sm" onclick="openTemplateManagerModal()">
             <i data-lucide="layout"></i> Gallery
@@ -1582,17 +1822,20 @@ function renderGalleryTemplateGrid() {
   if (countEl) countEl.textContent = templates.length;
   if (!container) return;
 
-  container.innerHTML = templates.map(t => `
+  container.innerHTML = templates.map(t => {
+    const hasDesigner = !t.isBuiltIn && t.id.startsWith('custom-');
+    return `
     <div class="template-option">
       ${!t.isBuiltIn ? '<span class="template-badge">Custom</span>' : ''}
       <div class="template-mini-preview">${t.preview}</div>
       <div class="template-option-name" style="margin-bottom:0.4rem;">${escHTML(t.name)}</div>
-      <div style="display:flex;gap:0.3rem;">
+      <div style="display:flex;gap:0.3rem;flex-wrap:wrap;">
         <button class="btn btn-secondary btn-xs" style="flex:1;" onclick="previewInstalledTemplate('${t.id}')">👁️ Preview</button>
-        ${!t.isBuiltIn ? `<button class="btn btn-danger btn-xs" style="flex:1;" onclick="deleteCustomTemplate('${t.id}')">Delete</button>` : ''}
+        ${hasDesigner ? `<button class="btn btn-secondary btn-xs" style="flex:1;" onclick="closeModal('templateManagerModal');navigateTo('/designer/${t.id}')">✏️ Edit</button>` : ''}
+        ${!t.isBuiltIn ? `<button class="btn btn-danger btn-xs" onclick="deleteCustomTemplate('${t.id}')">✕</button>` : ''}
       </div>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function updatePreviewModalScale() {
@@ -3092,6 +3335,596 @@ function checkOnlineStatus() {
 }
 window.addEventListener('online', checkOnlineStatus);
 window.addEventListener('offline', checkOnlineStatus);
+
+/* =============================================================================
+   TEMPLATE DESIGNER
+   ============================================================================= */
+const DESIGNER = {
+  active: false, editingId: null, name: 'My Custom Template',
+  layout: 'single',
+  headerBlocks: ['name', 'title', 'contact'],
+  sidebarBlocks: [],
+  mainBlocks: ['sections'],
+  style: { accentColor: '#1e3a8a', fontFamily: "'Inter', sans-serif", headerStyle: 'minimal', dividerStyle: 'line', spacing: 'normal' },
+  dragState: null
+};
+
+const DESIGNER_BLOCKS = [
+  { id: 'name', label: 'Name', icon: '📛', defaultZone: 'header' },
+  { id: 'title', label: 'Title', icon: '💼', defaultZone: 'header' },
+  { id: 'contact', label: 'Contact', icon: '📧', defaultZone: 'header' },
+  { id: 'summary', label: 'Summary', icon: '📝', defaultZone: 'main' },
+  { id: 'experience', label: 'Experience', icon: '💻', defaultZone: 'main' },
+  { id: 'education', label: 'Education', icon: '🎓', defaultZone: 'main' },
+  { id: 'skills', label: 'Skills', icon: '🏷️', defaultZone: 'main' },
+  { id: 'projects', label: 'Projects', icon: '🚀', defaultZone: 'main' },
+  { id: 'certifications', label: 'Certs', icon: '📜', defaultZone: 'main' },
+  { id: 'sections', label: 'All Sections', icon: '📄', defaultZone: 'main' }
+];
+
+const DESIGNER_PRESETS = {
+  professional: { name:'Professional', icon:'🏢', desc:'Clean single-column, ATS-friendly', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['summary','experience','education','skills'], style:{ accentColor:'#1e3a8a', fontFamily:"'Inter', sans-serif", headerStyle:'underlined', dividerStyle:'line', spacing:'normal' } },
+  creative: { name:'Creative', icon:'🎨', desc:'Modern sidebar with accent header', layout:'sidebar-left', headerBlocks:['name','title'], sidebarBlocks:['contact','skills','certifications'], mainBlocks:['summary','experience','education'], style:{ accentColor:'#7c3aed', fontFamily:"'Outfit', sans-serif", headerStyle:'filled', dividerStyle:'accent-bar', spacing:'normal' } },
+  minimal: { name:'Minimal', icon:'📐', desc:'Ultra-clean, no dividers, tight spacing', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['summary','experience','education','skills'], style:{ accentColor:'#374151', fontFamily:"'Inter', sans-serif", headerStyle:'minimal', dividerStyle:'none', spacing:'compact' } },
+  academic: { name:'Academic', icon:'🎓', desc:'Formal centered header, classic look', layout:'single', headerBlocks:['name','title','contact'], sidebarBlocks:[], mainBlocks:['education','experience','projects','skills'], style:{ accentColor:'#1e3a8a', fontFamily:"'Merriweather', serif", headerStyle:'underlined', dividerStyle:'line', spacing:'spacious' } }
+};
+
+const ACCENT_COLORS = ['#1e3a8a','#7c3aed','#dc2626','#059669','#d97706','#0891b2','#be185d','#374151','#4338ca','#0d9488'];
+const DESIGNER_FONTS = [
+  { label:'Inter', value:"'Inter', sans-serif" },
+  { label:'Outfit', value:"'Outfit', sans-serif" },
+  { label:'Merriweather', value:"'Merriweather', serif" },
+  { label:'System', value:"system-ui, sans-serif" }
+];
+
+function openDesigner(editId) {
+  DESIGNER.active = true;
+  DESIGNER.editingId = editId || null;
+  if (editId) {
+    loadDesignerTemplate(editId);
+  } else {
+    resetDesignerState();
+    document.getElementById('designerTitleInput').value = DESIGNER.name;
+    _renderAllDesignerPanels();
+  }
+}
+
+function exitDesigner() {
+  DESIGNER.active = false;
+  navigateTo('/');
+}
+
+function resetDesignerState() {
+  DESIGNER.name = 'My Custom Template';
+  DESIGNER.layout = 'single';
+  DESIGNER.headerBlocks = ['name','title','contact'];
+  DESIGNER.sidebarBlocks = [];
+  DESIGNER.mainBlocks = ['sections'];
+  DESIGNER.style = { accentColor:'#1e3a8a', fontFamily:"'Inter', sans-serif", headerStyle:'minimal', dividerStyle:'line', spacing:'normal' };
+}
+
+async function loadDesignerTemplate(id) {
+  const tpl = await APP.db.get('templates', id);
+  if (tpl && tpl.designerState) {
+    const s = tpl.designerState;
+    DESIGNER.name = tpl.name || 'My Custom Template';
+    DESIGNER.layout = s.layout || 'single';
+    DESIGNER.headerBlocks = [...(s.headerBlocks || ['name','title','contact'])];
+    DESIGNER.sidebarBlocks = [...(s.sidebarBlocks || [])];
+    DESIGNER.mainBlocks = [...(s.mainBlocks || ['sections'])];
+    DESIGNER.style = { ...DESIGNER.style, ...(s.style || {}) };
+  } else {
+    resetDesignerState();
+    if (tpl) DESIGNER.name = tpl.name || 'My Custom Template';
+  }
+  document.getElementById('designerTitleInput').value = DESIGNER.name;
+  _renderAllDesignerPanels();
+}
+
+function _renderAllDesignerPanels() {
+  renderDesignerBlocksPanel();
+  renderDesignerStylePanel();
+  renderDesignerAIPanel();
+  renderDesignerCanvas();
+  setTimeout(scaleDesignerCanvas, 50);
+}
+
+function switchDesignerTab(tab, btn) {
+  document.querySelectorAll('.designer-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.designer-tab-panel').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else document.querySelector(`.designer-tab[data-dtab="${tab}"]`)?.classList.add('active');
+  const map = { blocks:'designerBlocksPanel', style:'designerStylePanel', ai:'designerAIPanel' };
+  document.getElementById(map[tab])?.classList.add('active');
+}
+
+/* --- Block Palette --- */
+function renderDesignerBlocksPanel() {
+  const allPlaced = [...DESIGNER.headerBlocks, ...DESIGNER.sidebarBlocks, ...DESIGNER.mainBlocks];
+  const container = document.getElementById('designerBlocksPanel');
+  if (!container) return;
+  container.innerHTML = `
+    <div style="margin-bottom:0.5rem;">
+      <div style="font-size:0.7rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.35rem;">Tap to add / remove blocks</div>
+      <div class="block-palette">
+        ${DESIGNER_BLOCKS.map(b => {
+          const placed = allPlaced.includes(b.id);
+          return `<div class="palette-block ${placed ? 'placed' : ''}" onclick="addBlockFromPalette('${b.id}')">
+            <span>${b.icon}</span>${b.label}${placed ? '<span class="palette-check">✓</span>' : ''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+    <div style="font-size:0.66rem;color:var(--text-tertiary);margin-top:0.2rem;">💡 Tap a block to toggle it. Drag ⠿ handles on the canvas to reorder or move between zones.</div>`;
+}
+
+function addBlockFromPalette(blockId) {
+  const allPlaced = [...DESIGNER.headerBlocks, ...DESIGNER.sidebarBlocks, ...DESIGNER.mainBlocks];
+  const sectionTypes = ['summary','experience','education','skills','projects','certifications'];
+
+  if (allPlaced.includes(blockId)) {
+    DESIGNER.headerBlocks = DESIGNER.headerBlocks.filter(b => b !== blockId);
+    DESIGNER.sidebarBlocks = DESIGNER.sidebarBlocks.filter(b => b !== blockId);
+    DESIGNER.mainBlocks = DESIGNER.mainBlocks.filter(b => b !== blockId);
+  } else {
+    if (blockId === 'sections') {
+      DESIGNER.headerBlocks = DESIGNER.headerBlocks.filter(b => !sectionTypes.includes(b));
+      DESIGNER.sidebarBlocks = DESIGNER.sidebarBlocks.filter(b => !sectionTypes.includes(b));
+      DESIGNER.mainBlocks = DESIGNER.mainBlocks.filter(b => !sectionTypes.includes(b));
+    } else if (sectionTypes.includes(blockId)) {
+      DESIGNER.mainBlocks = DESIGNER.mainBlocks.filter(b => b !== 'sections');
+      DESIGNER.sidebarBlocks = DESIGNER.sidebarBlocks.filter(b => b !== 'sections');
+    }
+    const def = DESIGNER_BLOCKS.find(b => b.id === blockId);
+    if (def?.defaultZone === 'header') DESIGNER.headerBlocks.push(blockId);
+    else if (DESIGNER.layout !== 'single' && ['skills','certifications','contact'].includes(blockId)) DESIGNER.sidebarBlocks.push(blockId);
+    else DESIGNER.mainBlocks.push(blockId);
+  }
+  renderDesignerBlocksPanel();
+  renderDesignerCanvas();
+}
+
+function removeDesignerBlock(zone, blockId) {
+  if (zone === 'header') DESIGNER.headerBlocks = DESIGNER.headerBlocks.filter(b => b !== blockId);
+  else if (zone === 'sidebar') DESIGNER.sidebarBlocks = DESIGNER.sidebarBlocks.filter(b => b !== blockId);
+  else DESIGNER.mainBlocks = DESIGNER.mainBlocks.filter(b => b !== blockId);
+  renderDesignerBlocksPanel();
+  renderDesignerCanvas();
+}
+
+/* --- Canvas Rendering --- */
+function renderDesignerCanvas() {
+  const canvas = document.getElementById('designerCanvas');
+  if (!canvas) return;
+  const { layout, headerBlocks, sidebarBlocks, mainBlocks, style } = DESIGNER;
+  const fontFamily = style.fontFamily || "'Inter', sans-serif";
+
+  const headerHtml = headerBlocks.length > 0 ? _designerZoneHtml('header', headerBlocks) : '';
+  let bodyHtml = '';
+
+  if (layout === 'single') {
+    bodyHtml = `<div style="padding:0 0.5in 0.5in 0.5in;">${_designerZoneHtml('main', mainBlocks)}</div>`;
+  } else {
+    const sideHtml = _designerZoneHtml('sidebar', sidebarBlocks);
+    const mainHtml = _designerZoneHtml('main', mainBlocks);
+    const sideCol = `<div style="width:35%;background:${style.accentColor};color:#e2e8f0;padding:0.5in 0.4in;">${sideHtml}</div>`;
+    const mainCol = `<div style="width:65%;padding:0.5in 0.5in 0.5in 0.6in;">${mainHtml}</div>`;
+    bodyHtml = `<div style="display:flex;flex:1;min-height:0;">${layout === 'sidebar-left' ? sideCol + mainCol : mainCol + sideCol}</div>`;
+  }
+
+  let hdrStyle = `padding:0.5in;padding-bottom:0.3in;font-family:${fontFamily};`;
+  if (style.headerStyle === 'filled') hdrStyle = `padding:0.5in;padding-bottom:0.3in;background:${style.accentColor};color:#ffffff;font-family:${fontFamily};`;
+  else if (style.headerStyle === 'underlined') hdrStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${style.accentColor};font-family:${fontFamily};`;
+
+  canvas.innerHTML = `<div style="font-family:${fontFamily};font-size:12px;line-height:1.35;display:flex;flex-direction:column;min-height:297mm;">
+    ${headerBlocks.length > 0 ? `<div style="${hdrStyle}">${headerHtml}</div>` : ''}
+    ${bodyHtml}
+  </div>`;
+  attachDesignerDragHandlers();
+}
+
+function _designerZoneHtml(zone, blocks) {
+  const { style } = DESIGNER;
+  const isSidebar = zone === 'sidebar';
+  const isHeader = zone === 'header';
+  const accent = style.accentColor;
+  const spacingMap = { compact:'0.4rem', normal:'0.7rem', spacious:'1rem' };
+  const gap = spacingMap[style.spacing] || '0.7rem';
+
+  if (blocks.length === 0) {
+    return `<div class="designer-zone" data-zone="${zone}"><div class="zone-empty-hint">${isSidebar ? 'Drag blocks here for sidebar' : 'Tap a block below to add here'}</div></div>`;
+  }
+
+  const html = blocks.map((bid, idx) => {
+    const def = DESIGNER_BLOCKS.find(b => b.id === bid) || { icon:'📋', label:bid };
+    const content = _blockPreview(bid, isSidebar, isHeader, style);
+    return `<div class="designer-block" data-block-id="${bid}" data-zone="${zone}" data-index="${idx}">
+      <span class="drag-handle" title="Drag to reorder">⠿</span>
+      <div style="flex:1;min-width:0;">${content}</div>
+      <button class="remove-block" onclick="event.stopPropagation();removeDesignerBlock('${zone}','${bid}')" title="Remove">✕</button>
+    </div>`;
+  }).join('');
+
+  return `<div class="designer-zone" data-zone="${zone}" style="display:flex;flex-direction:column;gap:${gap};">${html}</div>`;
+}
+
+function _blockPreview(bid, isSidebar, isHeader, style) {
+  const accent = style.accentColor;
+  const filled = isHeader && style.headerStyle === 'filled';
+  const divCss = _dividerCss(style.dividerStyle, accent, isSidebar);
+
+  switch (bid) {
+    case 'name':
+      return `<div style="font-size:22px;font-weight:700;color:${filled ? '#ffffff' : accent};line-height:1.1;">John Anderson</div>`;
+    case 'title':
+      return `<div style="font-size:13px;${isSidebar || filled ? 'color:rgba(255,255,255,0.8);' : 'color:#475569;'}margin-top:0.15rem;">Senior Software Engineer</div>`;
+    case 'contact':
+      if (isSidebar) return `<div style="font-size:11px;color:rgba(255,255,255,0.85);margin-top:0.3rem;"><div style="margin-bottom:0.15rem;">📧 john@email.com</div><div style="margin-bottom:0.15rem;">📱 (555) 123-4567</div><div>📍 San Francisco, CA</div></div>`;
+      return `<div style="font-size:11px;color:${filled ? 'rgba(255,255,255,0.85)' : '#64748b'};margin-top:0.3rem;">john@email.com • (555) 123-4567 • San Francisco, CA</div>`;
+    case 'summary':
+      return _sectionPreview('Summary', `<div style="font-size:12px;color:${isSidebar ? 'rgba(255,255,255,0.85)' : '#334155'};">Experienced engineer with 8+ years building scalable web applications and leading cross-functional teams.</div>`, isSidebar, divCss, accent);
+    case 'experience':
+      return _sectionPreview('Experience', `<div style="margin-bottom:0.3rem;"><div style="display:flex;justify-content:space-between;font-weight:600;font-size:12px;"><span>Senior Software Engineer</span><span style="color:#64748b;font-weight:400;font-size:11px;">2020 — Present</span></div><div style="color:${isSidebar ? 'rgba(255,255,255,0.7)' : accent};font-size:12px;">TechCorp Inc.</div><ul style="padding-left:1.1rem;margin-top:0.15rem;color:${isSidebar ? 'rgba(255,255,255,0.85)' : '#334155'};font-size:11px;"><li>Led development of microservices architecture</li></ul></div>`, isSidebar, divCss, accent);
+    case 'education':
+      return _sectionPreview('Education', `<div><div style="font-weight:600;font-size:12px;">B.S. Computer Science</div><div style="color:${isSidebar ? 'rgba(255,255,255,0.7)' : accent};font-size:12px;">Stanford University</div></div>`, isSidebar, divCss, accent);
+    case 'skills':
+      if (isSidebar) return _sectionPreview('Skills', `<div style="font-size:11px;color:rgba(255,255,255,0.85);"><div style="margin-bottom:0.1rem;">• JavaScript / TypeScript</div><div style="margin-bottom:0.1rem;">• React / Next.js</div><div>• Node.js / Python</div></div>`, true, divCss, accent);
+      return _sectionPreview('Skills', `<div style="display:flex;flex-wrap:wrap;gap:0.25rem;"><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:3px;font-size:11px;border:1px solid #e2e8f0;">JavaScript</span><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:3px;font-size:11px;border:1px solid #e2e8f0;">React</span><span style="background:#f1f5f9;padding:0.12rem 0.4rem;border-radius:3px;font-size:11px;border:1px solid #e2e8f0;">Python</span></div>`, false, divCss, accent);
+    case 'projects':
+      return _sectionPreview('Projects', `<div style="font-weight:600;font-size:12px;">Open Source CLI Tool</div><div style="font-size:11px;color:${isSidebar ? 'rgba(255,255,255,0.85)' : '#334155'};">Built a developer productivity tool with 2k+ GitHub stars</div>`, isSidebar, divCss, accent);
+    case 'certifications':
+      return _sectionPreview('Certifications', `<div style="font-size:11px;${isSidebar ? 'color:rgba(255,255,255,0.85);' : 'color:#334155;'}"><div style="margin-bottom:0.1rem;">• AWS Solutions Architect</div><div>• Google Cloud Professional</div></div>`, isSidebar, divCss, accent);
+    case 'sections':
+      return _sectionPreview('All Sections', `<div style="font-size:11px;color:#94a3b8;font-style:italic;">All resume sections render here automatically</div>`, isSidebar, divCss, accent);
+    default:
+      return `<div style="font-size:11px;color:#94a3b8;">${bid}</div>`;
+  }
+}
+
+function _dividerCss(dividerStyle, accent, isSidebar) {
+  if (isSidebar) return 'border-bottom:1px solid rgba(255,255,255,0.15);padding-bottom:0.15rem;';
+  switch (dividerStyle) {
+    case 'line': return 'border-bottom:1px solid #ddd;padding-bottom:0.2rem;';
+    case 'accent-bar': return `border-bottom:2px solid ${accent};padding-bottom:0.15rem;`;
+    case 'dots': return 'border-bottom:2px dotted #ddd;padding-bottom:0.2rem;';
+    default: return '';
+  }
+}
+
+function _sectionPreview(title, content, isSidebar, divCss, accent) {
+  const titleColor = isSidebar ? 'rgba(255,255,255,0.6)' : accent;
+  return `<div><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.3rem;color:${titleColor};${divCss}">${title}</div>${content}</div>`;
+}
+
+/* --- Style Panel --- */
+function renderDesignerStylePanel() {
+  const { style, layout } = DESIGNER;
+  const container = document.getElementById('designerStylePanel');
+  if (!container) return;
+  container.innerHTML = `
+    <div class="designer-style-section">
+      <label>Layout</label>
+      <div class="layout-cards">
+        <div class="layout-card ${layout==='single'?'active':''}" onclick="setDesignerLayout('single')">
+          <div class="layout-card-preview lcp-single"><div class="lcp-header"></div><div class="lcp-body"></div></div>
+          <div class="layout-card-label">Single Col</div>
+        </div>
+        <div class="layout-card ${layout==='sidebar-left'?'active':''}" onclick="setDesignerLayout('sidebar-left')">
+          <div class="layout-card-preview lcp-sidebar-left"><div class="lcp-side"></div><div class="lcp-main"></div></div>
+          <div class="layout-card-label">Left Sidebar</div>
+        </div>
+        <div class="layout-card ${layout==='sidebar-right'?'active':''}" onclick="setDesignerLayout('sidebar-right')">
+          <div class="layout-card-preview lcp-sidebar-right"><div class="lcp-main"></div><div class="lcp-side"></div></div>
+          <div class="layout-card-label">Right Sidebar</div>
+        </div>
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Accent Color</label>
+      <div class="color-swatches">
+        ${ACCENT_COLORS.map(c => `<div class="color-swatch ${style.accentColor===c?'active':''}" style="background:${c};" onclick="setDesignerColor('${c}')"></div>`).join('')}
+        <div class="color-swatch-custom">+<input type="color" value="${style.accentColor}" onchange="setDesignerColor(this.value)"></div>
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Font</label>
+      <div class="style-chips">
+        ${DESIGNER_FONTS.map(f => `<div class="style-chip ${style.fontFamily===f.value?'active':''}" style="font-family:${f.value};" onclick="setDesignerFont(\`${f.value}\`)">${f.label}</div>`).join('')}
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Header Style</label>
+      <div class="style-chips">
+        <div class="style-chip ${style.headerStyle==='minimal'?'active':''}" onclick="setDesignerHeaderStyle('minimal')">Minimal</div>
+        <div class="style-chip ${style.headerStyle==='filled'?'active':''}" onclick="setDesignerHeaderStyle('filled')">Filled</div>
+        <div class="style-chip ${style.headerStyle==='underlined'?'active':''}" onclick="setDesignerHeaderStyle('underlined')">Underlined</div>
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Section Dividers</label>
+      <div class="style-chips">
+        <div class="style-chip ${style.dividerStyle==='line'?'active':''}" onclick="setDesignerDivider('line')">── Line</div>
+        <div class="style-chip ${style.dividerStyle==='accent-bar'?'active':''}" onclick="setDesignerDivider('accent-bar')">━ Accent</div>
+        <div class="style-chip ${style.dividerStyle==='dots'?'active':''}" onclick="setDesignerDivider('dots')">┈ Dots</div>
+        <div class="style-chip ${style.dividerStyle==='none'?'active':''}" onclick="setDesignerDivider('none')">None</div>
+      </div>
+    </div>
+    <div class="designer-style-section">
+      <label>Spacing</label>
+      <div class="style-chips">
+        <div class="style-chip ${style.spacing==='compact'?'active':''}" onclick="setDesignerSpacing('compact')">Compact</div>
+        <div class="style-chip ${style.spacing==='normal'?'active':''}" onclick="setDesignerSpacing('normal')">Normal</div>
+        <div class="style-chip ${style.spacing==='spacious'?'active':''}" onclick="setDesignerSpacing('spacious')">Spacious</div>
+      </div>
+    </div>`;
+}
+
+function setDesignerLayout(layout) {
+  DESIGNER.layout = layout;
+  if (layout === 'single' && DESIGNER.sidebarBlocks.length > 0) {
+    DESIGNER.mainBlocks = [...DESIGNER.sidebarBlocks, ...DESIGNER.mainBlocks];
+    DESIGNER.sidebarBlocks = [];
+  }
+  if (layout !== 'single' && DESIGNER.sidebarBlocks.length === 0) {
+    ['contact','skills','certifications'].forEach(b => {
+      if (DESIGNER.mainBlocks.includes(b)) {
+        DESIGNER.mainBlocks = DESIGNER.mainBlocks.filter(x => x !== b);
+        DESIGNER.sidebarBlocks.push(b);
+      } else if (DESIGNER.headerBlocks.includes(b) && b !== 'name' && b !== 'title') {
+        DESIGNER.headerBlocks = DESIGNER.headerBlocks.filter(x => x !== b);
+        DESIGNER.sidebarBlocks.push(b);
+      }
+    });
+  }
+  renderDesignerStylePanel();
+  renderDesignerBlocksPanel();
+  renderDesignerCanvas();
+}
+
+function setDesignerColor(c) { DESIGNER.style.accentColor = c; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerFont(f) { DESIGNER.style.fontFamily = f; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerHeaderStyle(s) { DESIGNER.style.headerStyle = s; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerDivider(s) { DESIGNER.style.dividerStyle = s; renderDesignerStylePanel(); renderDesignerCanvas(); }
+function setDesignerSpacing(s) { DESIGNER.style.spacing = s; renderDesignerStylePanel(); renderDesignerCanvas(); }
+
+/* --- AI Panel --- */
+function renderDesignerAIPanel() {
+  const container = document.getElementById('designerAIPanel');
+  if (!container) return;
+  container.innerHTML = `
+    <button class="ai-suggest-btn" onclick="aiSmartSuggest()">✨ Smart Suggest — Auto-arrange blocks</button>
+    <div style="font-size:0.7rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.4rem;">One-tap Presets</div>
+    <div class="ai-preset-grid">
+      ${Object.entries(DESIGNER_PRESETS).map(([k, p]) => `
+        <div class="ai-preset-card" onclick="applyDesignerPreset('${k}')">
+          <div class="ai-preset-icon">${p.icon}</div>
+          <div class="ai-preset-name">${p.name}</div>
+          <div class="ai-preset-desc">${p.desc}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function applyDesignerPreset(key) {
+  const p = DESIGNER_PRESETS[key];
+  if (!p) return;
+  DESIGNER.layout = p.layout;
+  DESIGNER.headerBlocks = [...p.headerBlocks];
+  DESIGNER.sidebarBlocks = [...p.sidebarBlocks];
+  DESIGNER.mainBlocks = [...p.mainBlocks];
+  DESIGNER.style = { ...p.style };
+  _renderAllDesignerPanels();
+  showToast(`Applied "${p.name}" preset! ✨`, 'success');
+}
+
+function aiSmartSuggest() {
+  const allPlaced = [...DESIGNER.headerBlocks, ...DESIGNER.sidebarBlocks, ...DESIGNER.mainBlocks];
+  const hasSkills = allPlaced.includes('skills');
+  const hasCerts = allPlaced.includes('certifications');
+  const contentBlocks = allPlaced.filter(b => !['name','title','contact'].includes(b));
+  if (contentBlocks.length >= 3 && (hasSkills || hasCerts)) applyDesignerPreset('creative');
+  else if (contentBlocks.length <= 2) applyDesignerPreset('minimal');
+  else applyDesignerPreset('professional');
+}
+
+/* --- Drag and Drop --- */
+function attachDesignerDragHandlers() {
+  document.querySelectorAll('#designerCanvas .designer-block .drag-handle').forEach(handle => {
+    handle.addEventListener('touchstart', _onDesignerDragStart, { passive: false });
+    handle.addEventListener('mousedown', _onDesignerDragStart);
+  });
+}
+
+function _onDesignerDragStart(e) {
+  e.preventDefault();
+  const block = e.target.closest('.designer-block');
+  if (!block) return;
+  const blockId = block.dataset.blockId;
+  const zone = block.dataset.zone;
+  const isTouch = e.type === 'touchstart';
+  const pt = isTouch ? e.touches[0] : e;
+
+  block.classList.add('dragging');
+  const def = DESIGNER_BLOCKS.find(b => b.id === blockId) || { icon:'📋', label:blockId };
+  const ghost = document.createElement('div');
+  ghost.className = 'designer-drag-ghost';
+  ghost.innerHTML = `${def.icon} ${def.label}`;
+  ghost.style.left = pt.clientX + 'px';
+  ghost.style.top = pt.clientY + 'px';
+  document.body.appendChild(ghost);
+
+  document.querySelectorAll('.designer-zone').forEach(z => z.classList.add('drag-over'));
+
+  const moveHandler = (ev) => {
+    const p = ev.type.startsWith('touch') ? ev.touches[0] : ev;
+    ghost.style.left = p.clientX + 'px';
+    ghost.style.top = p.clientY + 'px';
+    document.querySelectorAll('.designer-zone').forEach(z => {
+      const r = z.getBoundingClientRect();
+      const over = p.clientX >= r.left && p.clientX <= r.right && p.clientY >= r.top && p.clientY <= r.bottom;
+      z.style.borderColor = over ? 'var(--accent)' : '';
+      z.style.background = over ? 'rgba(124,92,252,0.08)' : '';
+    });
+  };
+
+  const endHandler = (ev) => {
+    const p = ev.type.startsWith('touch') ? ev.changedTouches[0] : ev;
+    let targetZone = null;
+    document.querySelectorAll('.designer-zone').forEach(z => {
+      const r = z.getBoundingClientRect();
+      if (p.clientX >= r.left && p.clientX <= r.right && p.clientY >= r.top && p.clientY <= r.bottom) targetZone = z.dataset.zone;
+      z.classList.remove('drag-over');
+      z.style.borderColor = '';
+      z.style.background = '';
+    });
+    if (targetZone && targetZone !== zone) {
+      _moveBlockBetweenZones(blockId, zone, targetZone);
+    }
+    ghost.remove();
+    block.classList.remove('dragging');
+    document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', moveHandler);
+    document.removeEventListener(isTouch ? 'touchend' : 'mouseup', endHandler);
+  };
+
+  document.addEventListener(isTouch ? 'touchmove' : 'mousemove', moveHandler, { passive: false });
+  document.addEventListener(isTouch ? 'touchend' : 'mouseup', endHandler);
+}
+
+function _moveBlockBetweenZones(blockId, from, to) {
+  if (from === 'header') DESIGNER.headerBlocks = DESIGNER.headerBlocks.filter(b => b !== blockId);
+  else if (from === 'sidebar') DESIGNER.sidebarBlocks = DESIGNER.sidebarBlocks.filter(b => b !== blockId);
+  else DESIGNER.mainBlocks = DESIGNER.mainBlocks.filter(b => b !== blockId);
+
+  if (to === 'header') DESIGNER.headerBlocks.push(blockId);
+  else if (to === 'sidebar') DESIGNER.sidebarBlocks.push(blockId);
+  else DESIGNER.mainBlocks.push(blockId);
+
+  renderDesignerCanvas();
+  renderDesignerBlocksPanel();
+  showToast(`Moved to ${to}`, 'info');
+}
+
+/* --- Template Generation --- */
+function generateTemplateFromDesigner() {
+  const { layout, headerBlocks, sidebarBlocks, mainBlocks, style } = DESIGNER;
+  const accent = style.accentColor || '#1e3a8a';
+  const fontFamily = style.fontFamily || "'Inter', sans-serif";
+  const spacingMap = { compact:'0.6rem', normal:'1rem', spacious:'1.4rem' };
+  const sectionSpacing = spacingMap[style.spacing] || '1rem';
+  let divCss = '';
+  switch (style.dividerStyle) {
+    case 'line': divCss = 'border-bottom:1px solid #ddd;padding-bottom:0.2rem;'; break;
+    case 'accent-bar': divCss = `border-bottom:2px solid ${accent};padding-bottom:0.15rem;`; break;
+    case 'dots': divCss = 'border-bottom:2px dotted #ddd;padding-bottom:0.2rem;'; break;
+    default: divCss = '';
+  }
+
+  const css = `body{font-family:${fontFamily};font-size:12px;line-height:1.35;color:#1e293b;margin:0;padding:0;}
+.res-section{margin-bottom:${sectionSpacing};}
+.res-section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.4rem;color:${accent};${divCss}}
+.res-item{margin-bottom:0.5rem;}.res-item-header{display:flex;justify-content:space-between;font-weight:600;}
+.res-item-role{color:#0f172a;}.res-item-sub{color:${accent};}.res-item-date{color:#64748b;font-weight:400;font-size:11px;}
+.res-bullets{padding-left:1.15rem;margin-top:0.2rem;color:#334155;}.res-bullets li{margin-bottom:0.15rem;}
+.res-text{color:#334155;}.res-tags{display:flex;flex-wrap:wrap;gap:0.3rem;}
+.res-tag{background:#f1f5f9;color:#334155;padding:0.12rem 0.45rem;border-radius:3px;border:1px solid #e2e8f0;font-size:11px;}
+.res-bullet-list{padding-left:1.15rem;color:#334155;}
+.sidebar-contact-item{color:rgba(255,255,255,0.85);margin-bottom:0.2rem;font-size:11px;}`;
+
+  const headerHtml = headerBlocks.map(b => _blockToPlaceholder(b, false, style)).join('\n    ');
+  let html = '';
+
+  if (layout === 'single') {
+    const mainHtml = mainBlocks.map(b => _blockToPlaceholder(b, false, style)).join('\n    ');
+    let hStyle = 'padding:0.5in;padding-bottom:0.3in;';
+    if (style.headerStyle === 'filled') hStyle = `padding:0.5in;padding-bottom:0.3in;background:${accent};color:#ffffff;`;
+    else if (style.headerStyle === 'underlined') hStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${accent};`;
+    html = `<div style="${hStyle}">\n    ${headerHtml}\n  </div>\n  <div style="padding:0 0.5in 0.5in 0.5in;">\n    ${mainHtml}\n  </div>`;
+  } else {
+    const sideHtml = sidebarBlocks.map(b => _blockToPlaceholder(b, true, style)).join('\n      ');
+    const mainHtml = mainBlocks.map(b => _blockToPlaceholder(b, false, style)).join('\n      ');
+    let hStyle = 'padding:0.5in;padding-bottom:0.3in;';
+    if (style.headerStyle === 'filled') hStyle = `padding:0.5in;padding-bottom:0.3in;background:${accent};color:#ffffff;`;
+    else if (style.headerStyle === 'underlined') hStyle = `padding:0.5in;padding-bottom:0.3in;border-bottom:2px solid ${accent};`;
+    const sideCol = `<div style="width:35%;background:${accent};color:#e2e8f0;padding:0.5in 0.4in;">\n      ${sideHtml}\n    </div>`;
+    const mainCol = `<div style="width:65%;padding:0.5in 0.5in 0.5in 0.6in;">\n      ${mainHtml}\n    </div>`;
+    html = `${headerBlocks.length ? `<div style="${hStyle}">\n    ${headerHtml}\n  </div>\n  ` : ''}<div style="display:flex;flex:1;">\n    ${layout === 'sidebar-left' ? sideCol+'\n    '+mainCol : mainCol+'\n    '+sideCol}\n  </div>`;
+  }
+
+  return { html: html.trim(), css: css.trim() };
+}
+
+function _blockToPlaceholder(bid, isSidebar, style) {
+  const accent = style.accentColor || '#1e3a8a';
+  const filled = style.headerStyle === 'filled';
+  switch (bid) {
+    case 'name': return `<div style="font-size:22px;font-weight:700;color:${filled && !isSidebar ? '#ffffff' : accent};line-height:1.1;">{{name}}</div>`;
+    case 'title':
+      if (isSidebar || filled) return `<div style="font-size:13px;color:rgba(255,255,255,0.8);margin-top:0.15rem;">{{title}}</div>`;
+      return `<div style="font-size:13px;color:#475569;margin-top:0.15rem;">{{title}}</div>`;
+    case 'contact':
+      if (isSidebar) return `<div style="margin-top:0.3rem;"><div class="sidebar-contact-item">{{email}}</div><div class="sidebar-contact-item">{{phone}}</div><div class="sidebar-contact-item">{{location}}</div><div class="sidebar-contact-item">{{website}}</div></div>`;
+      if (filled) return `<div style="font-size:11px;color:rgba(255,255,255,0.85);margin-top:0.3rem;">{{email}} • {{phone}} • {{location}} • {{website}}</div>`;
+      return `<div style="font-size:11px;color:#64748b;margin-top:0.3rem;">{{email}} • {{phone}} • {{location}} • {{website}}</div>`;
+    default: return `{{${bid}}}`;
+  }
+}
+
+/* --- Save / Load --- */
+async function saveDesignerTemplate() {
+  DESIGNER.name = document.getElementById('designerTitleInput').value.trim() || 'My Custom Template';
+  const { html, css } = generateTemplateFromDesigner();
+  const templateId = DESIGNER.editingId || ('custom-' + uuid());
+
+  const customTpl = {
+    id: templateId, name: DESIGNER.name, html, css,
+    designerState: {
+      layout: DESIGNER.layout,
+      headerBlocks: [...DESIGNER.headerBlocks],
+      sidebarBlocks: [...DESIGNER.sidebarBlocks],
+      mainBlocks: [...DESIGNER.mainBlocks],
+      style: { ...DESIGNER.style }
+    },
+    updatedAt: Date.now()
+  };
+
+  if (DESIGNER.editingId) {
+    const existing = await APP.db.get('templates', templateId);
+    customTpl.createdAt = existing?.createdAt || Date.now();
+  } else {
+    customTpl.createdAt = Date.now();
+  }
+
+  await APP.db.put('templates', customTpl);
+  registerCustomTemplateObject(customTpl);
+
+  if (APP.currentResume) {
+    APP.currentResume.templateId = templateId;
+    APP.currentResume.customTemplateHtml = html;
+    APP.currentResume.customTemplateCss = css;
+    scheduleSave();
+  }
+
+  DESIGNER.editingId = templateId;
+  showToast(`Template "${DESIGNER.name}" saved! 🎨`, 'success');
+}
+
+/* --- Canvas Scaling --- */
+function scaleDesignerCanvas() {
+  const area = document.getElementById('designerCanvasArea');
+  const canvas = document.getElementById('designerCanvas');
+  if (!area || !canvas) return;
+  const areaWidth = area.clientWidth - 16;
+  const canvasWidth = canvas.offsetWidth;
+  if (canvasWidth > areaWidth && areaWidth > 0) {
+    const scale = areaWidth / canvasWidth;
+    canvas.style.transform = `scale(${scale})`;
+    canvas.style.marginBottom = `-${canvasWidth * (1 - scale)}px`;
+  } else {
+    canvas.style.transform = '';
+    canvas.style.marginBottom = '';
+  }
+}
+
+window.addEventListener('resize', () => { if (DESIGNER.active) scaleDesignerCanvas(); });
 
 /* =============================================================================
    PWA SERVICE WORKER
