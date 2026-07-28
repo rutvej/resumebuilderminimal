@@ -1068,11 +1068,15 @@ input[type="range"] {
       <button class="designer-tab" data-dtab="ai" onclick="switchDesignerTab('ai',this)">
         ✨ AI
       </button>
+      <button class="designer-tab" data-dtab="code" onclick="switchDesignerTab('code',this)">
+        💻 Code / LLM
+      </button>
     </div>
     <div class="designer-tab-content">
       <div class="designer-tab-panel active" id="designerBlocksPanel"></div>
       <div class="designer-tab-panel" id="designerStylePanel"></div>
       <div class="designer-tab-panel" id="designerAIPanel"></div>
+      <div class="designer-tab-panel" id="designerCodePanel" style="height:100%; display:flex; flex-direction:column;"></div>
     </div>
   </div>
 </div>
@@ -3451,6 +3455,7 @@ window.addEventListener('offline', checkOnlineStatus);
    ============================================================================= */
 const DESIGNER = {
   active: false, editingId: null, name: 'My Custom Template',
+  mode: 'visual', customHtml: '', customCss: '',
   layout: 'single',
   headerBlocks: ['name', 'title', 'contact'],
   sidebarBlocks: [],
@@ -3506,6 +3511,9 @@ function exitDesigner() {
 
 function resetDesignerState() {
   DESIGNER.name = 'My Custom Template';
+  DESIGNER.mode = 'visual';
+  DESIGNER.customHtml = '<div style="padding:1in;">\n  <div style="display:flex; justify-content:space-between; margin-bottom:20px;">\n    <!-- Manual Row/Column Design -->\n    <div style="flex:1;">\n      <h1>{{name}}</h1>\n      <p>{{title}}</p>\n    </div>\n    <div style="flex:1; text-align:right;">\n      <p>{{email}}</p>\n    </div>\n  </div>\n  {{sections}}\n</div>';
+  DESIGNER.customCss = '/* Paste Claude/ChatGPT CSS here */\nh1 { color: var(--accent); margin:0; }\np { margin: 5px 0; }';
   DESIGNER.layout = 'single';
   DESIGNER.headerBlocks = ['name','title','contact'];
   DESIGNER.sidebarBlocks = [];
@@ -3518,6 +3526,9 @@ async function loadDesignerTemplate(id) {
   if (tpl && tpl.designerState) {
     const s = tpl.designerState;
     DESIGNER.name = tpl.name || 'My Custom Template';
+    DESIGNER.mode = s.mode || 'visual';
+    DESIGNER.customHtml = s.customHtml || tpl.html || '';
+    DESIGNER.customCss = s.customCss || tpl.css || '';
     DESIGNER.layout = s.layout || 'single';
     DESIGNER.headerBlocks = [...(s.headerBlocks || ['name','title','contact'])];
     DESIGNER.sidebarBlocks = [...(s.sidebarBlocks || [])];
@@ -3535,6 +3546,7 @@ function _renderAllDesignerPanels() {
   renderDesignerBlocksPanel();
   renderDesignerStylePanel();
   renderDesignerAIPanel();
+  renderDesignerCodePanel();
   renderDesignerCanvas();
   setTimeout(scaleDesignerCanvas, 50);
 }
@@ -3544,8 +3556,17 @@ function switchDesignerTab(tab, btn) {
   document.querySelectorAll('.designer-tab-panel').forEach(p => p.classList.remove('active'));
   if (btn) btn.classList.add('active');
   else document.querySelector(`.designer-tab[data-dtab="${tab}"]`)?.classList.add('active');
-  const map = { blocks:'designerBlocksPanel', style:'designerStylePanel', ai:'designerAIPanel' };
+  const map = { blocks:'designerBlocksPanel', style:'designerStylePanel', ai:'designerAIPanel', code:'designerCodePanel' };
   document.getElementById(map[tab])?.classList.add('active');
+
+  if (tab === 'code' && DESIGNER.mode !== 'code') {
+    DESIGNER.mode = 'code';
+    renderDesignerCodePanel();
+    renderDesignerCanvas();
+  } else if (tab !== 'code' && DESIGNER.mode === 'code') {
+    DESIGNER.mode = 'visual';
+    renderDesignerCanvas();
+  }
 }
 
 /* --- Block Palette --- */
@@ -3606,6 +3627,16 @@ function removeDesignerBlock(zone, blockId) {
 function renderDesignerCanvas() {
   const canvas = document.getElementById('designerCanvas');
   if (!canvas) return;
+  
+  if (DESIGNER.mode === 'code') {
+    let previewHtml = DESIGNER.customHtml || '';
+    const subs = { name:'John Doe', title:'Software Engineer', email:'john@email.com', phone:'(555) 123-4567', location:'SF, CA', website:'github.com/john' };
+    previewHtml = previewHtml.replace(/{{name}}/g, subs.name).replace(/{{title}}/g, subs.title).replace(/{{email}}/g, subs.email).replace(/{{phone}}/g, subs.phone).replace(/{{location}}/g, subs.location).replace(/{{website}}/g, subs.website);
+    previewHtml = previewHtml.replace(/{{sections}}/g, '<div style="padding:1rem;background:rgba(124,92,252,0.05);border:2px dashed rgba(124,92,252,0.3);text-align:center;color:var(--accent);font-weight:600;border-radius:8px;">All Sections Render Here</div>');
+    canvas.innerHTML = `<style>${DESIGNER.customCss || ''}</style><div style="min-height:297mm; display:block; position:relative; overflow:hidden;">${previewHtml}</div>`;
+    return;
+  }
+
   const { layout, headerBlocks, sidebarBlocks, mainBlocks, style } = DESIGNER;
   const fontFamily = style.fontFamily || "'Inter', sans-serif";
 
@@ -3877,6 +3908,35 @@ function aiSmartSuggest() {
   else applyDesignerPreset('professional');
 }
 
+/* --- Code / LLM Panel --- */
+function renderDesignerCodePanel() {
+  const container = document.getElementById('designerCodePanel');
+  if (!container) return;
+  container.innerHTML = `
+    <div style="font-size:0.75rem; color:var(--text-secondary); margin-bottom:0.6rem; line-height:1.4;">
+      <strong>Custom HTML/CSS Mode</strong><br>
+      Paste HTML generated by Claude or ChatGPT. Use tags like <code>{{name}}</code>, <code>{{title}}</code>, <code>{{sections}}</code>. You can also build custom rows/columns manually here!
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0.5rem; flex:1; min-height:0;">
+      <label style="font-size:0.7rem;font-weight:700;color:var(--text-secondary);">HTML Template</label>
+      <textarea id="codePanelHtml" style="flex:2; font-family:'JetBrains Mono', monospace; font-size:11px; padding:0.5rem; border-radius:6px; background:var(--bg-elevated); color:var(--text-primary); border:1px solid var(--border-light); resize:none;" oninput="updateDesignerCodeHtml(this.value)">${DESIGNER.customHtml}</textarea>
+      
+      <label style="font-size:0.7rem;font-weight:700;color:var(--text-secondary); margin-top:0.3rem;">CSS Styling</label>
+      <textarea id="codePanelCss" style="flex:1; font-family:'JetBrains Mono', monospace; font-size:11px; padding:0.5rem; border-radius:6px; background:var(--bg-elevated); color:var(--text-primary); border:1px solid var(--border-light); resize:none;" oninput="updateDesignerCodeCss(this.value)">${DESIGNER.customCss}</textarea>
+    </div>
+  `;
+}
+
+function updateDesignerCodeHtml(val) {
+  DESIGNER.customHtml = val;
+  renderDesignerCanvas();
+}
+
+function updateDesignerCodeCss(val) {
+  DESIGNER.customCss = val;
+  renderDesignerCanvas();
+}
+
 /* --- Drag and Drop --- */
 function attachDesignerDragHandlers() {
   document.querySelectorAll('#designerCanvas .designer-block .drag-handle').forEach(handle => {
@@ -3956,6 +4016,10 @@ function _moveBlockBetweenZones(blockId, from, to) {
 
 /* --- Template Generation --- */
 function generateTemplateFromDesigner() {
+  if (DESIGNER.mode === 'code') {
+    return { html: DESIGNER.customHtml, css: DESIGNER.customCss, designerState: JSON.parse(JSON.stringify(DESIGNER)) };
+  }
+
   const { layout, headerBlocks, sidebarBlocks, mainBlocks, style } = DESIGNER;
   const accent = style.accentColor || '#1e3a8a';
   const fontFamily = style.fontFamily || "'Inter', sans-serif";
@@ -4000,7 +4064,7 @@ function generateTemplateFromDesigner() {
     html = `${headerBlocks.length ? `<div style="${hStyle}">\n    ${headerHtml}\n  </div>\n  ` : ''}<div style="display:flex;flex:1;">\n    ${layout === 'sidebar-left' ? sideCol+'\n    '+mainCol : mainCol+'\n    '+sideCol}\n  </div>`;
   }
 
-  return { html: html.trim(), css: css.trim() };
+  return { html: html.trim(), css: css.trim(), designerState: JSON.parse(JSON.stringify(DESIGNER)) };
 }
 
 function _blockToPlaceholder(bid, isSidebar, style) {
