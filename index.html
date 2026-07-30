@@ -426,6 +426,31 @@ input[type="range"] {
   position:relative; transition:transform 0.15s ease, margin-bottom 0.15s ease;
 }
 
+/* Physical Multi-Page Paper Cards */
+.page-sheets-container {
+  display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%;
+}
+.a4-page-sheet {
+  width: 210mm; height: 297mm; background: #ffffff; color: #1e293b;
+  box-shadow: var(--shadow-lg, 0 20px 50px -12px rgba(0,0,0,0.4));
+  border-radius: 4px; position: relative; overflow: hidden; box-sizing: border-box;
+}
+.page-sheet-header-badge {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 210mm; padding: 0.35rem 0.75rem; background: rgba(124,92,252,0.12);
+  border: 1px solid rgba(124,92,252,0.3); border-radius: 8px;
+  font-size: 0.72rem; font-weight: 700; color: var(--accent-light, #9b7fff);
+  margin-bottom: 4px; letter-spacing: 0.04em;
+}
+.page-sheet-gap-divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+  width: 210mm; margin: 10px 0; color: var(--text-secondary, #7e7e96);
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.page-sheet-gap-divider::before, .page-sheet-gap-divider::after {
+  content: ""; flex: 1; height: 1px; background: var(--border, rgba(255,255,255,0.15));
+}
+
 /* Editable canvas items hover outline */
 [contenteditable="true"] { outline:none; transition:box-shadow 0.15s; border-radius:2px; }
 [contenteditable="true"]:hover { box-shadow:0 0 0 1px rgba(124,92,252,0.4); }
@@ -466,6 +491,9 @@ input[type="range"] {
   .editor-body { display:block !important; height:auto !important; margin:0 !important; padding:0 !important; }
   .editor-preview { display:block !important; background:transparent !important; padding:0 !important; margin:0 !important; position:static !important; overflow:visible !important; transform:none !important; width:100% !important; }
   .document-wrapper { box-shadow:none !important; width:210mm !important; min-height:297mm !important; transform:none !important; margin:0 auto !important; border-radius:0 !important; }
+  .page-sheets-container { gap: 0 !important; }
+  .page-sheet-header-badge, .page-sheet-gap-divider { display: none !important; }
+  .a4-page-sheet { box-shadow: none !important; border-radius: 0 !important; height: 297mm !important; page-break-after: always !important; break-after: page !important; }
   [contenteditable="true"]:hover, [contenteditable="true"]:focus { box-shadow:none !important; background:transparent !important; }
   @page { size:A4 portrait; margin:0; }
 }
@@ -3221,6 +3249,7 @@ function checkOverflow() {
 
     // 2. Check if single page fits at 1.0
     if (naturalHeight <= A4_HEIGHT + 10) {
+      restoreSinglePageSheet();
       banner.classList.add('visible');
       banner.style.background = 'var(--success-bg)';
       banner.style.borderColor = 'rgba(52,211,153,0.3)';
@@ -3230,7 +3259,6 @@ function checkOverflow() {
         <span style="flex:1"><b>📄 Page 1 of 1</b> — Content fits perfectly (100% Scale).</span>
       `;
       if (typeof lucide !== 'undefined') lucide.createIcons();
-      removePageBreakGuides();
       return;
     }
 
@@ -3241,6 +3269,7 @@ function checkOverflow() {
 
     if (scaledHeight <= A4_HEIGHT + 15) {
       // Content fits on 1 page via auto-scaling!
+      restoreSinglePageSheet();
       banner.classList.add('visible');
       banner.style.background = 'var(--success-bg)';
       banner.style.borderColor = 'rgba(52,211,153,0.3)';
@@ -3250,7 +3279,6 @@ function checkOverflow() {
         <span style="flex:1"><b>📄 Page 1 of 1</b> — Auto-scaled to <b>${Math.round(targetScale * 100)}%</b> fit.</span>
       `;
       if (typeof lucide !== 'undefined') lucide.createIcons();
-      removePageBreakGuides();
     } else {
       // Content genuinely overflows to multi-page!
       doc.style.setProperty('--scale-factor', '0.95');
@@ -3263,7 +3291,7 @@ function checkOverflow() {
       banner.style.color = 'var(--warning)';
       banner.innerHTML = `
         <i data-lucide="alert-triangle" style="width:16px;height:16px;"></i>
-        <span style="flex:1"><b>📄 Page 1 of ${totalPages}</b> — Overflows by ~${overflowPx}px.</span>
+        <span style="flex:1"><b>📄 2 Physical Pages</b> — Content overflows Page 1 by ~${overflowPx}px.</span>
         <button class="btn btn-secondary btn-xs" onclick="autoFitToOnePage()" style="background:var(--warning);color:#000;font-weight:700;">
           ⚡ Fit to 1 Page
         </button>
@@ -3272,7 +3300,7 @@ function checkOverflow() {
         </button>
       `;
       if (typeof lucide !== 'undefined') lucide.createIcons();
-      renderPageBreakGuides(totalPages, A4_HEIGHT);
+      renderPhysicalPageSheets(totalPages, A4_HEIGHT);
     }
   }, 60);
 }
@@ -3286,6 +3314,7 @@ function autoFitToOnePage() {
   s.bodySize = Math.max(10, (s.bodySize || 12) * 0.92);
   APP.currentResume.styleOverrides = s;
 
+  restoreSinglePageSheet();
   const doc = document.getElementById('documentWrapper');
   if (doc) doc.style.setProperty('--scale-factor', '0.84');
 
@@ -3294,28 +3323,58 @@ function autoFitToOnePage() {
   showToast('⚡ Auto-fitted content to 1 page!', 'success');
 }
 
-function renderPageBreakGuides(totalPages, pageHeight) {
-  removePageBreakGuides();
+function renderPhysicalPageSheets(totalPages, pageHeight) {
   const doc = document.getElementById('documentWrapper');
   if (!doc) return;
 
-  for (let i = 1; i < totalPages; i++) {
-    const guide = document.createElement('div');
-    guide.className = 'page-break-guide';
-    guide.style.position = 'absolute';
-    guide.style.top = `${i * pageHeight}px`;
-    guide.style.left = '0';
-    guide.style.right = '0';
-    guide.style.borderTop = '2px dashed #f59e0b';
-    guide.style.pointerEvents = 'none';
-    guide.style.zIndex = '10';
-    guide.innerHTML = `<span style="position:absolute;right:10px;top:-12px;background:#f59e0b;color:#000;font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">PAGE BREAK (PAGE ${i+1})</span>`;
-    doc.appendChild(guide);
+  if (!doc.dataset.rawHtml || doc.querySelector('.page-sheets-container')) {
+    const innerContent = doc.querySelector('.a4-page-sheet .page-content-inner');
+    if (innerContent) {
+      doc.dataset.rawHtml = innerContent.innerHTML;
+    }
   }
+
+  const rawContent = doc.dataset.rawHtml || doc.innerHTML;
+  if (!doc.dataset.rawHtml) doc.dataset.rawHtml = rawContent;
+
+  let sheetsHtml = `<div class="page-sheets-container">`;
+
+  for (let p = 1; p <= totalPages; p++) {
+    const offset = (p - 1) * pageHeight;
+    sheetsHtml += `
+      <div class="page-sheet-header-badge">
+        <span>📄 PAGE ${p} OF ${totalPages} ${p > 1 ? '(Continuation Sheet)' : ''}</span>
+        <span>A4 Portrait (210mm × 297mm)</span>
+      </div>
+      <div class="a4-page-sheet" data-page="${p}">
+        <div class="page-content-inner" style="transform: translateY(-${offset}px); height:${totalPages * pageHeight}px;">
+          ${rawContent}
+        </div>
+      </div>
+    `;
+
+    if (p < totalPages) {
+      sheetsHtml += `
+        <div class="page-sheet-gap-divider">
+          <span>PAGE ${p} ENDS • PAGE ${p + 1} CONTINUES BELOW</span>
+        </div>
+      `;
+    }
+  }
+
+  sheetsHtml += `</div>`;
+  doc.innerHTML = sheetsHtml;
+  makeCanvasDirectlyEditable();
 }
 
-function removePageBreakGuides() {
-  document.querySelectorAll('.page-break-guide').forEach(el => el.remove());
+function restoreSinglePageSheet() {
+  const doc = document.getElementById('documentWrapper');
+  if (!doc) return;
+  if (doc.dataset.rawHtml) {
+    doc.innerHTML = doc.dataset.rawHtml;
+    delete doc.dataset.rawHtml;
+    makeCanvasDirectlyEditable();
+  }
 }
 
 function updateMobileScale() {
