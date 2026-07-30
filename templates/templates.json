@@ -1,5 +1,14 @@
 [
   {
+    "id": "tpl-2026-base",
+    "name": "2026 Proportional ATS Baseline",
+    "category": "2026 Modern",
+    "isAtsFriendly": true,
+    "atsScore": 100,
+    "accent": "#6366f1",
+    "file": "templates/tpl-2026-base.html"
+  },
+  {
     "id": "tpl-ats-01",
     "name": "ATS Standard Linear",
     "category": "ATS Friendly",

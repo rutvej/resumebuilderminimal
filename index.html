@@ -2245,8 +2245,29 @@ function renderEditPanel() {
   if (!APP.currentResume) return;
   const r = APP.currentResume;
   const c = r.contact || {};
+  const preset = r.careerPreset || 'mid';
+
+  const presetGuidance = {
+    fresher: '🎯 <b>Fresher (0–2 Yrs):</b> Enforcing 1-page max fit. Highlighting Education, Key Projects, Tech Stack & Certifications.',
+    mid: '🎯 <b>Mid-Level (3–7 Yrs):</b> 1-page target. Highlighting Work Experience metrics (ROI/KPIs) and Technical Competencies.',
+    senior: '🎯 <b>Senior / Executive (8+ Yrs):</b> 2-page flow enabled. Prioritizing Executive Summary, Strategic Leadership & High-Scale Impact.'
+  };
 
   let html = `
+    <div class="card mb-2" style="background:var(--accent-bg);border:1px solid var(--accent-glow);padding:0.75rem;">
+      <div style="font-size:0.72rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.35rem;">
+        <i data-lucide="target" style="width:14px;height:14px;"></i> 2026 Career Stage Setup
+      </div>
+      <div style="display:flex;gap:0.35rem;">
+        <button class="chip ${preset === 'fresher' ? 'active' : ''}" style="flex:1;justify-content:center;font-size:0.75rem;padding:0.3rem;" onclick="setCareerPreset('fresher')">🎓 Fresher</button>
+        <button class="chip ${preset === 'mid' ? 'active' : ''}" style="flex:1;justify-content:center;font-size:0.75rem;padding:0.3rem;" onclick="setCareerPreset('mid')">💼 Mid-Level</button>
+        <button class="chip ${preset === 'senior' ? 'active' : ''}" style="flex:1;justify-content:center;font-size:0.75rem;padding:0.3rem;" onclick="setCareerPreset('senior')">👑 Senior</button>
+      </div>
+      <div style="font-size:0.72rem;color:var(--text-secondary);margin-top:0.45rem;line-height:1.35;">
+        ${presetGuidance[preset]}
+      </div>
+    </div>
+
     <div class="card mb-2">
       <div class="card-header"><span class="card-title"><i data-lucide="user"></i> Contact Info</span></div>
       <div class="form-group">
@@ -3177,20 +3198,124 @@ function rgbToHex(rgb) {
   return '#' + nums.slice(0, 3).map(x => parseInt(x).toString(16).padStart(2, '0')).join('');
 }
 
+function setCareerPreset(preset) {
+  if (!APP.currentResume) return;
+  APP.currentResume.careerPreset = preset;
+  scheduleSave();
+  renderEditPanel();
+  checkOverflow();
+  showToast(`Applied ${preset.toUpperCase()} career stage guidance`, 'success');
+}
+
 function checkOverflow() {
   setTimeout(() => {
     const doc = document.getElementById('documentWrapper');
     const banner = document.getElementById('overflowBanner');
-    const pxText = document.getElementById('overflowPxText');
     if (!doc || !banner) return;
-    const overflow = doc.scrollHeight - 1130;
-    if (overflow > 0) {
+
+    const A4_HEIGHT = 1123; // 297mm @ 96dpi
+
+    // 1. Reset scale to 1.0 initially to measure true natural height
+    doc.style.setProperty('--scale-factor', '1.0');
+    let naturalHeight = doc.scrollHeight;
+
+    // 2. Check if single page fits at 1.0
+    if (naturalHeight <= A4_HEIGHT + 10) {
       banner.classList.add('visible');
-      if (pxText) pxText.textContent = Math.round(overflow);
-    } else {
-      banner.classList.remove('visible');
+      banner.style.background = 'var(--success-bg)';
+      banner.style.borderColor = 'rgba(52,211,153,0.3)';
+      banner.style.color = 'var(--success)';
+      banner.innerHTML = `
+        <i data-lucide="check-circle" style="width:16px;height:16px;"></i>
+        <span style="flex:1"><b>📄 Page 1 of 1</b> — Content fits perfectly (100% Scale).</span>
+      `;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      removePageBreakGuides();
+      return;
     }
-  }, 50);
+
+    // 3. Attempt proportional auto-scaling down to S_min = 0.82
+    const targetScale = Math.max(0.82, A4_HEIGHT / naturalHeight);
+    doc.style.setProperty('--scale-factor', targetScale.toFixed(3));
+    let scaledHeight = doc.scrollHeight;
+
+    if (scaledHeight <= A4_HEIGHT + 15) {
+      // Content fits on 1 page via auto-scaling!
+      banner.classList.add('visible');
+      banner.style.background = 'var(--success-bg)';
+      banner.style.borderColor = 'rgba(52,211,153,0.3)';
+      banner.style.color = 'var(--success)';
+      banner.innerHTML = `
+        <i data-lucide="sparkles" style="width:16px;height:16px;"></i>
+        <span style="flex:1"><b>📄 Page 1 of 1</b> — Auto-scaled to <b>${Math.round(targetScale * 100)}%</b> fit.</span>
+      `;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      removePageBreakGuides();
+    } else {
+      // Content genuinely overflows to multi-page!
+      doc.style.setProperty('--scale-factor', '0.95');
+      const totalPages = Math.ceil(doc.scrollHeight / A4_HEIGHT);
+      const overflowPx = Math.round(doc.scrollHeight - A4_HEIGHT);
+
+      banner.classList.add('visible');
+      banner.style.background = 'var(--warning-bg)';
+      banner.style.borderColor = 'rgba(251,191,36,0.3)';
+      banner.style.color = 'var(--warning)';
+      banner.innerHTML = `
+        <i data-lucide="alert-triangle" style="width:16px;height:16px;"></i>
+        <span style="flex:1"><b>📄 Page 1 of ${totalPages}</b> — Overflows by ~${overflowPx}px.</span>
+        <button class="btn btn-secondary btn-xs" onclick="autoFitToOnePage()" style="background:var(--warning);color:#000;font-weight:700;">
+          ⚡ Fit to 1 Page
+        </button>
+        <button class="btn btn-secondary btn-xs" onclick="copyOverflowFixPrompt()">
+          <i data-lucide="clipboard-copy"></i> AI Prompt
+        </button>
+      `;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      renderPageBreakGuides(totalPages, A4_HEIGHT);
+    }
+  }, 60);
+}
+
+function autoFitToOnePage() {
+  if (!APP.currentResume) return;
+  const s = APP.currentResume.styleOverrides || {};
+  s.margins = Math.max(0.25, (s.margins || 0.5) * 0.85);
+  s.sectionSpacing = Math.max(0.6, (s.sectionSpacing || 1.0) * 0.85);
+  s.baseFontSize = Math.max(10, (s.baseFontSize || 12) * 0.92);
+  s.bodySize = Math.max(10, (s.bodySize || 12) * 0.92);
+  APP.currentResume.styleOverrides = s;
+
+  const doc = document.getElementById('documentWrapper');
+  if (doc) doc.style.setProperty('--scale-factor', '0.84');
+
+  scheduleSave();
+  if (typeof updateEditorPreview === 'function') updateEditorPreview();
+  showToast('⚡ Auto-fitted content to 1 page!', 'success');
+}
+
+function renderPageBreakGuides(totalPages, pageHeight) {
+  removePageBreakGuides();
+  const doc = document.getElementById('documentWrapper');
+  if (!doc) return;
+
+  for (let i = 1; i < totalPages; i++) {
+    const guide = document.createElement('div');
+    guide.className = 'page-break-guide';
+    guide.style.position = 'absolute';
+    guide.style.top = `${i * pageHeight}px`;
+    guide.style.left = '0';
+    guide.style.right = '0';
+    guide.style.borderTop = '2px dashed #f59e0b';
+    guide.style.pointerEvents = 'none';
+    guide.style.zIndex = '10';
+    guide.innerHTML = `<span style="position:absolute;right:10px;top:-12px;background:#f59e0b;color:#000;font-size:10px;font-weight:800;padding:2px 8px;border-radius:4px;">PAGE BREAK (PAGE ${i+1})</span>`;
+    doc.appendChild(guide);
+  }
+}
+
+function removePageBreakGuides() {
+  document.querySelectorAll('.page-break-guide').forEach(el => el.remove());
 }
 
 function updateMobileScale() {
